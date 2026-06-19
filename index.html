@@ -549,8 +549,8 @@ const CHAPTERS=[
   {n:"第一章",title:"相识",       start:"c1"},
   {n:"第二章",title:"确立",       start:"c2"},
   {n:"第三章",title:"开放日·重逢", start:"c3"},
-  {n:"第四章",title:"七夕·蓝玫瑰",start:"c4"},
-  {n:"第五章",title:"裂痕",       start:"c5"},
+  {n:"第四章",title:"同居前·约会",start:"c4"},
+  {n:"第五章",title:"同居在家",   start:"c5"},
   {n:"第六章",title:"距离·抉择",  start:"c6"},
   {n:"第七章",title:"梦想/相守",  start:"c7d"},
   {n:"终章",  title:"跨年·烟花",  start:"c8"},
@@ -569,7 +569,7 @@ const PROLOGUE_LINES=[
 
 /* ====================== 引擎 ====================== */
 const NAMES={ nagi:"Nagi", ant:"Ant", yiyi:"一一", sys:"" };
-const BOND_FULL=24;
+const BOND_FULL=50;
 let bond=0, und=0, route=null, badFlag=false;
 let pendingNext=null;
 let queue=[], qi=0, after=null;
@@ -768,9 +768,9 @@ function skipChapter(){
 
 function finish(){
   let tier;
-  if(badFlag || und<8) tier="bad";
-  else if(route==="dream" && bond>=16 && und>=14) tier="true";
-  else if(bond>=15) tier="good";
+  if(badFlag || und<30) tier="bad";
+  else if(route==="dream" && bond>=42 && und>=42) tier="true";
+  else if(bond>=40 || und>=42) tier="good";
   else tier="normal";
   const e=ENDINGS[tier];
   unlockEnding(tier);
