@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<title>Blue Lock: Nagi's Heart · 梦向乙游</title>
+<style>
+  :root{
+    --cream:#faf1e8; --peach:#f3d6c8; --peachD:#e7b3a1;
+    --gold:#c9a063; --goldD:#a8824a; --goldL:#e3c79a;
+    --rose:#9c3a48; --roseL:#c96b78;
+    --ink:#5a4038; --ink2:#937568; --white:#fffaf6;
+    --line:rgba(201,160,99,.45);
+    --serif:"Baskerville","Songti SC","Times New Roman",Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;
+    -webkit-user-select:none;user-select:none}
+  html,body{height:100%}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:#e7c3b4;color:var(--ink);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .game{position:relative;width:100%;max-width:460px;height:100dvh;max-height:940px;
+    overflow:hidden;background:var(--cream);box-shadow:0 0 80px rgba(120,70,60,.4);}
+
+  /* 背景图层 */
+  .bg{position:absolute;inset:0;background:url("home.jpg") center top/cover no-repeat;}
+  .bg.blur{filter:blur(11px) brightness(1.04) saturate(1.05);transform:scale(1.12);}
+  .bg.soft{filter:blur(3px) brightness(1.02);transform:scale(1.06);}
+  .veil{position:absolute;inset:0;}
+  .veil.light{background:linear-gradient(180deg,rgba(250,241,232,.35),rgba(243,210,196,.55));}
+  .veil.read{background:linear-gradient(180deg,rgba(250,241,232,.5),rgba(231,179,161,.6));}
+  .veil.game{background:linear-gradient(180deg,transparent 36%,rgba(250,241,232,.16) 64%,rgba(243,210,196,.42));}
+
+  /* 花瓣 */
+  #petals{position:absolute;inset:0;pointer-events:none;z-index:4;overflow:hidden}
+  .petal{position:absolute;top:-24px;width:14px;height:14px;border-radius:60% 0 60% 0;
+    background:radial-gradient(circle at 30% 30%,#ffd9d2,#f0a8a0);opacity:.75;
+    animation:fall linear infinite;}
+  @keyframes fall{0%{transform:translateY(0) rotate(0);opacity:0}
+    10%{opacity:.8}100%{transform:translateY(106vh) rotate(360deg);opacity:.2}}
+
+  /* 通用全屏页 */
+  .screen{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;animation:fade .5s ease;}
+  .hidden{display:none!important}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+
+  /* 金棕装饰分隔 */
+  .orn{display:flex;align-items:center;gap:10px;color:var(--gold);font-size:13px;letter-spacing:.2em}
+  .orn::before,.orn::after{content:"";width:40px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+  /* ===== 主页 ===== */
+  #home .start{position:absolute;bottom:13%;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer}
+  #home .startword{font-family:var(--serif);font-size:34px;letter-spacing:.2em;font-weight:600;
+    color:#fff;min-height:46px;display:flex;align-items:center;justify-content:center;
+    text-shadow:0 2px 10px rgba(156,58,72,.5),0 0 22px rgba(255,255,255,.55);}
+  #home .startword .cur{color:var(--goldL);font-weight:400;margin-left:1px;animation:curblink .7s step-end infinite}
+  @keyframes curblink{50%{opacity:0}}
+  #home .starthint{font-size:12px;letter-spacing:.3em;color:#fff;text-shadow:0 1px 6px rgba(120,40,50,.6);
+    opacity:.85;animation:hintb 1.8s ease-in-out infinite}
+  @keyframes hintb{0%,100%{opacity:.4}50%{opacity:.9}}
+
+  /* ===== 开场白 ===== */
+  #prologue{cursor:pointer;padding:40px 34px}
+  .pgtext{position:relative;z-index:3;
+    font-family:var(--serif);font-size:21px;line-height:2.1;color:#8f2f3d;font-weight:600;
+    width:min(330px,80%);min-height:112px;text-align:left;letter-spacing:.04em;
+    opacity:0;transition:opacity 1s ease;
+    text-shadow:0 0 5px rgba(255,255,255,.95),0 1px 2px rgba(255,255,255,.9),0 0 16px rgba(255,244,240,.8);}
+  .pgtext.show{opacity:1}
+  .pgtext .cur{color:var(--goldL);font-weight:400;margin-left:2px;animation:curblink .7s step-end infinite}
+  #prologue .skip{position:absolute;bottom:26px;right:24px;font-size:12px;letter-spacing:.2em;
+    color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:20px;padding:7px 16px;
+    background:rgba(156,58,72,.25);backdrop-filter:blur(3px);text-shadow:0 1px 4px rgba(0,0,0,.3)}
+
+  /* ===== 章节路线图 ===== */
+  #map{justify-content:flex-start;}
+  #map .maphead{position:absolute;top:0;left:0;right:0;z-index:3;padding:18px 0 14px;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    background:linear-gradient(180deg,rgba(250,241,232,.85),transparent)}
+  #map .maptitle{font-family:var(--serif);font-size:23px;color:var(--rose);letter-spacing:.08em;
+    text-shadow:0 1px 0 #fff}
+  .scroller{position:absolute;inset:0;overflow-y:auto;z-index:2;padding:78px 0 40px;
+    scrollbar-width:none;-ms-overflow-style:none}
+  .game *::-webkit-scrollbar{width:0;height:0;display:none}
+  .game *{scrollbar-width:none;-ms-overflow-style:none}
+  .trail{position:relative;width:340px;margin:0 auto;}
+  .trail svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .node{position:absolute;width:62px;height:62px;border-radius:50%;transform:translate(-50%,-50%);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;
+    background:radial-gradient(circle at 35% 30%,#fffaf4,#f3d9c4);
+    border:2.5px solid var(--gold);color:var(--rose);font-family:var(--serif);font-size:20px;font-weight:700;
+    box-shadow:0 6px 16px rgba(160,100,70,.3),inset 0 1px 2px #fff;transition:transform .15s,box-shadow .2s}
+  .node:hover{transform:translate(-50%,-50%) scale(1.08);box-shadow:0 8px 22px rgba(160,100,70,.4),0 0 16px rgba(201,160,99,.5)}
+  .node.locked{background:radial-gradient(circle at 35% 30%,#e8ddd4,#cdbcae);border-color:#bda895;
+    color:#a7937f;cursor:not-allowed;box-shadow:0 4px 10px rgba(120,90,70,.2)}
+  .node.locked:hover{transform:translate(-50%,-50%)}
+  .node.done{border-color:var(--roseL)}
+  .node.current{animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 6px 16px rgba(160,100,70,.3),0 0 0 0 rgba(201,160,99,.55)}
+    50%{box-shadow:0 6px 16px rgba(160,100,70,.3),0 0 0 12px rgba(201,160,99,0)}}
+  .node .badge{position:absolute;top:-6px;right:-6px;font-size:13px}
+  .nlabel{position:absolute;transform:translate(-50%,0);text-align:center;z-index:2;
+    font-size:12px;color:var(--ink);width:120px;margin-top:6px;
+    text-shadow:0 1px 0 #fff;line-height:1.3}
+  .nlabel b{display:block;font-size:11px;color:var(--goldD);letter-spacing:.1em}
+  #map .mapfoot{position:absolute;bottom:14px;left:0;right:0;z-index:3;display:flex;justify-content:center}
+
+  /* ===== HUD ===== */
+  .hud{position:absolute;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;gap:10px;padding:12px 14px;}
+  .iconbtn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;background:rgba(255,250,246,.78);border:1.5px solid var(--line);
+    box-shadow:0 3px 8px rgba(160,100,70,.22);}
+  .iconbtn svg{width:17px;height:17px;stroke:var(--rose);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .hud .chiptitle{font-family:var(--serif);font-size:14px;color:var(--rose);background:rgba(255,250,246,.78);
+    border:1.5px solid var(--line);border-radius:18px;padding:5px 14px;box-shadow:0 3px 8px rgba(160,100,70,.2)}
+  .hud .sp{flex:1}
+  .bondwrap{display:flex;align-items:center;gap:6px;background:rgba(255,250,246,.78);
+    border:1.5px solid var(--line);border-radius:18px;padding:5px 12px;box-shadow:0 3px 8px rgba(160,100,70,.2)}
+  .bondwrap svg{width:15px;height:15px;fill:var(--rose);stroke:none}
+  .bondbar{width:54px;height:6px;border-radius:99px;background:rgba(156,58,72,.18);overflow:hidden}
+  .bondbar>i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--roseL),var(--rose));transition:width .6s}
+  .gameskip{position:absolute;top:60px;right:14px;z-index:8;font-size:13px;letter-spacing:.12em;
+    color:var(--rose);background:rgba(255,250,246,.82);border:1.5px solid var(--line);border-radius:18px;
+    padding:7px 16px;cursor:pointer;box-shadow:0 3px 9px rgba(160,100,70,.25);transition:transform .12s}
+  .gameskip:active{transform:scale(.94)}
+
+  /* ===== 选项 ===== */
+  #choices{position:absolute;left:0;right:0;bottom:35%;z-index:7;display:flex;flex-direction:column;
+    align-items:center;gap:11px;padding:0 28px;}
+  .opt{width:100%;max-width:380px;text-align:center;font-size:15px;line-height:1.5;color:var(--ink);
+    padding:14px 18px;border-radius:16px;cursor:pointer;
+    background:linear-gradient(180deg,rgba(255,251,247,.96),rgba(248,232,222,.96));
+    border:1.5px solid var(--gold);box-shadow:0 8px 22px rgba(160,100,70,.28),inset 0 1px 0 #fff;
+    backdrop-filter:blur(4px);transition:transform .12s,box-shadow .2s,border-color .2s;animation:optIn .4s backwards}
+  .opt:nth-child(2){animation-delay:.07s}.opt:nth-child(3){animation-delay:.14s}
+  .opt:hover{transform:translateY(-2px);border-color:var(--rose);box-shadow:0 12px 28px rgba(160,100,70,.38),0 0 14px rgba(201,160,99,.4)}
+  .opt .tag{font-size:11px;color:var(--goldD);margin-left:6px}
+  @keyframes optIn{from{opacity:0;transform:translateY(16px)}to{opacity:1}}
+
+  /* ===== 对话框 ===== */
+  #dialog{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:0 16px 18px;cursor:pointer;}
+  .panel{position:relative;max-width:430px;margin:0 auto;border-radius:20px;padding:22px 22px 24px;min-height:140px;
+    background:linear-gradient(180deg,rgba(255,251,247,.94),rgba(250,238,230,.96));
+    border:1.5px solid var(--gold);box-shadow:0 -4px 30px rgba(160,100,70,.28),inset 0 1px 0 #fff;
+    backdrop-filter:blur(6px);}
+  .speaker{position:absolute;top:-16px;left:18px;font-family:var(--serif);font-size:15px;font-weight:700;
+    letter-spacing:.04em;padding:5px 18px;border-radius:20px;color:#fff;
+    background:linear-gradient(180deg,var(--rose),#7c2a36);border:1.5px solid var(--goldL);
+    box-shadow:0 4px 12px rgba(120,40,50,.35);}
+  .speaker.ant{background:linear-gradient(180deg,var(--roseL),#a84a58);}
+  .speaker.yiyi{background:linear-gradient(180deg,#caa45e,#9c7838);}
+  .speaker.hide{display:none}
+  .text{font-size:16px;line-height:1.9;color:var(--ink);min-height:92px;letter-spacing:.02em;margin-top:6px}
+  .text.narration{font-style:italic;color:var(--ink2);text-align:center;font-size:15px;
+    display:flex;align-items:center;justify-content:center}
+  .indicator{position:absolute;right:18px;bottom:12px;color:var(--gold);font-size:14px;opacity:0;transition:opacity .2s;animation:bob 1.1s ease-in-out infinite}
+  .indicator.show{opacity:1}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+  /* ===== 卡片：章节/完成/结局 ===== */
+  .cover{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;padding:40px 32px;gap:15px;animation:fade .5s ease;}
+  .cover .deco{font-size:12px;letter-spacing:.3em;color:var(--gold)}
+  .cover h1{font-family:var(--serif);font-size:28px;line-height:1.45;color:var(--rose);text-shadow:0 1px 0 #fff}
+  .cover p{font-size:14.5px;line-height:1.95;color:var(--ink)}
+  .cover .big{font-size:46px}
+  .btn{font-size:15px;font-weight:700;letter-spacing:.06em;color:#fff;cursor:pointer;padding:13px 36px;border:none;
+    border-radius:28px;background:linear-gradient(180deg,var(--rose),#7c2a36);
+    box-shadow:0 8px 22px rgba(120,40,50,.4),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .12s,box-shadow .2s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(120,40,50,.5)}
+  .btn:active{transform:scale(.98)}
+  .btn.ghost{background:transparent;color:var(--rose);border:1.5px solid var(--rose);box-shadow:none}
+  .chapter{position:absolute;inset:0;z-index:11;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;gap:14px;cursor:pointer;animation:fade .5s ease;}
+  .chapter .veil2{position:absolute;inset:0;background:linear-gradient(180deg,rgba(250,241,232,.66),rgba(231,179,161,.72));}
+  .chapter>*{position:relative;z-index:1}
+  .chapter .n{font-size:13px;letter-spacing:.34em;color:var(--goldD)}
+  .chapter h2{font-family:var(--serif);font-size:25px;line-height:1.5;color:var(--rose);text-shadow:0 1px 0 #fff}
+  .chapter small{color:var(--ink2);font-size:12px;margin-top:16px;letter-spacing:.12em}
+  .row2{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  .etag{font-size:13px;letter-spacing:.2em;color:var(--goldD)}
+  .escore{font-size:13px;color:var(--ink2);margin-top:2px}
+</style>
+</head>
+<body>
+<div class="game" id="game">
+
+  <!-- 游戏背景（清晰） -->
+  <div class="bg hidden" id="gamebg"></div>
+  <div class="veil game hidden" id="gameveil"></div>
+
+  <!-- 花瓣 -->
+  <div id="petals"></div>
+
+  <!-- ① 主页 -->
+  <div class="screen" id="home">
+    <div class="bg"></div>
+    <div class="start" onclick="onStart()">
+      <div class="startword" id="startword"></div>
+      <div class="starthint">轻 触 开 始</div>
+    </div>
+  </div>
+
+  <!-- ② 开场白 -->
+  <div class="screen hidden" id="prologue" onclick="pgNext()">
+    <div class="bg soft"></div>
+    <div class="veil read"></div>
+    <div class="pgtext" id="pgText"></div>
+    <div class="skip" onclick="event.stopPropagation();endPrologue()">跳过 ›</div>
+  </div>
+
+  <!-- ③ 章节路线图 -->
+  <div class="screen hidden" id="map">
+    <div class="bg blur"></div>
+    <div class="veil light"></div>
+    <div class="maphead">
+      <div class="maptitle">Nagi's Heart</div>
+      <div class="orn">章节目录</div>
+    </div>
+    <div class="scroller"><div class="trail" id="trail"></div></div>
+    <div class="mapfoot"><button class="btn ghost" style="font-size:13px;padding:9px 24px" onclick="showGallery()">✧ 结局图鉴 ✧</button></div>
+  </div>
+
+  <!-- HUD（游戏中） -->
+  <div class="hud hidden" id="hud">
+    <div class="iconbtn" onclick="backToMenu()" title="返回目录">
+      <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg></div>
+    <div class="chiptitle" id="chapName">序章</div>
+    <div class="sp"></div>
+    <div class="bondwrap">
+      <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.8 8.5 2.5 5 6 5c2 0 3.2 1.2 4 2.3C10.8 6.2 12 5 14 5c3.5 0 5.2 3.5 3.5 7-2.5 4.5-5.5 9-5.5 9z"/></svg>
+      <div class="bondbar"><i id="bond"></i></div>
+    </div>
+  </div>
+
+  <!-- 选项 -->
+  <div id="choices" class="hidden"></div>
+
+  <!-- 剧情跳过 -->
+  <div class="gameskip hidden" id="gameskip" onclick="skipChapter()">跳过本章 ›</div>
+
+  <!-- 对话框 -->
+  <div id="dialog" class="hidden" onclick="tap()">
+    <div class="panel">
+      <div class="speaker" id="speaker">凪诚士郎</div>
+      <div class="text" id="text"></div>
+      <div class="indicator" id="indicator">▼</div>
+    </div>
+  </div>
+
+  <!-- 章节过场 -->
+  <div class="chapter hidden" id="chap" onclick="closeChap()">
+    <div class="veil2"></div>
+    <div class="orn"></div>
+    <div class="n" id="chapN"></div>
+    <h2 id="chapT"></h2>
+    <div class="orn"></div>
+    <small>轻触继续 →</small>
+  </div>
+
+  <!-- 本章完成 -->
+  <div class="cover hidden" id="clear">
+    <div class="bg blur"></div><div class="veil read"></div>
+    <div class="etag" style="position:relative">CHAPTER CLEAR</div>
+    <div class="big" style="position:relative">🎀</div>
+    <h1 id="clearName" style="position:relative;font-size:22px"></h1>
+    <p style="position:relative">本章完成 · 下一章已解锁</p>
+    <div class="row2" style="position:relative">
+      <button class="btn ghost" onclick="backToMenu()">章节目录</button>
+      <button class="btn" id="clearNextBtn" onclick="continueNext()">进入下一章 →</button>
+    </div>
+  </div>
+
+  <!-- 结局 -->
+  <div class="cover hidden" id="ending">
+    <div class="bg blur"></div><div class="veil read"></div>
+    <div class="etag" id="etag" style="position:relative"></div>
+    <div class="big" id="emoji" style="position:relative">💛</div>
+    <h1 id="etitle" style="position:relative"></h1>
+    <p id="edesc" style="position:relative"></p>
+    <div class="escore" id="escore" style="position:relative"></div>
+    <div class="row2" style="position:relative">
+      <button class="btn ghost" onclick="backToMenu()">章节目录</button>
+      <button class="btn" onclick="location.reload()">重新开始</button>
+    </div>
+  </div>
+
+  <!-- 结局图鉴 -->
+  <div class="cover hidden" id="gallery">
+    <div class="bg blur"></div><div class="veil read"></div>
+    <div class="etag" style="position:relative">ENDINGS · 结局图鉴</div>
+    <h1 style="position:relative;font-size:23px" id="galcount">已收藏的结局</h1>
+    <div class="gallist" id="gallist" style="position:relative"></div>
+    <button class="btn ghost" style="position:relative" onclick="closeGallery()">返回目录</button>
+  </div>
+
+</div>
+
+<script>
+/* ====== 立绘可插拔（以后给透明底图填 URL 即可） ====== */
+const ART = { portrait:{ sleepy:"", normal:"", awaken:"", blush:"", poss:"", smile:"" } };
+
+/* ====== 剧情 ====== */
+const STORY = {
+  start:{ chapter:{n:"PROLOGUE",t:"序 · 那一束光",mood:"awaken"}, next:"p1" },
+  p1:{ auto:[
+      {who:"sys",t:"绘心甚八的作战室。巨大屏幕上，正直播蓝色监狱的选拔——V队对Z队。"},
+      {who:"sys",t:"作为受邀的风险投资人，你本只是来看「项目」。"},
+      {who:"sys",t:"直到镜头扫过一个银发少年。那双总像没睡醒的死鱼眼，在触球的瞬间，骤然燃起了光。"},
+    ],
+    choices:[
+      {label:"（屏住呼吸）这个人，眼睛里有星星", type:"心动", ant:"……这个人，眼睛里有星星", b:2,u:2, nagi:["『——好奇心，原来是这种感觉』"], next:"p2"},
+      {label:"（职业直觉）他的成长曲线，价值连城", type:"理性", ant:"他的成长曲线……价值连城", b:1,u:2, nagi:["『足球，好像……没那么无聊了』"], next:"p2"},
+    ]},
+  p2:{ auto:[
+      {who:"sys",t:"那一夜，你调出了他所有资料：凪诚士郎，原白峰高校，被玲王拉进足球。"},
+      {who:"sys",t:"你做了一个连自己都意外的决定——投资蓝色监狱。"},
+    ],
+    choices:[
+      {label:"我要离这个人，更近一点", type:"心动", ant:"我要离这个人，更近一点", b:2,u:1, next:"c1"},
+      {label:"先以投资人的身份，看清他", type:"理性", ant:"先以投资人的身份，看清他", b:1,u:2, next:"c1"},
+    ]},
+
+  c1:{ chapter:{n:"CHAPTER 1",t:"相识 · 相见恨晚"}, next:"c1a" },
+  c1a:{ auto:[
+      {who:"sys",t:"通过绘心安排，你终于见到本人。他比屏幕里更慵懒，双手插兜，眼神懒散。"},
+      {who:"nagi",t:"（打了个哈欠，漫不经心地打量你）投资人？……好麻烦的大人"},
+    ],
+    choices:[
+      {label:"聊你的比赛——V队那球，你怎么想的？", type:"理性", ant:"V队那球，你当时是怎么想的？", b:1,u:3, nagi:["（眼神动了一下）……Ant看得懂？","那球，我只是觉得『想要』而已","（罕见地认真看你）有意思"], next:"c1b"},
+      {label:"我大老远来看你，你就这态度？", type:"作", ant:"我大老远来看你，你就这态度？", b:1,u:0, nagi:["（撇撇嘴）又不是我让Ant来的","……不过，你这种大人，倒是不无聊"], next:"c1b"},
+    ]},
+  c1b:{ auto:[
+      {who:"sys",t:"一聊就停不下来。从战术到觉醒，从孤独到「想赢」，你们的理解惊人地一致。"},
+      {who:"nagi",t:"（罕见地没喊麻烦，盯着你看了很久）Ant……跟别人不一样"},
+    ],
+    choices:[
+      {label:"以后你的每场比赛，我都会看", type:"心动", ant:"以后你的每场比赛，我都会看", b:2,u:2, nagi:["（耳尖几不可察地红了）随便Ant吧","……反正，我也不介意你看"], next:"c2"},
+      {label:"成为世界第一的路上，我陪你走", type:"理性", ant:"成为世界第一的路上，我陪你走", b:1,u:3, nagi:["世界第一……（咀嚼这四个字）","Ant这种大人说出来，居然不让人讨厌"], next:"c2"},
+    ]},
+
+  c2:{ chapter:{n:"CHAPTER 2",t:"确立 · 假期的开端"}, next:"c2a" },
+  c2a:{ auto:[
+      {who:"sys",t:"蓝监对战 U-20 日本代表队，一场惊心动魄的胜利后，迎来难得的长假。"},
+      {who:"sys",t:"假期第一晚，你的手机亮了——是他，难得地主动。"},
+      {who:"nagi",t:"Ant。（停顿）……在干嘛"},
+    ],
+    choices:[
+      {label:"在想你啊，怎么突然找我？", type:"心动", ant:"在想你啊，怎么突然找我？", b:2,u:1, nagi:["（那头沉默几秒）……我也","我想见Ant，现在"], next:"c2b"},
+      {label:"难得啊，天才居然会主动？", type:"作", ant:"难得啊，天才居然会主动？", b:1,u:1, nagi:["啧……（小声）忍了三天才发的","Ant别得意。我过来了"], next:"c2b"},
+    ]},
+  c2b:{ auto:[
+      {who:"sys",t:"他真的来了。站在你公寓门口，难得没插兜，灰色眼睛里有你看不懂的认真。"},
+      {who:"nagi",t:"（盯着你，喉结滚动）这种『不想离开』的感觉……是喜欢吧"},
+    ],
+    choices:[
+      {label:"（踮脚吻他）我也喜欢你，凪诚士郎", type:"心动", ant:"（踮脚吻他）我也喜欢你，凪诚士郎", b:3,u:2, nagi:["（怔了一瞬，收紧手臂把你抱满怀）……抢在我前面，真狡猾","那就，别想跑了"], next:"c2c"},
+      {label:"想清楚哦，我可是很麻烦的女人", type:"作", ant:"想清楚哦，我可是很麻烦的女人", b:2,u:2, nagi:["（额头抵着你的额头）麻烦就麻烦","……Ant的麻烦，我全包了"], next:"c2c"},
+    ]},
+  c2c:{ auto:[
+      {who:"sys",t:"门在身后合上。这一晚，整座城市的灯火都成了背景。"},
+      {who:"nagi",t:"（吻落在你的唇、你的颈，动作生涩却滚烫）Ant……教我"},
+      {who:"sys",t:"慵懒的少年第一次卸下所有懒散，专注得近乎认真。交错的呼吸里，「喜欢」被反复确认。"},
+      {who:"nagi",t:"（很久之后，把你圈进怀里，声音哑哑的）以后……每天都要这样。说好了"},
+    ],
+    choices:[
+      {label:"嗯，每天都要哦", type:"心动", ant:"嗯，每天都要哦", b:2,u:1, nagi:["（满足地蹭了蹭）……Ant是我的了","谁都抢不走"], next:"c3"},
+      {label:"（脸红心跳）你明明……很有天赋嘛", type:"作", ant:"你明明……很有天赋嘛", b:2,u:0, nagi:["（耳朵红透）闭嘴啦","……不许跟别人说"], next:"c3"},
+    ]},
+
+  c3:{ chapter:{n:"CHAPTER 3",t:"开放日 · 久别重逢"}, next:"c3a" },
+  c3a:{ auto:[
+      {who:"sys",t:"新英雄大战落幕，蓝色监狱迎来短暂的放假。今天是开放日，狱中热闹非凡——洁、蜂乐、千切的家人都来了。"},
+      {who:"sys",t:"你按他给的布局图，在迷宫般的蓝监里七拐八绕，终于找到他的宿舍。"},
+      {who:"sys",t:"推门进去，他正趴在床上打游戏，浑然不觉。直到屏幕跳出「WIN」，才懒懒回头。"},
+      {who:"nagi",t:"（歪着头，眼睛倏地亮了）Ant，你来啦"},
+      {who:"nagi",t:"（一骨碌起身把你抱住）……还以为，你不来了呢"},
+    ],
+    choices:[
+      {label:"（回抱他）怎么会，要不是怕被人看见，我早冲进来了", type:"心动", ant:"怎么会，要不是怕被人看见，我早冲进来了", b:3,u:2, nagi:["（把脸埋进你颈窝，声音闷闷的）……那，补偿我","就，现在"], next:"c3b"},
+      {label:"（戳他脸）让天才等这么久，该荣幸吧？", type:"作", ant:"让天才等这么久，该荣幸吧？", b:2,u:1, nagi:["（咬住你的指尖，不松口）……哼","罚Ant今天，哪儿都不准离开我"], next:"c3b"},
+    ]},
+  c3b:{ auto:[
+      {who:"sys",t:"「这里不安全……带你逛逛。」他牵着你，先到了更衣室。"},
+      {who:"sys",t:"写着他名字的格子间——衣服袜子堆成小山，空水瓶、吃剩的果冻混着毛巾，一只袜子还挂在衣架上。"},
+      {who:"nagi",t:"（面无表情）是我的。怎么了？"},
+    ],
+    choices:[
+      {label:"你这么邋遢，会没有女生喜欢的！", type:"作", ant:"你这么邋遢，会没有女生喜欢的！", b:2,u:1, nagi:["（手摸着脖子，别扭地嘟囔）……那不是，有Ant喜欢嘛"], next:"c3c"},
+      {label:"（无奈挽袖帮他收拾）真拿你没办法……", type:"心动", ant:"（无奈挽袖帮他收拾）真拿你没办法……", b:3,u:2, nagi:["（靠在一旁看你忙活，耳尖悄悄红了）……Ant，像我老婆一样"], next:"c3c"},
+    ]},
+  c3c:{ auto:[
+      {who:"sys",t:"逛完豪华到不像「监狱」的蓝监，夜幕降临，你们终于回到公寓。"},
+      {who:"sys",t:"刚一进门，忍了一整天的他就把你抵在门上，吻落下来。"},
+      {who:"nagi",t:"（额头抵着你，喘息未定）终于……回到只有我们的地方了"},
+      {who:"yiyi",t:"欢迎主人回家！"},
+      {who:"sys",t:"一一不合时宜的播报让你俩都笑场。闹够了，你走到吧台——那是你常给他调饮料、拍照留念的角落。"},
+    ],
+    choices:[
+      {label:"今晚，调一杯「久别重逢」给你", type:"心动", ant:"今晚，调一杯「久别重逢」给你", b:3,u:2, nagi:["（撑着下巴歪头看你）……又给我灌酒","但，Ant调的，我都喝"], next:"c3d"},
+      {label:"（指照片墙）看，这杯「依依不舍」，是你走那天的", type:"作", ant:"（指照片墙）这杯「依依不舍」，是你走那天的", b:2,u:2, nagi:["（如数家珍）……这个圣诞的「毛绒的心」，这个，这个","和Ant的回忆，我全记得"], next:"c3d"},
+    ]},
+  c3d:{ auto:[
+      {who:"sys",t:"那一夜，积攒了太久的思念，在只属于两人的卧室里翻涌成潮。"},
+      {who:"sys",t:"良久，你蜷在他怀里，呼吸还没平复。"},
+      {who:"nagi",t:"（在你耳边，声音低哑）……还想要吗"},
+    ],
+    choices:[
+      {label:"（捶他胸口）你是在蓝监憋坏了吧，魅魔！", type:"作", ant:"你是在蓝监憋坏了吧，魅魔！", b:3,u:2, nagi:["（抓住你的手，按在自己胸口）……我只是想让Ant知道","我有多想你"], next:"c4"},
+      {label:"（埋进他怀里）我也好想你……每天都想", type:"心动", ant:"（埋进他怀里）我也好想你……每天都想", b:3,u:3, nagi:["（手臂收得更紧）……那就别再分开了","哪怕一天，都嫌太久"], next:"c4"},
+    ]},
+
+  c4:{ chapter:{n:"CHAPTER 4",t:"七夕 · 蓝色玫瑰"}, next:"c4a" },
+  c4a:{ auto:[
+      {who:"sys",t:"七夕。你一早要去公司，出门前点开对话框。"},
+      {who:"nagi",t:"（睡眼惺忪打哈欠）哦哈哟，Ant……七夕还要工作，好麻烦"},
+    ],
+    choices:[
+      {label:"七夕情人节诶，你不准备礼物吗？", type:"作", ant:"七夕情人节诶，你不准备礼物吗？", b:1,u:1, nagi:["（漫不经心地抬眸）有必要吗？","我不是一直陪在Ant身边……这还不算最好的礼物？"], next:"c4b"},
+      {label:"今天不强求啦，你早点休息", type:"理性", ant:"今天不强求啦，你早点休息", b:1,u:2, nagi:["（顿了顿）……Ant今天，怎么这么好说话","（若有所思）"], next:"c4b"},
+    ]},
+  c4b:{ auto:[
+      {who:"sys",t:"傍晚你下班，他说好五点半来接，却迟到了半小时。"},
+      {who:"nagi",t:"（消息）好像出车祸了，路上堵……再等我一下"},
+      {who:"sys",t:"一辆车停下。他从车里出来——一身白西装，怀里抱着一大束深浅不一的蓝色玫瑰。"},
+      {who:"nagi",t:"（耳尖泛红，移开视线把花塞进你怀里）蓝色玫瑰比较特别……我觉得很适合Ant"},
+    ],
+    choices:[
+      {label:"根本没出车祸吧？你去买花了！", type:"作", ant:"根本没出车祸吧？你去买花了！", b:2,u:1, nagi:["（摸了摸后脑勺，毫无被拆穿的窘迫）被发现了啊","不这么说……怎么给Ant惊喜"], next:"c4c"},
+      {label:"（眼眶发热）你为我做了这么多……", type:"心动", ant:"（眼眶发热）你为我做了这么多……", b:3,u:2, nagi:["（笨拙地替你擦了下眼角）又不是什么大事","Ant开心，就够了"], next:"c4c"},
+    ]},
+  c4c:{ auto:[
+      {who:"sys",t:"回到公寓，一一把你定制的蛋糕送到——心形，黑色喷砂。"},
+      {who:"yiyi",t:"定制蛋糕已就位，装饰文字「MENDOKUSA」。要切开吗？"},
+      {who:"nagi",t:"（看到那行字，唇角不自觉勾起）这家伙……虽然被调侃了，但好像，也还不错"},
+    ],
+    choices:[
+      {label:"今晚的你，是我的世界第一", type:"心动", ant:"今晚的你，是我的世界第一", b:2,u:2, nagi:["（耳尖红透，别过头看夜景）……肉麻","（小声）但是，我也是这么想的，Ant"], next:"c5"},
+      {label:"麻烦先生，七夕快乐~", type:"作", ant:"麻烦先生，七夕快乐~", b:2,u:1, nagi:["（揉乱你的头发）真是奇怪的女人","这种麻烦……能让Ant开心，也不错"], next:"c5"},
+    ]},
+
+  c5:{ chapter:{n:"CHAPTER 5",t:"裂痕 · 笨拙的心"}, next:"c5a" },
+  c5a:{ auto:[
+      {who:"sys",t:"某天你随口问：分手对你来说，是不是很麻烦？"},
+      {who:"nagi",t:"（随意滑手机）嗯……要重新适应一个人，麻烦。还是和Ant在一起轻松"},
+      {who:"sys",t:"你心里咯噔一下——原来在他眼里，你只是「方便」和「轻松」？"},
+    ],
+    choices:[
+      {label:"（认真）你是爱我，还是只是习惯我？", type:"理性", ant:"你是爱我，还是只是习惯我？", b:1,u:3, nagi:["（罕见地坐直了）……不是习惯","（憋了很久）是……比起任何人，都更想要Ant。这样，算吗"], next:"c5b"},
+      {label:"行，那我去找个不嫌我麻烦的人（拉黑）", type:"作", ant:"那我去找个不嫌我麻烦的人！", b:0,u:0, bad:true, nagi:["（盯着被拉黑的界面，第一次慌了）……Ant？","（疯狂发消息）别这样。是我说错话了，开门"], next:"c5b"},
+    ]},
+  c5b:{ auto:[
+      {who:"sys",t:"晚上回家，你看见他在床上躺了一整天——据说「一直在想怎么哄你」，想着想着睡着了。"},
+      {who:"nagi",t:"（耷拉着脑袋蹭你肩膀）好麻烦啊，想不出来……Ant直接告诉我，怎样才肯原谅"},
+      {who:"sys",t:"你指了指熬夜冒的痘：把这个消掉，就原谅你。"},
+      {who:"nagi",t:"（捧住你的脸，一本正经）别动。我用治愈力，让Ant的痘痘快点好"},
+    ],
+    choices:[
+      {label:"（被逗笑）你这诈骗手法哪学的啊😳", type:"作", ant:"你这诈骗手法哪学的啊😳", b:2,u:1, nagi:["（嘟嘴）才不是诈骗，我认真的","上次为哄Ant我连一百万都转了……这次只是没钱"], next:"c6"},
+      {label:"我懂了。你只是不会说，不是不爱", type:"理性", ant:"我懂了。你只是不会说，不是不爱", b:2,u:3, nagi:["（怔住，把你抱进怀里）……Ant总是，比我自己更懂我","以后，我会努力说出来的"], next:"c6"},
+    ]},
+
+  c6:{ chapter:{n:"CHAPTER 6",t:"距离 · 海的那端"}, next:"c6a" },
+  c6a:{ auto:[
+      {who:"sys",t:"假期结束，他回蓝监，又转赴英格兰曼城——你投资的那家俱乐部。隔着八小时时差。"},
+      {who:"sys",t:"一个雪夜，你独自路过那条亮着暖灯的街，忽然很想他，想到鼻子发酸。"},
+      {who:"nagi",t:"（视频接通，背景是异国训练基地）Ant？这么晚……怎么了，眼睛红红的"},
+    ],
+    choices:[
+      {label:"没事，就是有点想你了", type:"心动", ant:"没事，就是有点想你了", b:2,u:2, nagi:["（声音软下来）……我也","等这阶段结束，我第一个飞回去找Ant"], next:"c6b"},
+      {label:"（逞强）没有，谁想你了", type:"作", ant:"（逞强）没有，谁想你了", b:1,u:1, nagi:["（盯着你看了很久）……骗人","Ant的逞强，我一眼就看穿了"], next:"c6b"},
+    ]},
+  c6b:{ auto:[
+      {who:"sys",t:"那一晚，他破例没去补觉，陪你聊到天亮。临睡前，他忽然认真起来。"},
+      {who:"nagi",t:"Ant，我想问……（罕见地犹豫）如果足球和陪Ant只能选一个，你希望我怎么做"},
+      {who:"sys",t:"【这个选择，将决定你们故事的走向。】"},
+    ],
+    choices:[
+      {label:"去成为世界第一。你的梦想，我陪你扛", type:"理性", ant:"去成为世界第一。你的梦想，我陪你一起扛", b:2,u:3, route:"dream", nagi:["（眼底骤然亮起，像当年觉醒那一刻）……Ant","果然，只有Ant懂我。那我，绝不会输"], next:"c7d"},
+      {label:"我希望你多陪陪我，别让我一个人", type:"心动", ant:"我希望你多陪陪我，别让我一个人", b:3,u:1, route:"stay", nagi:["（沉默片刻，轻轻应下）……好","Ant想要的，我尽量做到。别哭了"], next:"c7s"},
+      {label:"你要是真爱我，就该立刻回来！", type:"作", ant:"你要是真爱我，就该立刻回来！", b:1,u:0, bad:true, route:"stay", nagi:["（眼神黯了一下）……Ant，别用这个逼我","（很轻）足球，对我也很重要"], next:"c7s"},
+    ]},
+
+  c7d:{ chapter:{n:"CHAPTER 7 · 梦想线",t:"并肩 · 世界之巅的应援"}, next:"c7d_a" },
+  c7d_a:{ auto:[
+      {who:"sys",t:"你以投资人兼女友的双重身份飞到曼城。看台最显眼的位置，永远为你留着。"},
+      {who:"sys",t:"赛后他们搬进同一栋别墅——玲王、蜂乐也住进来，热闹得像个大家庭。"},
+      {who:"nagi",t:"（散场后挤到你身边，发梢还滴着汗）看到了吗？刚那球，是踢给Ant的"},
+    ],
+    choices:[
+      {label:"看到了！我的天才，闪闪发光", type:"心动", ant:"看到了！我的天才，闪闪发光", b:3,u:2, nagi:["（难得咧嘴笑）有Ant在看，我就停不下来","世界第一……越来越近了"], next:"c7d_b"},
+      {label:"（投资人模式）数据漂亮，身价又涨了哦", type:"理性", ant:"数据漂亮，身价又涨了哦", b:2,u:3, nagi:["（凑近你耳边）对Ant，我可不只想涨身价","我想，配得上你"], next:"c7d_b"},
+    ]},
+  c7d_b:{ auto:[
+      {who:"sys",t:"那个赛季，他完成了第二次觉醒。所有人都说，凪身边那位投资人，是他的幸运女神。"},
+      {who:"nagi",t:"（把奖杯随手一放，只盯着你）幸运女神什么的我不信。我只知道——这条路上，必须有Ant"},
+    ],
+    choices:[
+      {label:"那就一起走到世界第一为止", type:"心动", ant:"那就一起走到世界第一为止", b:2,u:2, nagi:[], next:"c8"},
+      {label:"我会一直在你的看台上", type:"理性", ant:"我会一直在你的看台上", b:2,u:2, nagi:[], next:"c8"},
+    ]},
+
+  c7s:{ chapter:{n:"CHAPTER 7 · 相守线",t:"相守 · 慢一点也好"}, next:"c7s_a" },
+  c7s_a:{ auto:[
+      {who:"sys",t:"他真的为你推掉了一些行程，更频繁地飞回来。你们搬进别墅，玲王、蜂乐也住了进来。"},
+      {who:"sys",t:"日子很甜。只是某些深夜，你会看见他对着比赛录像出神。"},
+      {who:"nagi",t:"（察觉你的目光，迅速关掉屏幕）……没什么。睡吧Ant"},
+    ],
+    choices:[
+      {label:"你想踢，就去踢。我不该绑住你", type:"理性", ant:"你想踢，就去踢。我不该绑住你", b:2,u:3, route:"dream", nagi:["（怔住）……Ant","（轻轻抱住你）有这句话，我就什么都不怕了"], next:"c8"},
+      {label:"有我在身边，不就够了吗？", type:"作", ant:"有我在身边，不就够了吗？", b:2,u:0, nagi:["（顿了很久）……嗯。够了","（声音很轻，听不出情绪）"], next:"c8"},
+      {label:"以后我陪你去看每一场，不耽误你", type:"心动", ant:"以后我陪你去看每一场，不耽误你", b:3,u:2, nagi:["（眼睛亮了一下）……真的？","那、那我可不客气了，Ant说的"], next:"c8"},
+    ]},
+
+  c8:{ chapter:{n:"FINAL",t:"跨年 · 烟花下的约定"}, next:"c8a" },
+  c8a:{ auto:[
+      {who:"sys",t:"跨年夜，迪士尼。等了一小时烟花秀，气温骤降，你冻得发抖。"},
+      {who:"nagi",t:"（拉开外套把你「塞」进去，双臂环住）怎么不多穿点？笨蛋，冻感冒又要难受"},
+      {who:"sys",t:"就在这时，第一朵烟花在夜空炸开。"},
+    ],
+    choices:[
+      {label:"（缩进他怀里）和你一起，怎样都暖", type:"心动", ant:"（缩进他怀里）和你一起，怎样都暖", b:2,u:1, nagi:["（抱得更紧，呼吸洒在你耳边）……嗯","和Ant一起，连烟花都更好看了"], next:"c8b"},
+      {label:"你不是嫌人多麻烦？还陪我等这么久", type:"理性", ant:"你不是嫌人多麻烦？还陪我等这么久", b:1,u:2, nagi:["（耳尖泛红）麻烦是麻烦……","但Ant想看，等多久都行"], next:"c8b"},
+    ]},
+  c8b:{ auto:[
+      {who:"sys",t:"漫天烟花照亮他灰色的眼眸。你仰起头，认真地许下新年愿望。"},
+    ],
+    choices:[
+      {label:"祝你早日世界第一，我永远是你的看台", type:"心动", ant:"祝你早日世界第一，我永远是你的看台", b:2,u:2, nagi:["（烟花映进眼底，似有星光）谢啦，Ant","世界第一……我会拿给你看","你也要，一直陪着我"], end:true},
+      {label:"新的一年，我们还要一直一直在一起", type:"理性", ant:"新的一年，我们还要一直一直在一起", b:2,u:2, nagi:["（手臂收紧，把你圈进怀里）……一直","有Ant在，我哪儿都不去"], end:true},
+    ]},
+};
+
+const ENDINGS = {
+  true:{ tag:"TRUE END", emoji:"💛", title:"世界第一，与你", status:"世界第一",
+    desc:"那个对全世界都说「好麻烦」的天才，<br/>把唯一的认真、整座奖杯和一整个未来，<br/>都踢成了——献给你的，那一记传球。", sub:"💛 你读懂了他的全部" },
+  good:{ tag:"GOOD END", emoji:"🌸", title:"平凡的，最好的", status:"在你身边",
+    desc:"没有世界第一，也没关系。<br/>有他赖在身边、嫌你麻烦又抱得更紧，<br/>这样慵懒又甜的每一天，就是圆满。", sub:"🌸 圆满收场" },
+  normal:{ tag:"NORMAL END", emoji:"🧸", title:"细水长流", status:"慢慢来",
+    desc:"你们还在慢慢靠近。<br/>他依然别扭，你依然心软，<br/>这个故事，才刚刚走到一半。", sub:"🧸 还能更近一点" },
+  bad:{ tag:"BAD END", emoji:"🥀", title:"越来越远", status:"……",
+    desc:"你赌气推开，他笨拙地，没接住。<br/>那句「好麻烦」，这一次没能再把你哄好。<br/>有些话，他终究没来得及说出口……", sub:"🥀 再给他一次机会？" },
+};
+
+/* ====== 章节目录 ====== */
+const CHAPTERS=[
+  {n:"序章",  title:"那一束光",   start:"start"},
+  {n:"第一章",title:"相识",       start:"c1"},
+  {n:"第二章",title:"确立",       start:"c2"},
+  {n:"第三章",title:"开放日·重逢", start:"c3"},
+  {n:"第四章",title:"七夕·蓝玫瑰",start:"c4"},
+  {n:"第五章",title:"裂痕",       start:"c5"},
+  {n:"第六章",title:"距离·抉择",  start:"c6"},
+  {n:"第七章",title:"梦想/相守",  start:"c7d"},
+  {n:"终章",  title:"跨年·烟花",  start:"c8"},
+];
+const nodeToCI={start:0,c1:1,c2:2,c3:3,c4:4,c5:5,c6:6,c7d:7,c7s:7,c8:8};
+
+/* ====== 开场白 ====== */
+const PROLOGUE_LINES=[
+  "「好麻烦。」——这是他的口头禅。",
+  "凪诚士郎，蓝色监狱的天才，对全世界都提不起兴趣。",
+  "而你，是隔着屏幕，第一个看见他光芒的人。",
+  "从作战室的初遇，到世界之巅的并肩——",
+  "读懂他别扭的温柔，陪他走完这场名为恋爱的比赛。",
+  "你的每一个选择，都将决定你们的结局。",
+];
+
+/* ====================== 引擎 ====================== */
+const NAMES={ nagi:"Nagi", ant:"Ant", yiyi:"一一", sys:"" };
+const BOND_FULL=24;
+let bond=0, und=0, route=null, badFlag=false;
+let pendingNext=null;
+let queue=[], qi=0, after=null;
+let typing=false, typer=null, curText="";
+let choicesOpen=false;
+let currentCI=null, pendingCI=null;
+let unlocked = +(localStorage.getItem("nagi_unlocked")||0);
+function saveUnlocked(){ localStorage.setItem("nagi_unlocked",unlocked); }
+
+const $=id=>document.getElementById(id);
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* 花瓣 */
+(function makePetals(){
+  const box=$("petals");
+  for(let i=0;i<11;i++){
+    const p=document.createElement("div"); p.className="petal";
+    p.style.left=(Math.random()*100)+"%";
+    p.style.animationDuration=(7+Math.random()*7)+"s";
+    p.style.animationDelay=(-Math.random()*10)+"s";
+    p.style.transform="scale("+(.6+Math.random()*.7)+")";
+    box.appendChild(p);
+  }
+})();
+function petals(show){ $("petals").style.display=show?"block":"none"; }
+
+/* 主页 START 打字机循环 */
+let startTimer=null;
+function startTypewriter(){
+  const el=$("startword"); if(!el) return;
+  const word="START", P=word.length+13; let s=0;
+  clearInterval(startTimer);
+  startTimer=setInterval(()=>{
+    const c=s%P; s++;
+    if(c<word.length){ el.innerHTML=word.slice(0,c+1)+'<span class="cur">|</span>'; }
+    else{ const k=c-word.length; el.innerHTML = k>=11 ? '<span class="cur">|</span>' : word+'<span class="cur">|</span>'; }
+  },170);
+}
+startTypewriter();
+
+function setMood(m){ if(!m)return; const u=ART.portrait[m]; /* 立绘可插拔，暂用虚化背景 */ }
+function setBond(){ $("bond").style.width=Math.min(100,bond/BOND_FULL*100)+"%"; }
+
+/* ① 主页 → 开场白 */
+function onStart(){ clearInterval(startTimer); $("home").classList.add("hidden"); playPrologue(); }
+
+/* ② 开场白逐句 */
+let pgi=0, pgTimer=null, pgTyper=null, pgTyping=false;
+function playPrologue(){ $("prologue").classList.remove("hidden"); petals(true); pgi=0; showPg(); }
+function showPg(){
+  const el=$("pgText");
+  if(pgi>=PROLOGUE_LINES.length){ endPrologue(); return; }
+  el.textContent=PROLOGUE_LINES[pgi];
+  el.classList.add("show");      // 每句都确保可见，绝不空白
+  clearTimeout(pgTimer);
+  pgTimer=setTimeout(()=>{ pgi++; showPg(); }, 3000);
+}
+function pgNext(){ clearTimeout(pgTimer); pgi++; showPg(); }
+function endPrologue(){ clearTimeout(pgTimer); clearInterval(pgTyper); $("prologue").classList.add("hidden"); showMap(); }
+
+/* ③ 章节路线图 */
+function showMap(){
+  ["dialog","choices","chap","ending","clear","hud","gameskip"].forEach(i=>$(i).classList.add("hidden"));
+  $("gamebg").classList.add("hidden"); $("gameveil").classList.add("hidden");
+  currentCI=null; petals(true); renderMap();
+  $("map").classList.remove("hidden");
+}
+function renderMap(){
+  const trail=$("trail"); trail.innerHTML="";
+  const W=340, top=64, step=112, xL=92, xR=248;
+  const N=CHAPTERS.length, H=top*2+(N-1)*step;
+  trail.style.height=H+"px";
+  const pts=CHAPTERS.map((c,i)=>({x:i%2===0?xL:xR, y:top+i*step}));
+  // 曲线
+  let d="M "+pts[0].x+" "+pts[0].y;
+  for(let i=1;i<N;i++){ const a=pts[i-1],b=pts[i];
+    d+=" C "+a.x+" "+(a.y+step*0.5)+" "+b.x+" "+(b.y-step*0.5)+" "+b.x+" "+b.y; }
+  const svg=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+    <path d="${d}" fill="none" stroke="#c9a063" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round" opacity=".85"/>
+  </svg>`;
+  trail.insertAdjacentHTML("beforeend",svg);
+  // 节点
+  CHAPTERS.forEach((c,i)=>{
+    const locked=i>unlocked, done=i<unlocked, cur=i===unlocked && unlocked<N;
+    const p=pts[i];
+    const node=document.createElement("div");
+    node.className="node"+(locked?" locked":"")+(done?" done":"")+(cur?" current":"");
+    node.style.left=p.x+"px"; node.style.top=p.y+"px";
+    node.innerHTML=(locked?"🔒":(i===0?"♡":i===N-1?"★":i))+(done?'<span class="badge">✓</span>':"");
+    if(!locked) node.onclick=()=>enterChapter(i,true);
+    trail.appendChild(node);
+    const lab=document.createElement("div");
+    lab.className="nlabel"; lab.style.left=p.x+"px"; lab.style.top=(p.y+34)+"px";
+    lab.innerHTML="<b>"+c.n+"</b>"+c.title;
+    trail.appendChild(lab);
+  });
+}
+function resetProgress(){
+  if(!confirm("确定清空所有章节进度？")) return;
+  unlocked=0; route=null;
+  localStorage.removeItem("nagi_unlocked"); localStorage.removeItem("nagi_route");
+  renderMap();
+}
+
+/* 进入章节 / 游戏层 */
+function enterChapter(ci, reset){
+  ["map","clear","ending","chap","home","prologue"].forEach(i=>$(i).classList.add("hidden"));
+  $("gamebg").classList.remove("hidden"); $("gameveil").classList.remove("hidden");
+  $("hud").classList.remove("hidden"); $("gameskip").classList.remove("hidden"); petals(false);
+  if(reset){ bond=0; und=0; badFlag=false; }
+  setBond();
+  currentCI=ci;
+  if(ci===7 && !route) route=localStorage.getItem("nagi_route")||"dream";
+  const start = ci===7 ? (route==="stay"?"c7s":"c7d") : CHAPTERS[ci].start;
+  play(start);
+}
+function chapterComplete(ci){
+  if(ci+1>unlocked){ unlocked=ci+1; saveUnlocked(); }
+  if(route) localStorage.setItem("nagi_route",route);
+  pendingCI=ci;
+  $("dialog").classList.add("hidden"); $("choices").classList.add("hidden");
+  $("clearName").textContent = CHAPTERS[ci].n+" · "+CHAPTERS[ci].title;
+  $("clearNextBtn").style.display = (ci+1<CHAPTERS.length)?"inline-block":"none";
+  $("clear").classList.remove("hidden");
+}
+function continueNext(){ $("clear").classList.add("hidden"); enterChapter(pendingCI+1, false); }
+function backToMenu(){ showMap(); }
+
+/* 对话推进 */
+function typeLine(text){
+  typing=true; curText=text; let i=0; const box=$("text"); box.textContent="";
+  $("indicator").classList.remove("show"); clearInterval(typer);
+  typer=setInterval(()=>{ box.textContent=text.slice(0,++i);
+    if(i>=text.length){ clearInterval(typer); typing=false; $("indicator").classList.add("show"); } },26);
+}
+function applyWho(who){
+  const sp=$("speaker");
+  if(who==="sys"){ sp.classList.add("hide"); $("text").classList.add("narration"); }
+  else{ sp.classList.remove("hide"); $("text").classList.remove("narration");
+    sp.textContent=NAMES[who]; sp.className="speaker"+(who==="ant"?" ant":who==="yiyi"?" yiyi":""); }
+}
+function showLine(){ const ln=queue[qi]; if(ln.mood) setMood(ln.mood); applyWho(ln.who); typeLine(ln.t); }
+function tap(){
+  if(choicesOpen) return;
+  if(typing){ clearInterval(typer); $("text").textContent=curText; typing=false; $("indicator").classList.add("show"); return; }
+  qi++; if(qi<queue.length){ showLine(); } else { onQueueEnd(); }
+}
+function onQueueEnd(){
+  if(after&&after.type==="choices"){ renderChoices(after.choices); }
+  else if(after&&after.type==="next"){ play(after.next); }
+  else if(after&&after.type==="end"){ finish(); }
+}
+function renderChoices(list){
+  choicesOpen=true; $("indicator").classList.remove("show");
+  const box=$("choices"); box.innerHTML=""; box.classList.remove("hidden");
+  list.forEach(c=>{ const b=document.createElement("div"); b.className="opt";
+    b.innerHTML=esc(c.label)+'<span class="tag">['+c.type+']</span>';
+    b.onclick=(e)=>{ e.stopPropagation(); choose(c); }; box.appendChild(b); });
+}
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function choose(c){
+  choicesOpen=false; $("choices").classList.add("hidden");
+  bond+=c.b||0; und+=c.u||0; if(c.route) route=c.route; if(c.bad) badFlag=true; setBond();
+  const q=[{who:"ant",t:c.ant}];
+  (c.nagi||[]).forEach((line,idx)=>{ q.push({who:"nagi",t:line, mood: idx===0?c.mood:undefined}); });
+  queue=q; qi=0; after = c.end ? {type:"end"} : {type:"next", next:c.next};
+  showLine();
+}
+function play(id){
+  const sc=STORY[id]; if(!sc){ console.warn("缺失节点",id); return; }
+  if(sc.chapter){
+    const nci=nodeToCI[id];
+    if(nci!==undefined && currentCI!==null && nci>currentCI){ chapterComplete(currentCI); return; }
+    if(nci!==undefined) currentCI=nci;
+    if(sc.chapter.mood) setMood(sc.chapter.mood);
+    $("chapName").textContent=CHAPTERS[nci]?CHAPTERS[nci].n:"";
+    pendingNext=sc.next;
+    $("chapN").textContent=sc.chapter.n; $("chapT").textContent=sc.chapter.t;
+    $("dialog").classList.add("hidden"); $("choices").classList.add("hidden");
+    $("chap").classList.remove("hidden");
+    return;
+  }
+  if(sc.mood) setMood(sc.mood);
+  $("dialog").classList.remove("hidden");
+  queue=(sc.auto||[]).map(x=>({who:x.who,t:x.t,mood:x.mood})); qi=0;
+  after={type:"choices", choices:sc.choices};
+  showLine();
+}
+function closeChap(){ $("chap").classList.add("hidden"); play(pendingNext); }
+
+function skipChapter(){
+  clearInterval(typer); typing=false; choicesOpen=false; clearTimeout(pgTimer);
+  if(currentCI===CHAPTERS.length-1){ finish(); }
+  else if(currentCI!==null){ chapterComplete(currentCI); }
+}
+
+function finish(){
+  let tier;
+  if(badFlag || und<8) tier="bad";
+  else if(route==="dream" && bond>=16 && und>=14) tier="true";
+  else if(bond>=15) tier="good";
+  else tier="normal";
+  const e=ENDINGS[tier];
+  unlockEnding(tier);
+  unlocked=CHAPTERS.length; saveUnlocked();
+  if(route) localStorage.setItem("nagi_route",route);
+  $("chapName").textContent=e.status;
+  setTimeout(()=>{
+    $("dialog").classList.add("hidden"); $("hud").classList.add("hidden"); $("gameskip").classList.add("hidden");
+    $("etag").textContent=e.tag; $("emoji").textContent=e.emoji;
+    $("etitle").textContent=e.title; $("edesc").innerHTML=e.desc;
+    const rt=route?("　·　"+(route==="dream"?"梦想线":"相守线")):"";
+    $("escore").innerHTML="💛 羁绊 "+bond+"　🧠 理解 "+und+rt+"<br>"+e.sub;
+    $("ending").classList.remove("hidden");
+  },700);
+}
+
+/* ====== 结局图鉴 ====== */
+const ENDING_ORDER=["true","good","normal","bad"];
+function unlockEnding(tier){
+  let a=JSON.parse(localStorage.getItem("nagi_endings")||"[]");
+  if(!a.includes(tier)){ a.push(tier); localStorage.setItem("nagi_endings",JSON.stringify(a)); }
+}
+function showGallery(){ $("map").classList.add("hidden"); petals(true); renderGallery(); $("gallery").classList.remove("hidden"); }
+function closeGallery(){ $("gallery").classList.add("hidden"); showMap(); }
+function renderGallery(){
+  const got=JSON.parse(localStorage.getItem("nagi_endings")||"[]");
+  $("galcount").textContent="已收藏的结局 "+ENDING_ORDER.filter(k=>got.includes(k)).length+" / "+ENDING_ORDER.length;
+  const box=$("gallist"); box.innerHTML="";
+  ENDING_ORDER.forEach(k=>{
+    const e=ENDINGS[k], has=got.includes(k);
+    const c=document.createElement("div"); c.className="galcard"+(has?"":" lock");
+    c.innerHTML = has
+      ? '<span class="gbig">'+e.emoji+'</span><div class="gtag">'+e.tag+'</div><div class="gtit">'+e.title+'</div><div class="gdesc">'+e.desc+'</div>'
+      : '<span class="gbig">🔒</span><div class="gtag">??? END</div><div class="gtit">尚未解锁</div><div class="gdesc">达成对应结局后，将在此收藏。</div>';
+    box.appendChild(c);
+  });
+}
+
+document.addEventListener("keydown",e=>{ if(e.code==="Space"||e.code==="Enter"){ e.preventDefault();
+  if(!$("prologue").classList.contains("hidden")) pgNext(); else tap(); }});
+</script>
+</body>
+</html>
