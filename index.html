@@ -222,6 +222,22 @@
   .galcard .gtag{font-size:11px;letter-spacing:.2em;color:var(--goldD);margin-top:2px}
   .galcard .gtit{font-family:var(--serif);font-size:17px;color:var(--rose);margin:2px 0 4px}
   .galcard .gdesc{font-size:12px;line-height:1.7;color:var(--ink2)}
+
+  /* ===== 名字录入页 ===== */
+  #setup{padding:0 30px}
+  .setupbox{position:relative;z-index:3;width:min(360px,90%);
+    background:linear-gradient(180deg,rgba(255,251,247,.97),rgba(250,238,230,.98));
+    border:1.5px solid var(--gold);border-radius:22px;padding:26px 24px 22px;
+    box-shadow:0 14px 44px rgba(160,100,70,.32);display:flex;flex-direction:column;gap:9px;align-items:center}
+  .setupbox h2{font-family:var(--serif);font-size:22px;color:var(--rose);margin:2px 0 4px;text-shadow:0 1px 0 #fff}
+  .setupbox label{align-self:flex-start;font-size:14px;color:var(--ink);letter-spacing:.04em;margin-top:6px;font-weight:600}
+  .setupbox input{width:100%;font-size:16px;color:var(--ink);background:#fffaf6;border:1.5px solid var(--line);
+    border-radius:12px;padding:11px 14px;outline:none;font-family:inherit;
+    -webkit-user-select:text;user-select:text}
+  .setupbox input::placeholder{color:#c4ad9c;font-size:13px}
+  .setupbox input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(201,160,99,.22)}
+  .setupbox .btn{margin-top:16px}
+  .setuphint{font-size:11.5px;color:var(--ink2);line-height:1.7;margin-top:8px;text-align:center}
 </style>
 </head>
 <body>
@@ -241,6 +257,22 @@
     <div class="start" onclick="onStart()">
       <div class="startword" id="startword"></div>
       <div class="starthint">轻 触 开 始</div>
+    </div>
+  </div>
+
+  <!-- ①b 名字录入 -->
+  <div class="screen hidden" id="setup">
+    <div class="bg soft"></div>
+    <div class="veil read"></div>
+    <div class="setupbox">
+      <div class="orn">开始之前</div>
+      <h2>填写你的设定</h2>
+      <label>你的名字：</label>
+      <input id="inpPlayer" maxlength="12" placeholder="你在故事里的名字" />
+      <label>给 Nagi 的昵称：</label>
+      <input id="inpNagi" maxlength="12" placeholder="你想怎么称呼他，如：凪、凪宝、士郎" />
+      <button class="btn" onclick="confirmSetup()">进入故事 →</button>
+      <div class="setuphint">故事里所有称呼都会替换成上面的名字 ♡<br/>留空则用默认「你 / 凪」</div>
     </div>
   </div>
 
@@ -1038,14 +1070,22 @@ const CHAPTERS=[
 const PROLOGUE_LINES=[
   "「好麻烦。」——这是他的口头禅。",
   "凪诚士郎，蓝色监狱的天才，对全世界都提不起兴趣。",
-  "而你，是隔着屏幕，第一个看见他光芒的人。",
+  "而你，是一位年轻的风险投资人——表面理性精明，嘴硬心软。",
+  "也是隔着屏幕，第一个看见他光芒的人。",
   "从作战室的初遇，到世界之巅的并肩——",
-  "读懂他别扭的温柔，陪他走完这场名为恋爱的比赛。",
+  "你会宠他、会治他，读懂他别扭的温柔，",
+  "陪他走完这场名为恋爱的比赛。",
   "你的每一个选择，都将决定你们的结局。",
 ];
 
 /* ====================== 引擎 ====================== */
-const NAMES={ nagi:"Nagi", ant:"Ant", yiyi:"一一", sys:"" };
+/* 玩家自定义称呼：Ant→玩家名，凪诚士郎/Nagi/凪→玩家给的昵称 */
+let PLAYER = localStorage.getItem("nagi_pname") || "你";
+let NAGI   = localStorage.getItem("nagi_nname") || "凪";
+function sub(s){ if(s==null) return s;
+  /* 单次扫描替换：替换插入的昵称不会被重扫（避免「凪宝」→「凪宝宝」）；长名「凪诚士郎」优先匹配 */
+  return String(s).replace(/凪诚士郎|凪|Nagi|Ant/g, m => m==="Ant" ? PLAYER : NAGI); }
+const NAMES={ nagi:NAGI, ant:PLAYER, yiyi:"一一", sys:"" };
 const BOND_FULL=60;
 let bond=+(localStorage.getItem("nagi_bond")||0);
 let und=+(localStorage.getItem("nagi_und")||0);
@@ -1097,8 +1137,20 @@ startTypewriter();
 function setMood(m){ /* 立绘可插拔，暂用虚化背景 */ }
 function setBond(){ $("bond").style.width=Math.min(100,bond/BOND_FULL*100)+"%"; }
 
-/* ① 主页 → 开场白 */
-function onStart(){ clearInterval(startTimer); $("home").classList.add("hidden"); playPrologue(); }
+/* ① 主页 → 名字录入 → 开场白 */
+function onStart(){ clearInterval(startTimer); $("home").classList.add("hidden"); showSetup(); }
+function showSetup(){
+  $("inpPlayer").value = localStorage.getItem("nagi_pname")||"";
+  $("inpNagi").value   = localStorage.getItem("nagi_nname")||"";
+  $("setup").classList.remove("hidden");
+}
+function confirmSetup(){
+  const p=$("inpPlayer").value.trim(), n=$("inpNagi").value.trim();
+  PLAYER = p || "你";  NAGI = n || "凪";
+  localStorage.setItem("nagi_pname",PLAYER); localStorage.setItem("nagi_nname",NAGI);
+  NAMES.ant=PLAYER; NAMES.nagi=NAGI;
+  $("setup").classList.add("hidden"); playPrologue();
+}
 
 /* ② 开场白逐句 */
 let pgi=0, pgTimer=null, pgTyper=null, pgTyping=false;
@@ -1106,7 +1158,7 @@ function playPrologue(){ $("prologue").classList.remove("hidden"); petals(true);
 function showPg(){
   const el=$("pgText");
   if(pgi>=PROLOGUE_LINES.length){ endPrologue(); return; }
-  el.textContent=PROLOGUE_LINES[pgi];
+  el.textContent=sub(PROLOGUE_LINES[pgi]);
   el.classList.add("show");
   clearTimeout(pgTimer);
   pgTimer=setTimeout(()=>{ pgi++; showPg(); }, 3000);
@@ -1145,7 +1197,7 @@ function renderMap(){
     trail.appendChild(node);
     const lab=document.createElement("div");
     lab.className="nlabel"; lab.style.left=p.x+"px"; lab.style.top=(p.y+34)+"px";
-    lab.innerHTML="<b>"+c.n+"</b>"+c.title;
+    lab.innerHTML="<b>"+c.n+"</b>"+sub(c.title);
     trail.appendChild(lab);
   });
 }
@@ -1168,7 +1220,7 @@ function openChapterMap(ci){
 }
 function renderSectionMap(ci){
   const ch=CHAPTERS[ci];
-  $("smapTitle").textContent=ch.n+" · "+ch.title;
+  $("smapTitle").textContent=sub(ch.n+" · "+ch.title);
   $("smapSub").textContent=chapterDone(ci)?"本章已通关 ✓":(ch.sections.length+" 节");
   const box=$("seclist"); box.innerHTML="";
   ch.sections.forEach((s,si)=>{
@@ -1177,7 +1229,7 @@ function renderSectionMap(ci){
     card.className="seccard"+(done?" done":"");
     card.style.animationDelay=(si*0.05)+"s";
     card.innerHTML='<div class="sidx">'+(si+1)+'</div>'
-      +'<div class="sbody"><div class="sn">'+s.n+'</div><div class="st">'+esc(secTitle(s))+'</div></div>'
+      +'<div class="sbody"><div class="sn">'+s.n+'</div><div class="st">'+esc(sub(secTitle(s)))+'</div></div>'
       +'<div class="sck">'+(done?'✓':'›')+'</div>';
     card.onclick=()=>playSection(ci,si);
     box.appendChild(card);
@@ -1196,7 +1248,7 @@ function playSection(ci,si){
   $("gamebg").style.backgroundImage="url('"+bgImg+"')";
   $("chapName").textContent=ch.n;
   $("chapN").textContent=ch.n+" · "+s.n;
-  $("chapT").textContent=secTitle(s);
+  $("chapT").textContent=sub(secTitle(s));
   pendingNext=(s.routed && route==="stay" && s.startStay)? s.startStay : s.start;
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden");
   $("chap").classList.remove("hidden");
@@ -1211,7 +1263,7 @@ function sectionDone(){
   if(chapterDone(ci) && ci+1>unlocked){ unlocked=ci+1; saveUnlocked(); }
   const ch=CHAPTERS[ci], s=ch.sections[si];
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden"); $("gameskip").classList.add("hidden");
-  $("clearName").textContent=ch.n+" · "+secTitle(s);
+  $("clearName").textContent=sub(ch.n+" · "+secTitle(s));
   $("clearSub").textContent=chapterDone(ci)?("「"+ch.title+"」已通关 · 🎉"):"本节完成";
   $("clearBackBtn").onclick=()=>{ $("clear").classList.add("hidden"); openChapterMap(ci); };
   const btn=$("clearNextBtn");
@@ -1231,6 +1283,7 @@ function exitToSection(){ if(currentCI!==null) openChapterMap(currentCI); else s
 
 /* 对话推进 */
 function typeLine(text){
+  text=sub(text);
   typing=true; curText=text; let i=0; const box=$("text"); box.textContent="";
   $("indicator").classList.remove("show"); clearInterval(typer);
   typer=setInterval(()=>{ box.textContent=text.slice(0,++i);
@@ -1260,7 +1313,7 @@ function renderChoices(list){
   $("dialog").classList.add("hidden");           // 选项出现时隐藏对话框，杜绝重叠
   const box=$("choices"); box.innerHTML=""; box.classList.remove("hidden");
   list.forEach(c=>{ const b=document.createElement("div"); b.className="opt";
-    b.innerHTML=esc(c.label)+'<span class="tag">['+c.type+']</span>';
+    b.innerHTML=esc(sub(c.label))+'<span class="tag">['+c.type+']</span>';
     b.onclick=(e)=>{ e.stopPropagation(); choose(c); }; box.appendChild(b); });
 }
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
@@ -1310,7 +1363,7 @@ function finish(forceTier){
   setTimeout(()=>{
     $("dialog").classList.add("hidden"); $("hud").classList.add("hidden"); $("gameskip").classList.add("hidden");
     $("etag").textContent=e.tag; $("emoji").textContent=e.emoji;
-    $("etitle").textContent=e.title; $("edesc").innerHTML=e.desc;
+    $("etitle").textContent=sub(e.title); $("edesc").innerHTML=sub(e.desc);
     const rt=route?("　·　"+(route==="dream"?"梦想线":"相守线")):"";
     $("escore").innerHTML="💛 羁绊 "+bond+"　🧠 理解 "+und+rt+"<br>"+e.sub;
     $("ending").classList.remove("hidden");
