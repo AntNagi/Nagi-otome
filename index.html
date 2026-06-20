@@ -1137,8 +1137,8 @@ startTypewriter();
 function setMood(m){ /* 立绘可插拔，暂用虚化背景 */ }
 function setBond(){ $("bond").style.width=Math.min(100,bond/BOND_FULL*100)+"%"; }
 
-/* ① 主页 → 名字录入 → 开场白 */
-function onStart(){ clearInterval(startTimer); $("home").classList.add("hidden"); showSetup(); }
+/* ① 主页 → 开场白 → 名字录入 → 章节目录 */
+function onStart(){ clearInterval(startTimer); $("home").classList.add("hidden"); playPrologue(); }
 function showSetup(){
   $("inpPlayer").value = localStorage.getItem("nagi_pname")||"";
   $("inpNagi").value   = localStorage.getItem("nagi_nname")||"";
@@ -1149,7 +1149,7 @@ function confirmSetup(){
   PLAYER = p || "你";  NAGI = n || "凪";
   localStorage.setItem("nagi_pname",PLAYER); localStorage.setItem("nagi_nname",NAGI);
   NAMES.ant=PLAYER; NAMES.nagi=NAGI;
-  $("setup").classList.add("hidden"); playPrologue();
+  $("setup").classList.add("hidden"); showMap();
 }
 
 /* ② 开场白逐句 */
@@ -1164,7 +1164,7 @@ function showPg(){
   pgTimer=setTimeout(()=>{ pgi++; showPg(); }, 3000);
 }
 function pgNext(){ clearTimeout(pgTimer); pgi++; showPg(); }
-function endPrologue(){ clearTimeout(pgTimer); clearInterval(pgTyper); $("prologue").classList.add("hidden"); showMap(); }
+function endPrologue(){ clearTimeout(pgTimer); clearInterval(pgTyper); $("prologue").classList.add("hidden"); showSetup(); }
 
 /* ③ 章节路线图（一级页）*/
 function showMap(){
