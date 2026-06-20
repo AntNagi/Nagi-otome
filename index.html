@@ -62,6 +62,29 @@
   #home .starthint{font-size:12px;letter-spacing:.3em;color:#fff;text-shadow:0 1px 6px rgba(120,40,50,.6);
     opacity:.85;animation:hintb 1.8s ease-in-out infinite}
   @keyframes hintb{0%,100%{opacity:.4}50%{opacity:.9}}
+  /* 存档记录入口（首页）*/
+  #home .homesaves{position:absolute;bottom:6%;left:0;right:0;text-align:center;z-index:4;
+    font-size:12px;letter-spacing:.22em;color:#fff;cursor:pointer;opacity:.9;
+    text-shadow:0 1px 6px rgba(120,40,50,.6)}
+  #home .homesaves span{border-bottom:1px solid rgba(255,255,255,.5);padding-bottom:2px}
+  /* 存档卡片 */
+  .savecard{position:relative;border-radius:16px;padding:13px 44px 13px 16px;text-align:left;
+    border:1.5px solid var(--gold);background:rgba(255,250,246,.92);cursor:pointer;
+    transition:transform .12s,box-shadow .12s}
+  .savecard:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(120,40,50,.22)}
+  .savecard .svtag{font-size:11px;letter-spacing:.18em;color:var(--goldD)}
+  .savecard .svtit{font-family:var(--serif);font-size:16px;color:var(--rose);margin:3px 0 4px}
+  .savecard .svmeta{font-size:11.5px;line-height:1.6;color:var(--ink2)}
+  .savecard .savedel{position:absolute;top:50%;right:12px;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:15px;color:var(--rose);background:rgba(156,58,72,.10);border:1px solid rgba(156,58,72,.25)}
+  .saveempty{font-size:13px;color:var(--ink2);line-height:2;opacity:.85;margin-top:30px}
+  /* 轻提示 */
+  .toast{position:absolute;left:50%;top:18%;transform:translateX(-50%);z-index:30;
+    background:rgba(60,30,35,.88);color:#fff;font-size:13px;letter-spacing:.05em;
+    padding:9px 20px;border-radius:20px;box-shadow:0 8px 22px rgba(0,0,0,.3);
+    opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+  .toast.show{opacity:1}
 
   /* ===== 开场白 ===== */
   #prologue{cursor:pointer;padding:40px 34px}
@@ -258,6 +281,7 @@
       <div class="startword" id="startword"></div>
       <div class="starthint">轻 触 开 始</div>
     </div>
+    <div class="homesaves" onclick="openSaves('home')"><span>☰ 存档记录</span></div>
   </div>
 
   <!-- ①b 名字录入 -->
@@ -293,7 +317,10 @@
       <div class="orn">章节目录</div>
     </div>
     <div class="scroller"><div class="trail" id="trail"></div></div>
-    <div class="mapfoot"><button class="btn ghost" style="font-size:13px;padding:9px 24px" onclick="showGallery()">✧ 结局图鉴 ✧</button></div>
+    <div class="mapfoot" style="gap:10px">
+      <button class="btn ghost" style="font-size:13px;padding:9px 20px" onclick="openSaves('map')">☰ 存档记录</button>
+      <button class="btn ghost" style="font-size:13px;padding:9px 20px" onclick="showGallery()">✧ 结局图鉴 ✧</button>
+    </div>
   </div>
 
   <!-- ③b 小节目录（二级页） -->
@@ -310,8 +337,10 @@
 
   <!-- HUD（游戏中） -->
   <div class="hud hidden" id="hud">
-    <div class="iconbtn" onclick="exitToSection()" title="返回小节目录">
+    <div class="iconbtn" onclick="exitToSection()" title="返回章节目录">
       <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg></div>
+    <div class="iconbtn" onclick="quickSave()" title="存档">
+      <svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5zM8 3v6h7V3M8 14h8v7H8z"/></svg></div>
     <div class="chiptitle" id="chapName">序章</div>
     <div class="sp"></div>
     <div class="bondwrap">
@@ -381,6 +410,18 @@
     <div class="gallist" id="gallist" style="position:relative"></div>
     <button class="btn ghost" style="position:relative" onclick="closeGallery()">返回目录</button>
   </div>
+
+  <!-- 存档记录（多卡槽） -->
+  <div class="cover hidden" id="saves">
+    <div class="bg blur"></div><div class="veil read"></div>
+    <div class="etag" style="position:relative">SAVE DATA · 存档记录</div>
+    <h1 style="position:relative;font-size:23px" id="savecount">存档卡槽</h1>
+    <div class="gallist" id="savelist" style="position:relative"></div>
+    <button class="btn ghost" style="position:relative" onclick="closeSaves()">返回</button>
+  </div>
+
+  <!-- 轻提示 -->
+  <div class="toast" id="toast"></div>
 
 </div>
 
@@ -1237,11 +1278,11 @@ function setMood(m){ /* 立绘可插拔，暂用虚化背景 */ }
 
 /* ====================== 分支系统（线性·五幕） ====================== */
 /* 隐藏数值 I=懂他, D=心墙；旗标 mj(M/J) path(dream/stay/cling) kc3(爱/习惯) nel(好/坏) finalFlag mDeep */
-let I=0, D=0, mj=null, path=null, kc3=null, nel=null, mDeep=false, curNode=null, maxStage=0, pendingNode=null;
+let I=0, D=0, mj=null, path=null, kc3=null, nel=null, mDeep=false, curNode=null, maxStage=0, pendingNode=null, curScene=null;
 (function loadSt(){ try{ const s=JSON.parse(localStorage.getItem("nagi_state")||"null");
-  if(s){ I=s.I||0; D=s.D||0; mj=s.mj; path=s.path; kc3=s.kc3; nel=s.nel; mDeep=!!s.mDeep; finalFlag=s.finalFlag||null; curNode=s.cur||null; maxStage=s.maxStage||0; } }catch(e){} })();
-function saveState(){ localStorage.setItem("nagi_state",JSON.stringify({I,D,mj,path,kc3,nel,mDeep,finalFlag,cur:curNode,maxStage})); }
-function clearState(){ I=0;D=0;mj=path=kc3=nel=finalFlag=null;mDeep=false;curNode=null;maxStage=0; localStorage.removeItem("nagi_state"); }
+  if(s){ I=s.I||0; D=s.D||0; mj=s.mj; path=s.path; kc3=s.kc3; nel=s.nel; mDeep=!!s.mDeep; finalFlag=s.finalFlag||null; curNode=s.cur||null; maxStage=s.maxStage||0; curScene=s.curScene||null; } }catch(e){} })();
+function saveState(){ localStorage.setItem("nagi_state",JSON.stringify({I,D,mj,path,kc3,nel,mDeep,finalFlag,cur:curNode,maxStage,curScene})); }
+function clearState(){ I=0;D=0;mj=path=kc3=nel=finalFlag=null;mDeep=false;curNode=null;maxStage=0;curScene=null; localStorage.removeItem("nagi_state"); }
 
 /* 六幕结构（章）+ 节标题，用于过场卡/进度/HUD */
 const STAGES=["相遇 · 相识","确立 · 第一次","相处 · 日常","感情 · 认知","NEL · 低谷","世界舞台 · 结局"];
@@ -1318,7 +1359,7 @@ function go(id){
   const node=STORY[id];
   if(!node){ console.warn("缺失节点",id); finish(); return; }
   if(node.router){ go(resolveRouter(id)); return; }
-  curNode=id; const si=stageIndex(id); if(si>maxStage)maxStage=si; saveState();
+  curNode=id; if(SCENE[id]) curScene=id; const si=stageIndex(id); if(si>maxStage)maxStage=si; saveState();
   if(SCENE[id]) showSceneTitle(id);   // 节首 → 先弹「节标题卡」
   else playNode(id);                   // 链内续节 → 直接连续播放
 }
@@ -1660,6 +1701,76 @@ function eggFinish(){
   $("edesc").innerHTML=sub("那个对全世界都说「好麻烦」的人，<br/>把「一辈子」这三个字，<br/>认认真真，说给了你一个人听。");
   $("escore").innerHTML="💍 世界第一，和他的余生，都归你了";
   $("ending").classList.remove("hidden");
+}
+
+/* ====== 多存档卡槽（日乙本地存档）====== */
+function loadSaves(){ try{ return JSON.parse(localStorage.getItem("nagi_saves")||"[]"); }catch(e){ return []; } }
+function writeSaves(a){ localStorage.setItem("nagi_saves",JSON.stringify(a)); }
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),1700); }
+function quickSave(){
+  if(!curNode){ toast("还没有进入剧情"); return; }
+  const sceneId = curScene || (SCENE[curNode]?curNode:null);
+  const nm = sceneId ? sub(SCENE[sceneId]) : ("第"+(stageIndex(curNode)+1)+"幕 · "+STAGES[stageIndex(curNode)]);
+  const a=loadSaves();
+  a.unshift({ id:Date.now(), node:curNode, scene:sceneId, name:nm,
+    part:(PARTMAP[curNode]||partOf(curNode)),
+    act:"第"+(stageIndex(curNode)+1)+"幕 · "+STAGES[stageIndex(curNode)],
+    ts:Date.now(),
+    st:{I,D,mj,path,kc3,nel,mDeep,finalFlag,maxStage,curScene,route,coldFlag,bond,und},
+    pname:PLAYER, nname:NAGI });
+  if(a.length>30) a.length=30;
+  writeSaves(a); toast("已存档 ♡ "+nm);
+}
+let savesFrom="map";
+function openSaves(from){
+  savesFrom=from||"map";
+  ["home","map","smap","gallery","ending","clear","chap","dialog","choices","hud","gameskip"].forEach(i=>$(i).classList.add("hidden"));
+  petals(true); renderSaves(); $("saves").classList.remove("hidden");
+}
+function closeSaves(){
+  $("saves").classList.add("hidden");
+  if(savesFrom==="home"){ petals(true); $("home").classList.remove("hidden"); startTypewriter(); }
+  else showMap();
+}
+function fmtTime(ts){ const d=new Date(ts), p=n=>(n<10?"0":"")+n;
+  return (d.getMonth()+1)+"/"+d.getDate()+" "+p(d.getHours())+":"+p(d.getMinutes()); }
+function renderSaves(){
+  const a=loadSaves();
+  $("savecount").textContent = a.length ? ("存档卡槽 · "+a.length+" 条") : "存档卡槽";
+  const box=$("savelist"); box.innerHTML="";
+  if(!a.length){ box.innerHTML='<div class="saveempty">还没有任何存档。<br/>进入剧情后，点顶部 💾 图标即可随时存档。</div>'; return; }
+  a.forEach(s=>{
+    const card=document.createElement("div"); card.className="savecard";
+    const line=(s.st&&s.st.path)?({dream:"梦想线",stay:"相守线",cling:"执念"}[s.st.path]||""):"";
+    card.innerHTML='<div class="svtag">'+esc(s.part||"")+(line?(' · '+line):'')+'</div>'
+      +'<div class="svtit">'+esc(s.name||"存档")+'</div>'
+      +'<div class="svmeta">'+esc(s.act||"")+' · 懂他 '+(s.st?s.st.I:0)+' / 心墙 '+(s.st?s.st.D:0)+'<br/>'
+      +esc(s.pname||"你")+' ♡ '+esc(s.nname||"凪")+' · '+fmtTime(s.ts)+'</div>'
+      +'<div class="savedel" title="删除">×</div>';
+    card.onclick=()=>loadSlot(s.id);
+    card.querySelector(".savedel").onclick=(e)=>{ e.stopPropagation(); deleteSlot(s.id); };
+    box.appendChild(card);
+  });
+}
+function deleteSlot(id){
+  if(!confirm("删除这条存档？")) return;
+  writeSaves(loadSaves().filter(s=>s.id!==id)); renderSaves();
+}
+function loadSlot(id){
+  const s=loadSaves().find(x=>x.id===id); if(!s){ toast("存档已失效"); return; }
+  const st=s.st||{};
+  I=st.I||0; D=st.D||0; mj=st.mj||null; path=st.path||null; kc3=st.kc3||null; nel=st.nel||null;
+  mDeep=!!st.mDeep; finalFlag=st.finalFlag||null; maxStage=st.maxStage||0; curScene=st.curScene||s.scene||null;
+  route=st.route||route; coldFlag=!!st.coldFlag; bond=st.bond||0; und=st.und||0;
+  if(s.pname){ PLAYER=s.pname; localStorage.setItem("nagi_pname",PLAYER); NAMES.ant=PLAYER; }
+  if(s.nname){ NAGI=s.nname; localStorage.setItem("nagi_nname",NAGI); NAMES.nagi=NAGI; }
+  if(route) localStorage.setItem("nagi_route",route);
+  localStorage.setItem("nagi_cold",coldFlag?"1":"0"); saveScore();
+  curNode=s.node; saveState();
+  $("saves").classList.add("hidden");
+  toast("读取存档 ♡ "+(s.name||""));
+  go(s.node);
 }
 
 /* ====== 结局图鉴 ====== */
