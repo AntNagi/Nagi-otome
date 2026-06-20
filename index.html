@@ -1237,11 +1237,35 @@ function setMood(m){ /* 立绘可插拔，暂用虚化背景 */ }
 
 /* ====================== 分支系统（线性·五幕） ====================== */
 /* 隐藏数值 I=懂他, D=心墙；旗标 mj(M/J) path(dream/stay/cling) kc3(爱/习惯) nel(好/坏) finalFlag mDeep */
-let I=0, D=0, mj=null, path=null, kc3=null, nel=null, mDeep=false, curNode=null;
+let I=0, D=0, mj=null, path=null, kc3=null, nel=null, mDeep=false, curNode=null, maxStage=0, pendingNode=null;
 (function loadSt(){ try{ const s=JSON.parse(localStorage.getItem("nagi_state")||"null");
-  if(s){ I=s.I||0; D=s.D||0; mj=s.mj; path=s.path; kc3=s.kc3; nel=s.nel; mDeep=!!s.mDeep; finalFlag=s.finalFlag||null; curNode=s.cur||null; } }catch(e){} })();
-function saveState(){ localStorage.setItem("nagi_state",JSON.stringify({I,D,mj,path,kc3,nel,mDeep,finalFlag,cur:curNode})); }
-function clearState(){ I=0;D=0;mj=path=kc3=nel=finalFlag=null;mDeep=false;curNode=null; localStorage.removeItem("nagi_state"); }
+  if(s){ I=s.I||0; D=s.D||0; mj=s.mj; path=s.path; kc3=s.kc3; nel=s.nel; mDeep=!!s.mDeep; finalFlag=s.finalFlag||null; curNode=s.cur||null; maxStage=s.maxStage||0; } }catch(e){} })();
+function saveState(){ localStorage.setItem("nagi_state",JSON.stringify({I,D,mj,path,kc3,nel,mDeep,finalFlag,cur:curNode,maxStage})); }
+function clearState(){ I=0;D=0;mj=path=kc3=nel=finalFlag=null;mDeep=false;curNode=null;maxStage=0; localStorage.removeItem("nagi_state"); }
+
+/* 六幕结构（章）+ 节标题，用于过场卡/进度/HUD */
+const STAGES=["相遇 · 相识","确立 · 第一次","相处 · 日常","感情 · 认知","NEL · 低谷","世界舞台 · 结局"];
+function stageIndex(id){
+  if(["p1","p2","c1a","e_select2","c1b"].includes(id)) return 0;
+  if(["c2a","c2b","c2c","c3a","c3b"].includes(id)) return 1;
+  if(["c5a","c5b"].includes(id)) return 3;
+  if(["e_depart","e_bday1","e_therapy","e_bday2","nelbad1","nelbad2"].includes(id)) return 4;
+  if(["p5_intro","c7d_a","p5_reunion","c8a","c8b","c7d_b","stay_intro","e_xmas1","e_xmas2","e_valentine","c7s_a","c6_cold"].includes(id)) return 5;
+  return 2;
+}
+/* 节标题（仅「节首」节点有；链内节点 c4b/c4c/c5b/c8b 无 → 不弹卡，连续播放）*/
+const SCENE={ p1:"作战室·初遇",p2:"投资的私心",c1a:"训练室初见",e_select2:"二次选拔·主动选洁",c1b:"心意相通",
+ c2a:"假期的来电",c2b:"门口的告白",c2c:"青涩的第一次",c3a:"开放日·歪头重逢",c3b:"邋遢更衣室",kc2:"★相处之道",
+ e_lolly:"棒棒糖·自动刷脸",mt1:"暧昧·该不该催",e_invite:"高级公寓的邀请",e_lemontea:"你的，我的",e_summer:"Fiery Summer·花环",
+ c4a:"七夕·蓝色玫瑰",mt2:"已读不回的夜",e_rain:"雨天·共撑一伞",e_festival:"夏日祭·浴衣与烟火",mt3:"同居·他放飞了",
+ e_bath:"满室水汽",mt4:"闹别扭的夜",e_drunk:"借着醉意",e_period:"经期·别扭的温柔",m_shallow:"客气的距离",
+ e_sick:"换季感冒·笨拙看护",e_scarf:"送围巾",mt5:"他的温柔·与你的分寸",
+ e_softrice:"软饭王哲学",e_dressup:"任人打扮",e_drive:"飙车实录",e_apocalypse:"末日盛夏",e_curry:"黑暗料理·咖喱饭",
+ e_autumn:"读书之秋",e_jealous:"只在乎你·吃醋",e_quarrel:"拌嘴·收手还是闹大",e_halloween:"万圣夜·专属恶魔",
+ c5a:"★笨拙的心·是爱还是习惯",
+ e_depart:"NEL启程·闭关送别",e_bday1:"★被淘汰的生日·你的反应",e_therapy:"那一夜·情绪的出口",e_bday2:"重燃的愿望",nelbad1:"失望·第一次争吵",nelbad2:"表面的和好",
+ p5_intro:"★世界舞台·最后的抉择",c7d_a:"世界之巅·应援",p5_reunion:"赛季结束·久别重逢",c8a:"跨年·迪士尼烟花",c7d_b:"世界第一·终局",
+ stay_intro:"相守·他常回来",e_xmas1:"圣诞·预制照片与猫睡衣",e_xmas2:"圣诞夜·礼物与痛房树",e_valentine:"情人节·玩偶熊",c7s_a:"相守·最后的选择",c6_cold:"渐行渐远" };
 function setBond(){ $("bond").style.width=Math.min(100, I*5)+"%"; }
 
 const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:"bg/select2.jpg",c1b:"bg/pitch.jpg",
@@ -1278,17 +1302,47 @@ function enterGameLayer(){
   $("hud").classList.remove("hidden"); $("gameskip").classList.add("hidden"); petals(false);
 }
 function go(id){
-  curNode=id; saveState();
   const node=STORY[id];
   if(!node){ console.warn("缺失节点",id); finish(); return; }
   if(node.router){ go(resolveRouter(id)); return; }
-  enterGameLayer();
+  curNode=id; const si=stageIndex(id); if(si>maxStage)maxStage=si; saveState();
+  if(SCENE[id]) showSceneTitle(id);   // 节首 → 先弹「节标题卡」
+  else playNode(id);                   // 链内续节 → 直接连续播放
+}
+function showSceneTitle(id){
+  enterGameLayer(); $("hud").classList.add("hidden");
   $("gamebg").style.backgroundImage="url('"+(NODEBG[id]||"bg/apartment.jpg")+"')";
-  $("chapName").textContent=partOf(id); setBond();
+  const st=stageIndex(id);
+  $("chapN").textContent="第 "+(st+1)+" 幕 · "+STAGES[st];
+  $("chapT").textContent=sub(SCENE[id]);
+  pendingNode=id;
+  $("dialog").classList.add("hidden"); $("choices").classList.add("hidden");
+  $("chap").classList.remove("hidden");
+}
+function playNode(id){
+  enterGameLayer();
+  const node=STORY[id]; const st=stageIndex(id);
+  $("gamebg").style.backgroundImage="url('"+(NODEBG[id]||"bg/apartment.jpg")+"')";
+  $("chapName").textContent="第"+(st+1)+"幕 "+STAGES[st]; setBond();
   $("dialog").classList.remove("hidden");
   queue=(node.auto||[]).map(x=>({who:x.who,t:x.t})); qi=0;
   after={type:"choices", choices:node.choices};
   showLine();
+}
+function advanceTo(next){
+  if(!next){ finish(); return; }
+  if(STORY[next] && stageIndex(next) > stageIndex(curNode)) showActClear(stageIndex(curNode), next);
+  else go(next);
+}
+function showActClear(actIdx,next){
+  $("dialog").classList.add("hidden"); $("choices").classList.add("hidden"); $("hud").classList.add("hidden");
+  $("clearName").textContent="第 "+(actIdx+1)+" 幕 · "+STAGES[actIdx];
+  $("clearSub").textContent="本幕完成 ♡";
+  $("clearBackBtn").textContent="回主页看进度";
+  $("clearBackBtn").onclick=()=>{ $("clear").classList.add("hidden"); showMap(); };
+  const b=$("clearNextBtn"); b.style.display="inline-block"; b.textContent="进入下一幕 →";
+  b.onclick=()=>{ $("clear").classList.add("hidden"); go(next); };
+  $("clear").classList.remove("hidden");
 }
 function startNew(){ clearState(); go("p1"); }
 function continueGame(){ if(curNode) go(curNode); else startNew(); }
@@ -1331,7 +1385,18 @@ function showMap(){
   petals(true);
   const hasSave=!!localStorage.getItem("nagi_state");
   const t=$("trail"); t.style.height="auto";
-  let h='<div style="display:flex;flex-direction:column;gap:15px;align-items:center;padding-top:60px">';
+  let h='<div style="display:flex;flex-direction:column;gap:8px;width:286px;margin:26px auto 20px">';
+  STAGES.forEach((s,i)=>{
+    const reached=hasSave && i<=maxStage, cur=hasSave && i===maxStage;
+    let label=s; if(i===2&&mj) label="相处 · "+(mj==="M"?"默契线":"较劲线");
+    h+='<div style="display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:12px;'
+      +(reached?'background:rgba(201,160,99,.20);border:1px solid var(--gold);color:var(--ink);'
+               :'background:rgba(160,140,120,.10);border:1px solid rgba(120,90,70,.12);color:#b6a496;')
+      +(cur?'box-shadow:0 0 0 2px rgba(156,58,72,.35);':'')+'">'
+      +'<span style="font-family:var(--serif);font-size:14px;width:16px;text-align:center;color:'+(reached?'var(--rose)':'#c4b3a4')+'">'+(reached?(cur?'▶':'✓'):(i+1))+'</span>'
+      +'<span style="font-size:13px">第'+(i+1)+'幕 · '+label+'</span></div>';
+  });
+  h+='</div><div style="display:flex;flex-direction:column;gap:12px;align-items:center">';
   if(hasSave) h+='<button class="btn" onclick="continueGame()">继续上次 →</button>';
   h+='<button class="btn'+(hasSave?' ghost':'')+'" onclick="newGameConfirm()">'+(hasSave?'重新开始':'开始游戏 →')+'</button></div>';
   t.innerHTML=h;
@@ -1425,7 +1490,7 @@ function playSection(ci,si){
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden");
   $("chap").classList.remove("hidden");
 }
-function closeChap(){ $("chap").classList.add("hidden"); play(pendingNext); }
+function closeChap(){ $("chap").classList.add("hidden"); playNode(pendingNode); }
 
 /* 本节完成 */
 function sectionDone(){
@@ -1475,7 +1540,7 @@ function tap(){
 }
 function onQueueEnd(){
   if(after&&after.type==="choices"){ renderChoices(after.choices); }
-  else if(after&&after.type==="go"){ go(after.next); }
+  else if(after&&after.type==="go"){ advanceTo(after.next); }
   else if(after&&after.type==="endbad"){ finish("bad"); }
   else if(after&&after.type==="egg"){ eggFinish(); }
   else if(after&&after.type==="end"){ finish(); }
