@@ -229,8 +229,9 @@
 <body>
 <div class="game" id="game">
 
-  <!-- 游戏背景：底层模糊铺满 + 上层完整图居中（自适配任意比例） -->
-  <div class="gbg hidden" id="gamebg"><div class="gbgfront" id="gamebgF"></div></div>
+  <!-- 游戏背景：底层模糊铺满 + 上层完整图居中（两层为兄弟，blur 不污染清晰层） -->
+  <div class="gbg hidden" id="gamebg"></div>
+  <div class="gbgfront hidden" id="gamebgF"></div>
   <div class="veil game hidden" id="gameveil"></div>
 
   <!-- 花瓣 -->
@@ -1117,7 +1118,7 @@ function endPrologue(){ clearTimeout(pgTimer); clearInterval(pgTyper); $("prolog
 
 /* ③ 章节路线图（一级页）*/
 function showMap(){
-  ["dialog","choices","chap","ending","clear","hud","gameskip","smap","gallery"].forEach(i=>$(i).classList.add("hidden"));
+  ["dialog","choices","chap","ending","clear","hud","gameskip","smap","gallery","gamebgF"].forEach(i=>$(i).classList.add("hidden"));
   $("gamebg").classList.add("hidden"); $("gameveil").classList.add("hidden");
   currentCI=null; currentSI=null; petals(true); renderMap();
   $("map").classList.remove("hidden");
@@ -1159,7 +1160,7 @@ function resetProgress(){
 
 /* ③b 小节目录（二级页）*/
 function openChapterMap(ci){
-  ["map","clear","ending","chap","home","prologue","dialog","choices","hud","gameskip","gallery"].forEach(i=>$(i).classList.add("hidden"));
+  ["map","clear","ending","chap","home","prologue","dialog","choices","hud","gameskip","gallery","gamebgF"].forEach(i=>$(i).classList.add("hidden"));
   $("gamebg").classList.add("hidden"); $("gameveil").classList.add("hidden");
   currentCI=ci; currentSI=null; petals(true);
   if(!route) route="dream";
@@ -1188,7 +1189,7 @@ function renderSectionMap(ci){
 /* 进入某一节（游戏层）*/
 function playSection(ci,si){
   ["smap","map","clear","ending","gallery"].forEach(i=>$(i).classList.add("hidden"));
-  $("gamebg").classList.remove("hidden"); $("gameveil").classList.remove("hidden");
+  $("gamebg").classList.remove("hidden"); $("gamebgF").classList.remove("hidden"); $("gameveil").classList.remove("hidden");
   $("hud").classList.remove("hidden"); $("gameskip").classList.remove("hidden"); petals(false);
   currentCI=ci; currentSI=si; setBond();
   if(!route) route="dream";
