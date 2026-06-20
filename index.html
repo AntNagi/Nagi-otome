@@ -1266,6 +1266,19 @@ const SCENE={ p1:"作战室·初遇",p2:"投资的私心",c1a:"训练室初见",
  e_depart:"NEL启程·闭关送别",e_bday1:"★被淘汰的生日·你的反应",e_therapy:"那一夜·情绪的出口",e_bday2:"重燃的愿望",nelbad1:"失望·第一次争吵",nelbad2:"表面的和好",
  p5_intro:"★世界舞台·最后的抉择",c7d_a:"世界之巅·应援",p5_reunion:"赛季结束·久别重逢",c8a:"跨年·迪士尼烟花",c7d_b:"世界第一·终局",
  stay_intro:"相守·他常回来",e_xmas1:"圣诞·预制照片与猫睡衣",e_xmas2:"圣诞夜·礼物与痛房树",e_valentine:"情人节·玩偶熊",c7s_a:"相守·最后的选择",c6_cold:"渐行渐远" };
+
+/* 五大 Part（目录两级结构）：每个 part 含若干 stage */
+const PARTS=[
+  {t:"相遇 · 相识", stages:[0]},
+  {t:"确立 · 热恋 · 相处", stages:[1,2]},
+  {t:"感情 · 认知", stages:[3]},
+  {t:"NEL · 低谷", stages:[4]},
+  {t:"世界舞台 · 结局", stages:[5]},
+];
+const STAGE2PART=[0,1,1,2,3,4];
+let menuOpen=-1;
+let seen=new Set(JSON.parse(localStorage.getItem("nagi_seen")||"[]"));
+function markSeen(id){ if(SCENE[id]&&!seen.has(id)){ seen.add(id); localStorage.setItem("nagi_seen",JSON.stringify([...seen])); } }
 function setBond(){ $("bond").style.width=Math.min(100, I*5)+"%"; }
 
 const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:"bg/select2.jpg",c1b:"bg/pitch.jpg",
@@ -1320,7 +1333,7 @@ function showSceneTitle(id){
   $("chap").classList.remove("hidden");
 }
 function playNode(id){
-  enterGameLayer();
+  enterGameLayer(); markSeen(id);
   const node=STORY[id]; const st=stageIndex(id);
   $("gamebg").style.backgroundImage="url('"+(NODEBG[id]||"bg/apartment.jpg")+"')";
   $("chapName").textContent="第"+(st+1)+"幕 "+STAGES[st]; setBond();
@@ -1383,26 +1396,44 @@ function showMap(){
   ["dialog","choices","chap","ending","clear","hud","gameskip","smap","gallery","gamebgF"].forEach(i=>$(i).classList.add("hidden"));
   $("gamebg").classList.add("hidden"); $("gameveil").classList.add("hidden");
   petals(true);
-  const hasSave=!!localStorage.getItem("nagi_state");
-  const t=$("trail"); t.style.height="auto";
-  let h='<div style="display:flex;flex-direction:column;gap:8px;width:286px;margin:26px auto 20px">';
-  STAGES.forEach((s,i)=>{
-    const reached=hasSave && i<=maxStage, cur=hasSave && i===maxStage;
-    let label=s; if(i===2&&mj) label="相处 · "+(mj==="M"?"默契线":"较劲线");
-    h+='<div style="display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:12px;'
-      +(reached?'background:rgba(201,160,99,.20);border:1px solid var(--gold);color:var(--ink);'
-               :'background:rgba(160,140,120,.10);border:1px solid rgba(120,90,70,.12);color:#b6a496;')
-      +(cur?'box-shadow:0 0 0 2px rgba(156,58,72,.35);':'')+'">'
-      +'<span style="font-family:var(--serif);font-size:14px;width:16px;text-align:center;color:'+(reached?'var(--rose)':'#c4b3a4')+'">'+(reached?(cur?'▶':'✓'):(i+1))+'</span>'
-      +'<span style="font-size:13px">第'+(i+1)+'幕 · '+label+'</span></div>';
-  });
-  h+='</div><div style="display:flex;flex-direction:column;gap:12px;align-items:center">';
-  if(hasSave) h+='<button class="btn" onclick="continueGame()">继续上次 →</button>';
-  h+='<button class="btn'+(hasSave?' ghost':'')+'" onclick="newGameConfirm()">'+(hasSave?'重新开始':'开始游戏 →')+'</button></div>';
-  t.innerHTML=h;
+  renderMenu();
   $("map").classList.remove("hidden");
   return;
 }
+function renderMenu(){
+  const hasSave=!!localStorage.getItem("nagi_state");
+  const curPart = hasSave ? STAGE2PART[maxStage] : -1;
+  const t=$("trail"); t.style.height="auto";
+  let h='<div style="width:300px;margin:18px auto 14px;display:flex;flex-direction:column;gap:7px">';
+  PARTS.forEach((p,pi)=>{
+    const reached = hasSave && maxStage>=p.stages[0];
+    const isCur = pi===curPart, open = menuOpen===pi && reached;
+    h+='<div onclick="toggleMenuPart('+pi+')" style="cursor:pointer;display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:12px;'
+      +(reached?'background:rgba(201,160,99,.20);border:1px solid var(--gold);'
+               :'background:rgba(160,140,120,.10);border:1px solid rgba(120,90,70,.12);')
+      +(isCur?'box-shadow:0 0 0 2px rgba(156,58,72,.35);':'')+'">'
+      +'<span style="font-family:var(--serif);font-size:14px;width:16px;text-align:center;color:'+(reached?'var(--rose)':'#c4b3a4')+'">'+(reached?(isCur?'▶':'✓'):(pi+1))+'</span>'
+      +'<span style="flex:1;font-size:13.5px;color:'+(reached?'var(--ink)':'#b6a496')+'">Part '+(pi+1)+' · '+p.t+'</span>'
+      +'<span style="font-size:11px;color:'+(reached?'var(--gold)':'#c4b3a4')+'">'+(reached?(open?'▲':'▼'):'🔒')+'</span></div>';
+    if(open){
+      let locked=0;
+      h+='<div style="display:flex;flex-direction:column;gap:5px;padding:1px 6px 6px 20px">';
+      Object.keys(SCENE).forEach(id=>{
+        if(STAGE2PART[stageIndex(id)]!==pi) return;
+        if(seen.has(id)) h+='<div onclick="jumpTo(\''+id+'\')" style="cursor:pointer;font-size:12.5px;color:var(--ink2);padding:6px 11px;border-radius:9px;background:rgba(255,250,246,.72);border:1px solid var(--line)">▷ '+esc(sub(SCENE[id]))+'</div>';
+        else locked++;
+      });
+      if(locked) h+='<div style="font-size:11.5px;color:#c4b3a4;padding:4px 11px">🔒 还有 '+locked+' 节待解锁（换条线/换种选择重玩）</div>';
+      h+='</div>';
+    }
+  });
+  h+='</div><div style="display:flex;flex-direction:column;gap:11px;align-items:center">';
+  if(hasSave) h+='<button class="btn" onclick="continueGame()">继续上次 →</button>';
+  h+='<button class="btn'+(hasSave?' ghost':'')+'" onclick="newGameConfirm()">'+(hasSave?'重新开始':'开始游戏 →')+'</button></div>';
+  t.innerHTML=h;
+}
+function toggleMenuPart(i){ menuOpen=(menuOpen===i?-1:i); renderMenu(); }
+function jumpTo(id){ menuOpen=-1; go(id); }
 function _oldShowMap_unused(){
   ["dialog","choices","chap","ending","clear","hud","gameskip","smap","gallery","gamebgF"].forEach(i=>$(i).classList.add("hidden"));
   $("gamebg").classList.add("hidden"); $("gameveil").classList.add("hidden");
