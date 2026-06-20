@@ -23,6 +23,11 @@
 
   /* 背景图层 */
   .bg{position:absolute;inset:0;background:url("home.jpg") center top/cover no-repeat;}
+  /* 游戏内背景：双层自适配（底层模糊铺满，上层完整图居中，杜绝裁脸/留白） */
+  .gbg{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;
+    filter:blur(18px) brightness(.9) saturate(1.05);transform:scale(1.14);}
+  .gbgfront{position:absolute;inset:0;background-position:center;background-size:contain;background-repeat:no-repeat;
+    filter:drop-shadow(0 0 24px rgba(90,50,40,.35));}
   .bg.blur{filter:blur(11px) brightness(1.04) saturate(1.05);transform:scale(1.12);}
   .bg.soft{filter:blur(3px) brightness(1.02);transform:scale(1.06);}
   .veil{position:absolute;inset:0;}
@@ -224,8 +229,8 @@
 <body>
 <div class="game" id="game">
 
-  <!-- 游戏背景（清晰） -->
-  <div class="bg hidden" id="gamebg"></div>
+  <!-- 游戏背景：底层模糊铺满 + 上层完整图居中（自适配任意比例） -->
+  <div class="gbg hidden" id="gamebg"><div class="gbgfront" id="gamebgF"></div></div>
   <div class="veil game hidden" id="gameveil"></div>
 
   <!-- 花瓣 -->
@@ -262,7 +267,7 @@
 
   <!-- ③b 小节目录（二级页） -->
   <div class="screen hidden" id="smap">
-    <div class="bg blur"></div>
+    <div class="bg blur" id="smapbg"></div>
     <div class="veil light"></div>
     <div class="backbtn" onclick="showMap()">‹ 章节</div>
     <div class="maphead">
@@ -972,7 +977,7 @@ const CHAPTERS=[
     {n:"第二节",title:"门口的告白",start:"c2b"},
     {n:"第三节",title:"只属于两人的夜",start:"c2c"},
   ]},
-  {n:"第三章",title:"开放日·重逢", sections:[
+  {n:"第三章",title:"开放日·重逢", bg:"bg/openday.jpg", sections:[
     {n:"第一节",title:"宿舍·歪头重逢",start:"c3a"},
     {n:"第二节",title:"邋遢更衣室",start:"c3b"},
     {n:"第三节",title:"吧台·久别重逢",start:"c3c"},
@@ -980,20 +985,20 @@ const CHAPTERS=[
   ]},
   {n:"第四章",title:"心动日常", sections:[
     {n:"第一节",title:"飙车实录",start:"e_drive"},
-    {n:"第二节",title:"软饭王哲学",start:"e_softrice"},
-    {n:"第三节",title:"哦哈哟·赖床的早晨",start:"e_morning"},
-    {n:"第四节",title:"任人打扮的小姑娘",start:"e_dressup"},
+    {n:"第二节",title:"软饭王哲学",start:"e_softrice",bg:"bg/kfc.jpg"},
+    {n:"第三节",title:"哦哈哟·赖床的早晨",start:"e_morning",bg:"bg/morning.jpg"},
+    {n:"第四节",title:"任人打扮的小姑娘",start:"e_dressup",bg:"bg/dressup.jpg"},
     {n:"第五节",title:"只在乎你·吃醋",start:"e_jealous"},
-    {n:"第六节",title:"棒棒糖·自动刷脸",start:"e_lolly"},
-    {n:"第七节",title:"高级公寓的邀请",start:"e_invite"},
+    {n:"第六节",title:"棒棒糖·自动刷脸",start:"e_lolly",bg:"bg/lolly.jpg"},
+    {n:"第七节",title:"高级公寓的邀请",start:"e_invite",bg:"bg/apartment.jpg"},
     {n:"第八节",title:"笨拙的心",start:"c5a"},
   ]},
-  {n:"第五章",title:"盛夏限定", sections:[
-    {n:"第一节",title:"七夕·蓝色玫瑰",start:"c4a"},
-    {n:"第二节",title:"末日盛夏畅想",start:"e_apocalypse"},
-    {n:"第三节",title:"Fiery Summer·花环",start:"e_summer"},
+  {n:"第五章",title:"盛夏限定", bg:"bg/summer.jpg", sections:[
+    {n:"第一节",title:"七夕·蓝色玫瑰",start:"c4a",bg:"bg/qixi.jpg"},
+    {n:"第二节",title:"末日盛夏畅想",start:"e_apocalypse",bg:"bg/apocalypse.jpg"},
+    {n:"第三节",title:"Fiery Summer·花环",start:"e_summer",bg:"bg/summer.jpg"},
     {n:"第四节",title:"夏日祭·浴衣与烟火",start:"e_festival"},
-    {n:"第五节",title:"黑暗料理·咖喱饭",start:"e_curry"},
+    {n:"第五节",title:"黑暗料理·咖喱饭",start:"e_curry",bg:"bg/curry.jpg"},
     {n:"第六节",title:"拌嘴与和好",start:"e_quarrel"},
   ]},
   {n:"第六章",title:"亲密", sections:[
@@ -1004,20 +1009,20 @@ const CHAPTERS=[
   ]},
   {n:"第七章",title:"低谷·NEL与抉择", sections:[
     {n:"第一节",title:"NEL启程·机场送别",start:"e_depart"},
-    {n:"第二节",title:"被淘汰的生日",start:"e_bday1"},
+    {n:"第二节",title:"被淘汰的生日",start:"e_bday1",bg:"bg/birthday.jpg"},
     {n:"第三节",title:"那一夜·情绪的出口",start:"e_therapy"},
-    {n:"第四节",title:"重燃的愿望",start:"e_bday2"},
+    {n:"第四节",title:"重燃的愿望",start:"e_bday2",bg:"bg/birthday.jpg"},
     {n:"第五节",title:"雪夜的思念",start:"c6a"},
     {n:"第六节",title:"海那端的抉择",start:"c6b"},
   ]},
-  {n:"第八章",title:"入秋·并肩相守", sections:[
-    {n:"第一节",title:"花园别墅·搬家",start:"e_villa"},
-    {n:"第二节",title:"并肩 / 相守",routed:true,titleDream:"并肩·世界之巅的应援",titleStay:"相守·慢一点也好",start:"c7d_a",startStay:"c7s_a"},
-    {n:"第三节",title:"读书之秋",start:"e_autumn"},
-    {n:"第四节",title:"拥抱",start:"e_hug"},
+  {n:"第八章",title:"入秋·并肩相守", bg:"bg/autumn.jpg", sections:[
+    {n:"第一节",title:"花园别墅·搬家",start:"e_villa",bg:"bg/villa.jpg"},
+    {n:"第二节",title:"并肩 / 相守",routed:true,titleDream:"并肩·世界之巅的应援",titleStay:"相守·慢一点也好",start:"c7d_a",startStay:"c7s_a",bg:"bg/magazine.jpg"},
+    {n:"第三节",title:"读书之秋",start:"e_autumn",bg:"bg/autumn.jpg"},
+    {n:"第四节",title:"拥抱",start:"e_hug",bg:"bg/hug.jpg"},
     {n:"第五节",title:"换季感冒·笨拙看护",start:"e_sick"},
-    {n:"第六节",title:"送围巾",start:"e_scarf"},
-    {n:"第七节",title:"雨天·共撑一伞",start:"e_rain"},
+    {n:"第六节",title:"送围巾",start:"e_scarf",bg:"bg/scarf.jpg"},
+    {n:"第七节",title:"雨天·共撑一伞",start:"e_rain",bg:"bg/afterwork.jpg"},
     {n:"第八节",title:"万圣夜",start:"e_halloween"},
   ]},
   {n:"终章",  title:"烟花与约定", sections:[
@@ -1026,7 +1031,7 @@ const CHAPTERS=[
     {n:"第三节",title:"情人节·玩偶熊",start:"e_valentine"},
     {n:"第四节",title:"你的，我的",start:"e_lemontea"},
     {n:"第五节",title:"跨年·烟花",start:"c8a"},
-    {n:"第六节",title:"烟花下的求婚",start:"c8c"},
+    {n:"第六节",title:"烟花下的求婚",start:"c8c",bg:"bg/propose.jpg"},
   ]},
 ];
 
@@ -1158,6 +1163,7 @@ function openChapterMap(ci){
   $("gamebg").classList.add("hidden"); $("gameveil").classList.add("hidden");
   currentCI=ci; currentSI=null; petals(true);
   if(!route) route="dream";
+  $("smapbg").style.backgroundImage="url('"+(CHAPTERS[ci].bg||"home.jpg")+"')";
   renderSectionMap(ci);
   $("smap").classList.remove("hidden");
 }
@@ -1187,6 +1193,9 @@ function playSection(ci,si){
   currentCI=ci; currentSI=si; setBond();
   if(!route) route="dream";
   const ch=CHAPTERS[ci], s=ch.sections[si];
+  const bgImg = s.bg || ch.bg || "home.jpg";
+  $("gamebg").style.backgroundImage="url('"+bgImg+"')";
+  $("gamebgF").style.backgroundImage="url('"+bgImg+"')";
   $("chapName").textContent=ch.n;
   $("chapN").textContent=ch.n+" · "+s.n;
   $("chapT").textContent=secTitle(s);
