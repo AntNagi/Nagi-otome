@@ -23,11 +23,9 @@
 
   /* 背景图层 */
   .bg{position:absolute;inset:0;background:url("home.jpg") center top/cover no-repeat;}
-  /* 游戏内背景：双层自适配（底层模糊铺满，上层完整图居中，杜绝裁脸/留白） */
-  .gbg{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;
-    filter:blur(18px) brightness(.9) saturate(1.05);transform:scale(1.14);}
-  .gbgfront{position:absolute;inset:0;background-position:center;background-size:contain;background-repeat:no-repeat;
-    filter:drop-shadow(0 0 24px rgba(90,50,40,.35));}
+  /* 游戏内背景：直接裁剪铺满（清晰、占屏，顶部对齐保面部） */
+  .gbg{position:absolute;inset:0;background-position:center top;background-size:cover;background-repeat:no-repeat;}
+  .gbgfront{display:none;}
   .bg.blur{filter:blur(11px) brightness(1.04) saturate(1.05);transform:scale(1.12);}
   .bg.soft{filter:blur(3px) brightness(1.02);transform:scale(1.06);}
   .veil{position:absolute;inset:0;}
@@ -1164,7 +1162,7 @@ function openChapterMap(ci){
   $("gamebg").classList.add("hidden"); $("gameveil").classList.add("hidden");
   currentCI=ci; currentSI=null; petals(true);
   if(!route) route="dream";
-  $("smapbg").style.backgroundImage="url('"+(CHAPTERS[ci].bg||"home.jpg")+"')";
+  $("smapbg").style.backgroundImage="url('"+(CHAPTERS[ci].bg||"bg/apartment.jpg")+"')";
   renderSectionMap(ci);
   $("smap").classList.remove("hidden");
 }
@@ -1189,14 +1187,13 @@ function renderSectionMap(ci){
 /* 进入某一节（游戏层）*/
 function playSection(ci,si){
   ["smap","map","clear","ending","gallery"].forEach(i=>$(i).classList.add("hidden"));
-  $("gamebg").classList.remove("hidden"); $("gamebgF").classList.remove("hidden"); $("gameveil").classList.remove("hidden");
+  $("gamebg").classList.remove("hidden"); $("gameveil").classList.remove("hidden");
   $("hud").classList.remove("hidden"); $("gameskip").classList.remove("hidden"); petals(false);
   currentCI=ci; currentSI=si; setBond();
   if(!route) route="dream";
   const ch=CHAPTERS[ci], s=ch.sections[si];
-  const bgImg = s.bg || ch.bg || "home.jpg";
+  const bgImg = s.bg || ch.bg || "bg/apartment.jpg";
   $("gamebg").style.backgroundImage="url('"+bgImg+"')";
-  $("gamebgF").style.backgroundImage="url('"+bgImg+"')";
   $("chapName").textContent=ch.n;
   $("chapN").textContent=ch.n+" · "+s.n;
   $("chapT").textContent=secTitle(s);
