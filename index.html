@@ -154,8 +154,8 @@
   .gameskip:active{transform:scale(.94)}
 
   /* ===== 选项 ===== */
-  #choices{position:absolute;left:0;right:0;bottom:35%;z-index:7;display:flex;flex-direction:column;
-    align-items:center;gap:11px;padding:0 28px;}
+  #choices{position:absolute;left:0;right:0;top:0;bottom:0;z-index:7;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:13px;padding:0 28px;}
   .opt{width:100%;max-width:380px;text-align:center;font-size:15px;line-height:1.5;color:var(--ink);
     padding:14px 18px;border-radius:16px;cursor:pointer;
     background:linear-gradient(180deg,rgba(255,251,247,.96),rgba(248,232,222,.96));
@@ -815,13 +815,14 @@ const STORY = {
   /* 第一章·二次选拔（官方时间线：一次选拔觉醒后→二次选拔队伍战）*/
   e_select2:{ auto:[
       {who:"sys",t:"二次选拔·组队淘汰赛。你坐在绘心的观察席，看着大屏——这一轮，凪做了个让所有人意外的决定。"},
-      {who:"sys",t:"他没有继续和玲王搭档，而是被洁世一一句「过来」就招了过去，跟洁、蜂乐组成三人队。被抛下的玲王站在原地，脸色一点点沉下去。"},
-      {who:"sys",t:"这条路并不好走。三人队一路苦战、险象环生；可每当球到凪脚下，他总能用一记天外飞仙的停球扭转战局，高光一个接一个。蜂乐打趣他「把玲王甩了，有点冷血」，他却只是慢悠悠地一句——"},
-      {who:"nagi",t:"（进球后没欢呼，抬头望向观察席你的方向）……跟洁和蜂乐踢，更让我兴奋。抛下Reo，我也难受……但顺着自己的『自我』，才能在这里活下去。Ant，看到了吗。"},
+      {who:"sys",t:"他没有选择驾轻就熟的玲王，而是主动挑了洁世一，和洁、蜂乐组成三人队。被舍下的玲王怔在原地，脸色一点点沉下去。"},
+      {who:"sys",t:"这条路并不好走——三人队一路苦战、险象环生；可每当球到凪脚下，他总能用一记天外飞仙的停球扭转战局，高光一个接一个。"},
+      {who:"nagi",t:"（进球后没欢呼，抬头望向观察席你的方向）……是我自己选的洁。他是这里最强、最有意思的那个，跟他踢，我能变得更强。"},
+      {who:"nagi",t:"跟Reo太轻松了，人会停下来。所以我才……（顿了顿）Ant，看到了吗。"},
     ],
     choices:[
-      {label:"看到了。这一步很狠，但你没错——该为自己踢", type:"理性", ant:"看到了。这一步很狠，但你没错——该为自己踢", b:1,u:3, nagi:["（灰眸里有光）……只有Ant懂我","总有一天，我会让Reo也明白，这不是背叛"], sec:true},
-      {label:"看到了。但记得回头跟玲王好好说，别让他误会", type:"心动", ant:"看到了。但记得回头跟玲王好好说，别让他误会", b:2,u:2, nagi:["（顿了一下，难得认真）……嗯。我不太会说话","（小声）这种事好麻烦……但Ant说的，我记住了"], sec:true},
+      {label:"看到了。为了变强主动跳出舒适区——你没选错", type:"理性", ant:"看到了。为了变强主动跳出舒适区——你没选错", b:1,u:3, nagi:["（灰眸里有光）……果然只有Ant懂我","总有一天，我会证明：选洁，是对的"], sec:true},
+      {label:"看到了。但记得回头跟玲王说清楚，别让他误会被抛弃", type:"心动", ant:"看到了。但记得回头跟玲王说清楚，别让他误会被抛弃", b:2,u:2, nagi:["（顿了一下，难得认真）……嗯。我不太会说话","（小声）这种事好麻烦……但Ant说的，我记住了"], sec:true},
     ]},
   /* 第四章·早安赖床（哦哈哟）*/
   e_morning:{ auto:[
@@ -963,7 +964,7 @@ const CHAPTERS=[
   ]},
   {n:"第一章",title:"相识", sections:[
     {n:"第一节",title:"训练室初见",start:"c1a"},
-    {n:"第二节",title:"二次选拔·抛下玲王",start:"e_select2"},
+    {n:"第二节",title:"二次选拔·主动选洁",start:"e_select2"},
     {n:"第三节",title:"心意相通",start:"c1b"},
   ]},
   {n:"第二章",title:"确立", sections:[
@@ -1249,6 +1250,7 @@ function onQueueEnd(){
 }
 function renderChoices(list){
   choicesOpen=true; $("indicator").classList.remove("show");
+  $("dialog").classList.add("hidden");           // 选项出现时隐藏对话框，杜绝重叠
   const box=$("choices"); box.innerHTML=""; box.classList.remove("hidden");
   list.forEach(c=>{ const b=document.createElement("div"); b.className="opt";
     b.innerHTML=esc(c.label)+'<span class="tag">['+c.type+']</span>';
@@ -1257,6 +1259,7 @@ function renderChoices(list){
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function choose(c){
   choicesOpen=false; $("choices").classList.add("hidden");
+  $("dialog").classList.remove("hidden");        // 选完恢复对话框，播放回应
   bond+=c.b||0; und+=c.u||0;
   if(c.route){ route=c.route; localStorage.setItem("nagi_route",route); }
   if(c.cold){ coldFlag=true; localStorage.setItem("nagi_cold","1"); }
