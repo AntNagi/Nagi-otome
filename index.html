@@ -366,6 +366,7 @@
     <h1 id="etitle" style="position:relative"></h1>
     <p id="edesc" style="position:relative"></p>
     <div class="escore" id="escore" style="position:relative"></div>
+    <button class="btn" id="eggBtn" style="position:relative;display:none;margin-bottom:4px" onclick="playProposal()">✧ 彩蛋 · 他的求婚 ✧</button>
     <div class="row2" style="position:relative">
       <button class="btn ghost" onclick="backToMenu()">章节目录</button>
       <button class="btn" onclick="location.reload()">重新开始</button>
@@ -451,13 +452,14 @@ const STORY = {
     ]},
   c2c:{ auto:[
       {who:"sys",t:"门在身后合上。整座城市的灯火，忽然都成了背景。他难得没插兜，灰眸里那点认真，烧得人脸热。"},
-      {who:"nagi",t:"（额头抵着你，呼吸交缠，生涩却滚烫）Ant……教我。怎么，离你更近一点。"},
-      {who:"sys",t:"慵懒的少年第一次卸下所有散漫，专注得近乎虔诚。每一个吻都带着小心的试探，又带着不容错辨的「想要」。月色漫过交叠的身影，「喜欢」两个字，被反复地、无声地确认到天快亮。"},
+      {who:"nagi",t:"（额头抵着你，呼吸发烫，声音却结巴）Ant……我、我看过漫画……应该，是这样对吧。"},
+      {who:"sys",t:"这个在球场上从不失误的天才，此刻指尖却抖得厉害——吻先是慌忙磕到，又手忙脚乱地放轻；每靠近一寸，都像在试探一场全新的、不容失误的比赛。"},
+      {who:"sys",t:"月色漫过交叠的身影，他额角渗出薄汗，白发湿湿地贴着，却始终专注地看着你的反应，认真得比赢一场球还要紧。生涩又滚烫，「喜欢」两个字，被反复确认到天快亮。"},
       {who:"nagi",t:"（很久之后，把你圈进怀里，声音哑哑的）以后……每天都要这样。说好了。"},
     ],
     choices:[
-      {label:"嗯，每天都要哦", type:"心动", ant:"嗯，每天都要哦", b:2,u:1, nagi:["（满足地蹭了蹭）……Ant是我的了","谁都抢不走"], sec:true},
-      {label:"（脸红心跳）你明明……很有天赋嘛", type:"作", ant:"你明明……很有天赋嘛", b:2,u:0, nagi:["（耳朵红透）闭嘴啦","……不许跟别人说"], sec:true},
+      {label:"（抚过他汗湿的发）第一次……你已经很好了", type:"心动", ant:"（抚过他汗湿的发）第一次……你已经很好了", b:3,u:2, nagi:["（耳根红透，却露出进球般的得意）……是Ant教得好","（闷闷地）还想，多练几次……不许嫌我麻烦"], sec:true},
+      {label:"（脸红心跳）你明明……很有天赋嘛", type:"作", ant:"你明明……很有天赋嘛", b:2,u:1, nagi:["（耳朵红透）闭嘴啦……第一次而已","……不许跟别人说"], sec:true},
     ]},
 
   /* ===== 第三章 开放日·重逢（Ep01/Ep02）===== */
@@ -634,17 +636,6 @@ const STORY = {
     ]},
 
   /* ===== 第六章 亲密（隐晦）===== */
-  e_night1:{ auto:[
-      {who:"sys",t:"顶奢公寓的夜。霓虹透过落地窗漫进来，落在凪散乱的白发上，给他镀了层微光。电视停在游戏暂停画面，手柄被丢在一边——他的心思，早不在那上头了。"},
-      {who:"sys",t:"你陷进柔软的沙发，他俯身过来，190的个子把你整个笼进阴影。吻先落在耳垂，牙齿不小心磕到，又慌忙放轻；再顺着颈侧一路向下，留下几点浅红。"},
-      {who:"nagi",t:"（气息发烫，声音结巴）Ant……我、我看过漫画……应该，是这样对吧？"},
-      {who:"sys",t:"这个在球场上从不失误的天才，指尖此刻却抖得厉害，时轻时重，像在试探一场全新的比赛节奏。霓虹在交叠的身影上流动，客厅里只剩交错的呼吸，和他一句句怕弄疼你的小心翼翼。"},
-      {who:"sys",t:"他额角渗出薄汗，白发湿湿地贴着，却始终专注地看着你的反应——认真得，比赢一场球还要紧。"},
-    ],
-    choices:[
-      {label:"（指尖抚过他汗湿的发）你做得很好……真的", type:"心动", ant:"（指尖抚过他汗湿的发）你做得很好……真的", b:3,u:2, nagi:["（怔了一秒，眼底的热意更浓，低头吻你额头）……Ant这么甜，我有点犯规了","（把你整个圈进怀里，闷闷地）还想，再多试几次……不许嫌我麻烦"], sec:true},
-      {label:"（喘着气推他）魅魔……你是不是天生就会", type:"作", ant:"（喘着气推他）魅魔……你是不是天生就会", b:2,u:2, nagi:["（耳根红透，却露出球场进球般的得意）……才不是。是Ant教得好","（蹭蹭你脖颈）再来一次……这次，我肯定不磕到了"], sec:true},
-    ]},
   e_therapy:{ auto:[
       {who:"sys",t:"NEL被淘汰的那晚，他回到公寓，190的个子佝偻着，灰眸里全是迷茫。问他，他只低低一句「不想说」。"},
       {who:"sys",t:"深夜，两人躺在卧室。月光落在他紧锁的眉间，他翻来覆去地睡不着。你侧过身，从背后环住他的腰，轻声说：把今晚的不甘和迷茫，都「撒」在我身上吧，我照单全收。"},
@@ -691,9 +682,9 @@ const STORY = {
       {label:"蓝监的大门还为你开着，世界赛场也是", type:"理性", ant:"蓝监的大门还为你开着，世界赛场也是", b:2,u:3, nagi:["（握紧拳）……嗯。我还想踢","还想看看，世界第一的风景"], sec:true},
     ]},
   c6a:{ auto:[
-      {who:"sys",t:"他随蓝监征战 NEL（新自我主义联赛）已经一个多月，人在海外的球会，隔着八小时时差。"},
-      {who:"sys",t:"一个雪夜，你独自路过那条亮着暖灯的街，忽然很想他，想到鼻子发酸。"},
-      {who:"nagi",t:"（视频接通，背景是异国训练基地）Ant？这么晚……怎么了，眼睛红红的"},
+      {who:"sys",t:"他闭关 NEL 集训已经一个多月，赛程一场接一场，你们聚少离多，常常只能在深夜挤出一点视频的时间。"},
+      {who:"sys",t:"一个降温的夜晚，你独自路过那条亮着暖灯的街，忽然很想他，想到鼻子发酸。"},
+      {who:"nagi",t:"（视频接通，背景是空荡的训练基地走廊）Ant？这么晚……怎么了，眼睛红红的"},
     ],
     choices:[
       {label:"没事，就是有点想你了", type:"心动", ant:"没事，就是有点想你了", b:2,u:2, nagi:["（声音软下来）……我也","等这阶段结束，我第一个飞回去找Ant"], sec:true},
@@ -711,11 +702,11 @@ const STORY = {
     ]},
   c6_cold:{ auto:[
       {who:"sys",t:"你那句「真爱我就立刻回来」像根刺，扎进两人之间。视频那头的灯，一盏盏暗了下去。"},
-      {who:"sys",t:"之后的日子，他训练越来越拼，回复越来越慢；你赌气不主动，他别扭不开口——两颗心隔着八小时时差，越飘越远。"},
+      {who:"sys",t:"之后的日子，他训练越来越拼，回复越来越慢；你赌气不主动，他别扭不开口——两颗心隔着一整个赛季的沉默，越飘越远。"},
       {who:"nagi",t:"（某个深夜，视频里的他疲惫又克制）Ant……我们，是不是哪里弄错了。"},
     ],
     choices:[
-      {label:"对不起，是我太任性了，你去追你的光", type:"理性", ant:"对不起，是我太任性了，你去追你的光", b:3,u:3, route:"stay", nagi:["（闭了闭眼，声音放软）……Ant肯这么说，我就还在","别怕。这次，换我想办法飞回去找你"], sec:true},
+      {label:"对不起，是我太任性了，你去追你的光", type:"理性", ant:"对不起，是我太任性了，你去追你的光", b:3,u:3, route:"stay", nagi:["（闭了闭眼，声音放软）……Ant肯这么说，我就还在","别怕。这次，换我多挤时间回去陪你"], sec:true},
       {label:"错的是你！既然这么忙，就别回来了！", type:"作", ant:"错的是你！既然这么忙，就别回来了！", b:0,u:0, nagi:["（很久，很轻）……好。","对不起，Ant。是我，没追上你。"], endBad:true},
     ]},
 
@@ -731,32 +722,32 @@ const STORY = {
       {label:"放哪都行，你别又抱着花盆睡着了", type:"作", ant:"放哪都行，你别又抱着花盆睡着了", b:2,u:1, nagi:["（打了个哈欠）……被发现了","就，靠着Ant眯一会儿……五分钟"], sec:true},
     ]},
   c7d_a:{ auto:[
-      {who:"sys",t:"你飞到 NEL 的海外赛场，坐进看台最显眼的位置——那个被世界碾压、被玲王丢下的少年，需要有人，一直看着他。"},
-      {who:"sys",t:"然后你亲眼看着他，一点点把自己从谷底捞了上来。那双死鱼眼里的光，比任何时候都亮。"},
-      {who:"sys",t:"终场哨响，他打进制胜球。"},
-      {who:"nagi",t:"（挤到你身边，发梢滴着汗，却笑了）看到了吗？刚那球……是踢给Ant的。这次我，没有停在原地"},
+      {who:"sys",t:"NEL 主场，你坐进看台最显眼的位置——那个被对手碾压、被玲王甩在身后的少年，需要有人，一直看着他。"},
+      {who:"sys",t:"然后你亲眼看着他，一点点把自己从谷底捞了上来。那双死鱼眼里的光，比任何时候都亮。终场哨响，他打进制胜球。"},
+      {who:"nagi",t:"（挤到看台边，发梢滴着汗，却笑了）看到了吗？刚那球……是踢给Ant的。这次我，没有停在原地"},
     ],
     choices:[
       {label:"看到了！我的天才，闪闪发光", type:"心动", ant:"看到了！我的天才，闪闪发光", b:3,u:2, nagi:["（难得咧嘴笑）有Ant在看，我就停不下来","世界第一……越来越近了"], next:"c7d_b"},
       {label:"（投资人模式）数据漂亮，身价又涨了哦", type:"理性", ant:"数据漂亮，身价又涨了哦", b:2,u:3, nagi:["（凑近你耳边）对Ant，我可不只想涨身价","我想，配得上你"], next:"c7d_b"},
     ]},
   c7d_b:{ auto:[
-      {who:"sys",t:"那个赛季，他完成了第二次觉醒。所有人都说，凪身边那位投资人，是他的幸运女神。"},
-      {who:"nagi",t:"（把奖杯随手一放，只盯着你）幸运女神什么的我不信。我只知道——这条路上，必须有Ant"},
+      {who:"sys",t:"那个赛季，他完成了第二次觉醒，一路踢进世界舞台的中央。当「世界第一前锋」的名号落到他头上时，整座球场都在喊他的名字。"},
+      {who:"nagi",t:"（把奖杯随手一放，越过人群只盯着你）幸运女神什么的我不信。我只知道——这条路上，必须有Ant在看台。"},
+      {who:"sys",t:"【最后一个选择，将决定你们的结局。】"},
     ],
     choices:[
-      {label:"那就一起走到世界第一为止", type:"心动", ant:"那就一起走到世界第一为止", b:2,u:2, nagi:["（伸手把你揽进怀里）……嗯。说好了"], sec:true},
-      {label:"我会一直在你的看台上", type:"理性", ant:"我会一直在你的看台上", b:2,u:2, nagi:["（额头抵着你）那我，每一球都踢给那个看台"], sec:true},
+      {label:"去吧，世界第一在等你——我永远是你的看台", type:"心动", ant:"去吧，世界第一在等你——我永远是你的看台", b:3,u:3, flag:"support", nagi:["（眼底亮得惊人，把你揽进怀里）……嗯。那我，绝不会输","世界第一，我拿给你看"], end:true},
+      {label:"你越飞越高……我有点怕跟不上你了", type:"作", ant:"你越飞越高……我有点怕跟不上你了", b:1,u:0, flag:"waver", nagi:["（动作顿住，眼里的光暗了一下）……Ant","（轻轻）别怕。大不了，我慢下来，等你"], end:true},
     ]},
   c7s_a:{ auto:[
-      {who:"sys",t:"他真的为你推掉了一些行程，更频繁地飞回来。日子很甜。"},
-      {who:"sys",t:"只是某些深夜，你会看见他对着比赛录像出神。"},
+      {who:"sys",t:"他真的为你推掉了一些赛程，更频繁地回到你身边。日子很甜——只是某些深夜，你会看见他对着比赛录像出神。"},
       {who:"nagi",t:"（察觉你的目光，迅速关掉屏幕）……没什么。睡吧Ant"},
+      {who:"sys",t:"【最后一个选择，将决定你们的结局。】"},
     ],
     choices:[
-      {label:"你想踢，就去踢。我不该绑住你", type:"理性", ant:"你想踢，就去踢。我不该绑住你", b:2,u:3, route:"dream", nagi:["（怔住）……Ant","（轻轻抱住你）有这句话，我就什么都不怕了"], sec:true},
-      {label:"以后我陪你去看每一场，不耽误你", type:"心动", ant:"以后我陪你去看每一场，不耽误你", b:3,u:2, nagi:["（眼睛亮了一下）……真的？","那、那我可不客气了，Ant说的"], sec:true},
-      {label:"有我在身边，不就够了吗？", type:"作", ant:"有我在身边，不就够了吗？", b:2,u:0, cold:true, nagi:["（顿了很久）……嗯。够了","（声音很轻，他眼底的光，悄悄暗了下去）"], sec:true},
+      {label:"其实……你该去追世界第一的，我不该拦你", type:"理性", ant:"其实……你该去追世界第一的，我不该拦你", b:2,u:3, flag:"release", nagi:["（怔住，把你紧紧抱住）……Ant","有这句话，我就什么都不怕了。但这一次，我想为我们，慢慢来"], end:true},
+      {label:"以后每一场，我都陪你去看，不耽误你", type:"心动", ant:"以后每一场，我都陪你去看，不耽误你", b:3,u:2, flag:"accompany", nagi:["（眼睛亮了一下）……真的？","那、那我可不客气了，Ant说的"], end:true},
+      {label:"有我在身边，不就够了吗？", type:"作", ant:"有我在身边，不就够了吗？", b:2,u:0, flag:"clip", nagi:["（顿了很久）……嗯。够了","（声音很轻，他眼底的光，悄悄暗了下去）"], end:true},
     ]},
   e_autumn:{ auto:[
       {who:"sys",t:"九月第一天。你信誓旦旦「秋天要当学霸」，结果两人睡到自然醒，磨蹭到傍晚才出门。"},
@@ -836,15 +827,16 @@ const STORY = {
       {label:"祝你早日世界第一，我永远是你的看台", type:"心动", ant:"祝你早日世界第一，我永远是你的看台", b:2,u:2, nagi:["（烟花映进眼底，似有星光）谢啦，Ant","世界第一……我会拿给你看","你也要，一直陪着我"], sec:true},
       {label:"新的一年，我们还要一直一直在一起", type:"理性", ant:"新的一年，我们还要一直一直在一起", b:2,u:2, nagi:["（手臂收紧，把你圈进怀里）……一直","有Ant在，我哪儿都不去"], sec:true},
     ]},
+  /* ★ TRUE END 彩蛋·求婚（仅梦想线达成世界第一后解锁，由结局页按钮触发）*/
   c8c:{ auto:[
-      {who:"sys",t:"烟花散尽，人潮退去。他却没松开你——反而，单膝跪了下去。"},
-      {who:"sys",t:"据说这套「求婚作战限定西装」，是玲王今早连拖带拽塞他进定制店的成果；丝绒盒里，躺着一枚足球形状钻石的戒指。"},
-      {who:"nagi",t:"（耳尖通红，别扭又认真）Ant……这种话，我只说一次，不许笑。玲王说这样成功率+99%……不过我觉得，换成柠檬茶的拉环，你大概也会答应。"},
-      {who:"nagi",t:"嫁给我。以后每一年的烟花、每一个早上……我都只要Ant在。"},
+      {who:"sys",t:"拿到「世界第一」那年的某个寻常夜晚。你们回到只属于两人的公寓，吧台旁的照片墙，记满了这些年的每一杯酒、每一次重逢。"},
+      {who:"sys",t:"他忽然变得不自然，从身后摸出一个丝绒小盒——里面躺着一枚足球形状钻石的戒指，据说是玲王今早连拖带拽塞他进定制店的成果。"},
+      {who:"nagi",t:"（耳尖通红，别扭又认真，单膝跪下）Ant……这种话我只说一次，不许笑。玲王说这样成功率+99%……不过我觉得，换成柠檬茶的拉环，你大概也会答应。"},
+      {who:"nagi",t:"世界第一我拿到了。剩下的一辈子——每一年的烟花、每一个早上，我都只要Ant在。嫁给我。"},
     ],
     choices:[
-      {label:"（眼泪一下涌出来）我愿意，凪诚士郎，一万个愿意", type:"心动", ant:"（眼泪涌出来）我愿意，凪诚士郎，一万个愿意", b:2,u:2, nagi:["（松了口气，慢慢笑了，把戒指戴上你的手指）……终于","Ant，正式地，是我的了"], end:true},
-      {label:"（哽咽点头）笨蛋……准备这个，很麻烦吧？", type:"理性", ant:"（哽咽点头）笨蛋……准备这个，很麻烦吧？", b:2,u:2, nagi:["（额头抵着你的额头）麻烦……","但为了Ant，我愿意麻烦一辈子"], end:true},
+      {label:"（眼泪一下涌出来）我愿意，凪诚士郎，一万个愿意", type:"心动", ant:"（眼泪涌出来）我愿意，凪诚士郎，一万个愿意", b:0,u:0, egg:true, nagi:["（松了口气，慢慢笑了，把戒指戴上你的手指）……终于","Ant，正式地，是我的了"]},
+      {label:"（哽咽点头）笨蛋……准备这个，很麻烦吧？", type:"理性", ant:"（哽咽点头）笨蛋……准备这个，很麻烦吧？", b:0,u:0, egg:true, nagi:["（额头抵着你的额头）麻烦……","但为了Ant，我愿意麻烦一辈子"]},
     ]},
 
   /* ===== 新增·贴聊天记录与官方时间线补全 ===== */
@@ -928,13 +920,13 @@ const STORY = {
     ]},
   /* 第七章·NEL启程·机场送别（官方时间线：NEL海外联赛）*/
   e_depart:{ auto:[
-      {who:"sys",t:"U-20 战后，蓝监的强者被各国豪门挑走，征战 NEL——新自我主义联赛。他要去的，是你参投的那家海外球会。机场，登机口。"},
-      {who:"sys",t:"这是你们第一次分隔两个时区。广播一遍遍念着登机信息，他难得没插兜，灰眸里有藏不住的不舍。"},
-      {who:"nagi",t:"（把你的手攥进掌心，不肯松）……隔那么远，好麻烦。Ant，等我打出成绩，第一个飞回来。"},
+      {who:"sys",t:"重燃斗志的他，被选入蓝监的 NEL——新自我主义联赛。要回基地长期闭关集训，备战一场接一场的硬仗。"},
+      {who:"sys",t:"出发前夜，他慢吞吞地把球鞋、护具一件件塞进包里，灰眸里有藏不住的不舍。"},
+      {who:"nagi",t:"（把你的手攥进掌心，不肯松）……一闭关就是好几周，好麻烦。Ant，等我打出成绩，第一个来找你。"},
     ],
     choices:[
-      {label:"去吧，世界那么大，我在这头等你发光", type:"心动", ant:"去吧，世界那么大，我在这头等你发光", b:2,u:2, nagi:["（额头抵着你）……嗯。这次我不会停在原地","（小声）想我了，就视频"], sec:true},
-      {label:"别逞强，碰上糸师凛那种怪物，也要稳住", type:"理性", ant:"别逞强，碰上糸师凛那种怪物，也要稳住", b:1,u:3, nagi:["（挑眉）……Ant连这都替我想到了","放心。这次，我是为了能配得上Ant才去的"], sec:true},
+      {label:"去吧，我会在看台上等你发光", type:"心动", ant:"去吧，我会在看台上等你发光", b:2,u:2, nagi:["（额头抵着你）……嗯。这次我不会停在原地","（小声）想我了，就视频"], sec:true},
+      {label:"别逞强，碰上糸师凛那种怪物，也要稳住", type:"理性", ant:"别逞强，碰上糸师凛那种怪物，也要稳住", b:1,u:3, nagi:["（挑眉）……Ant连这都替我想到了","放心。这次，我是为了能配得上Ant才拼的"], sec:true},
     ]},
   /* 第八章·换季感冒·笨拙看护 */
   e_sick:{ auto:[
@@ -985,11 +977,11 @@ const ENDINGS = {
   true:{ tag:"TRUE END", emoji:"💛", title:"世界第一，与你", status:"世界第一",
     desc:"那个对全世界都说「好麻烦」的天才，<br/>把唯一的认真、整座奖杯和一整个未来，<br/>都踢成了——献给你的，那一记传球。", sub:"💛 你读懂了他的全部" },
   good:{ tag:"GOOD END", emoji:"🌸", title:"平凡的，最好的", status:"在你身边",
-    desc:"没有世界第一，也没关系。<br/>有他赖在身边、嫌你麻烦又抱得更紧，<br/>这样慵懒又甜的每一天，就是圆满。", sub:"🌸 圆满收场" },
+    desc:"他本可以飞得更高，<br/>却选择慢下来，留在你身边。<br/>没有世界第一，但有他赖着你、嫌你麻烦又抱得更紧的每一天——<br/>这样，就够了。", sub:"🌸 他把你，排在了世界第一前面" },
   normal:{ tag:"NORMAL END", emoji:"🧸", title:"细水长流", status:"慢慢来",
-    desc:"你们还在慢慢靠近。<br/>他依然别扭，你依然心软，<br/>这个故事，才刚刚走到一半。", sub:"🧸 还能更近一点" },
+    desc:"你留住了他，<br/>却也悄悄熄灭了他眼里的那束光。<br/>他不再提世界第一，只是偶尔，<br/>会对着旧比赛录像，出神很久。", sub:"🧸 细水长流，也藏着没说出口的遗憾" },
   bad:{ tag:"BAD END", emoji:"🥀", title:"越来越远", status:"……",
-    desc:"你赌气推开，他笨拙地，没接住。<br/>那句「好麻烦」，这一次没能再把你哄好。<br/>有些话，他终究没来得及说出口……", sub:"🥀 再给他一次机会？" },
+    desc:"你用「爱」去逼他、去捆他，<br/>他笨拙地，没接住，也没追上。<br/>那句「好麻烦」，这一次没能再把你哄好。<br/>有些话，他终究没来得及说出口……", sub:"🥀 再给他一次机会？" },
 };
 
 /* ====== 章节目录（章 → 节）====== */
@@ -1008,61 +1000,59 @@ const CHAPTERS=[
     {n:"第二节",title:"门口的告白",start:"c2b"},
     {n:"第三节",title:"只属于两人的夜",start:"c2c",bg:"bg/bedroom.jpg"},
   ]},
-  {n:"第三章",title:"开放日·重逢", bg:"bg/openday.jpg", sections:[
-    {n:"第一节",title:"宿舍·歪头重逢",start:"c3a"},
+  {n:"第三章",title:"热恋·甜蜜日常", bg:"bg/openday.jpg", sections:[
+    {n:"第一节",title:"开放日·歪头重逢",start:"c3a"},
     {n:"第二节",title:"邋遢更衣室",start:"c3b"},
     {n:"第三节",title:"吧台·久别重逢",start:"c3c",bg:"bg/livingroom.jpg"},
-    {n:"第四节",title:"想你",start:"c3d",bg:"bg/bedroom.jpg"},
-  ]},
-  {n:"第四章",title:"心动日常", bg:"bg/livingroom.jpg", sections:[
-    {n:"第一节",title:"飙车实录",start:"e_drive",bg:"bg/drive.jpg"},
-    {n:"第二节",title:"软饭王哲学",start:"e_softrice",bg:"bg/softrice.jpg"},
-    {n:"第三节",title:"哦哈哟·赖床的早晨",start:"e_morning",bg:"bg/wakeup.jpg"},
-    {n:"第四节",title:"任人打扮的小姑娘",start:"e_dressup",bg:"bg/dressup.jpg"},
-    {n:"第五节",title:"只在乎你·吃醋",start:"e_jealous",bg:"bg/livingroom.jpg"},
+    {n:"第四节",title:"飙车实录",start:"e_drive",bg:"bg/drive.jpg"},
+    {n:"第五节",title:"任人打扮的小姑娘",start:"e_dressup",bg:"bg/dressup.jpg"},
     {n:"第六节",title:"棒棒糖·自动刷脸",start:"e_lolly",bg:"bg/lolly.jpg"},
-    {n:"第七节",title:"高级公寓的邀请",start:"e_invite",bg:"bg/apartment.jpg"},
-    {n:"第八节",title:"笨拙的心",start:"c5a",bg:"bg/bedroom.jpg"},
   ]},
-  {n:"第五章",title:"盛夏限定", bg:"bg/summer.jpg", sections:[
+  {n:"第四章",title:"同居·渐入佳境", bg:"bg/livingroom.jpg", sections:[
+    {n:"第一节",title:"软饭王哲学",start:"e_softrice",bg:"bg/softrice.jpg"},
+    {n:"第二节",title:"哦哈哟·赖床的早晨",start:"e_morning",bg:"bg/wakeup.jpg"},
+    {n:"第三节",title:"高级公寓的邀请",start:"e_invite",bg:"bg/apartment.jpg"},
+    {n:"第四节",title:"久别后·想你",start:"c3d",bg:"bg/bedroom.jpg"},
+    {n:"第五节",title:"拌嘴与和好",start:"e_quarrel",bg:"bg/bedroom.jpg"},
+    {n:"第六节",title:"笨拙的心",start:"c5a",bg:"bg/bedroom.jpg"},
+  ]},
+  {n:"第五章",title:"盛夏热恋", bg:"bg/summer.jpg", sections:[
     {n:"第一节",title:"七夕·蓝色玫瑰",start:"c4a",bg:"bg/qixi.jpg"},
     {n:"第二节",title:"末日盛夏畅想",start:"e_apocalypse",bg:"bg/apocalypse.jpg"},
     {n:"第三节",title:"Fiery Summer·花环",start:"e_summer",bg:"bg/summer.jpg"},
     {n:"第四节",title:"夏日祭·浴衣与烟火",start:"e_festival",bg:"bg/summer.jpg"},
     {n:"第五节",title:"黑暗料理·咖喱饭",start:"e_curry",bg:"bg/curry.jpg"},
-    {n:"第六节",title:"拌嘴与和好",start:"e_quarrel",bg:"bg/bedroom.jpg"},
+    {n:"第六节",title:"只在乎你·吃醋",start:"e_jealous",bg:"bg/livingroom.jpg"},
   ]},
-  {n:"第六章",title:"亲密", bg:"bg/bedroom.jpg", sections:[
-    {n:"第一节",title:"第一次·青涩的天才",start:"e_night1",bg:"bg/bedroom.jpg"},
-    {n:"第二节",title:"满室水汽",start:"e_bath",bg:"bg/bedroom.jpg"},
-    {n:"第三节",title:"经期乌龙·别扭的温柔",start:"e_period",bg:"bg/bedroom.jpg"},
-    {n:"第四节",title:"借着醉意",start:"e_drunk",bg:"bg/livingroom.jpg"},
+  {n:"第六章",title:"同居·甜与暖", bg:"bg/bedroom.jpg", sections:[
+    {n:"第一节",title:"满室水汽",start:"e_bath",bg:"bg/bedroom.jpg"},
+    {n:"第二节",title:"经期乌龙·别扭的温柔",start:"e_period",bg:"bg/bedroom.jpg"},
+    {n:"第三节",title:"借着醉意",start:"e_drunk",bg:"bg/livingroom.jpg"},
+    {n:"第四节",title:"无声的拥抱",start:"e_hug",bg:"bg/hug.jpg"},
   ]},
-  {n:"第七章",title:"低谷·NEL与抉择", bg:"bg/moody.jpg", sections:[
-    {n:"第一节",title:"NEL启程·机场送别",start:"e_depart",bg:"bg/pitch.jpg"},
-    {n:"第二节",title:"被淘汰的生日",start:"e_bday1",bg:"bg/birthday.jpg"},
-    {n:"第三节",title:"那一夜·情绪的出口",start:"e_therapy",bg:"bg/bedroom.jpg"},
-    {n:"第四节",title:"重燃的愿望",start:"e_bday2",bg:"bg/birthday.jpg"},
-    {n:"第五节",title:"雪夜的思念",start:"c6a",bg:"bg/moody.jpg"},
-    {n:"第六节",title:"海那端的抉择",start:"c6b",bg:"bg/moody.jpg"},
+  {n:"第七章",title:"秋与冬·细水长流", bg:"bg/autumn.jpg", sections:[
+    {n:"第一节",title:"读书之秋",start:"e_autumn",bg:"bg/autumn.jpg"},
+    {n:"第二节",title:"换季感冒·笨拙看护",start:"e_sick",bg:"bg/bedroom.jpg"},
+    {n:"第三节",title:"送围巾",start:"e_scarf",bg:"bg/scarf.jpg"},
+    {n:"第四节",title:"雨天·共撑一伞",start:"e_rain",bg:"bg/afterwork.jpg"},
+    {n:"第五节",title:"万圣夜·专属恶魔",start:"e_halloween",bg:"bg/masquerade.jpg"},
+    {n:"第六节",title:"圣诞·预制照片与猫睡衣",start:"e_xmas1",bg:"bg/Xmas.jpg"},
+    {n:"第七节",title:"圣诞夜·礼物与痛房树",start:"e_xmas2",bg:"bg/livingroom.jpg"},
+    {n:"第八节",title:"跨年·迪士尼烟花",start:"c8a",bg:"bg/disney.jpg"},
+    {n:"第九节",title:"情人节·玩偶熊",start:"e_valentine",bg:"bg/valentine.jpg"},
+    {n:"第十节",title:"你的，我的",start:"e_lemontea",bg:"bg/lemontea.jpg"},
   ]},
-  {n:"第八章",title:"入秋·并肩相守", bg:"bg/autumn.jpg", sections:[
-    {n:"第一节",title:"花园别墅·搬家",start:"e_villa",bg:"bg/villa.jpg"},
-    {n:"第二节",title:"并肩 / 相守",routed:true,titleDream:"并肩·世界之巅的应援",titleStay:"相守·慢一点也好",start:"c7d_a",startStay:"c7s_a",bg:"bg/goal.jpg"},
-    {n:"第三节",title:"读书之秋",start:"e_autumn",bg:"bg/autumn.jpg"},
-    {n:"第四节",title:"拥抱",start:"e_hug",bg:"bg/hug.jpg"},
-    {n:"第五节",title:"换季感冒·笨拙看护",start:"e_sick",bg:"bg/bedroom.jpg"},
-    {n:"第六节",title:"送围巾",start:"e_scarf",bg:"bg/scarf.jpg"},
-    {n:"第七节",title:"雨天·共撑一伞",start:"e_rain",bg:"bg/afterwork.jpg"},
-    {n:"第八节",title:"万圣夜",start:"e_halloween",bg:"bg/masquerade.jpg"},
+  {n:"第八章",title:"低谷·NEL与抉择", bg:"bg/moody.jpg", sections:[
+    {n:"第一节",title:"NEL启程·闭关送别",start:"e_depart",bg:"bg/pitch.jpg"},
+    {n:"第二节",title:"聚少离多·想念",start:"c6a",bg:"bg/moody.jpg"},
+    {n:"第三节",title:"被淘汰的生日",start:"e_bday1",bg:"bg/birthday.jpg"},
+    {n:"第四节",title:"那一夜·情绪的出口",start:"e_therapy",bg:"bg/bedroom.jpg"},
+    {n:"第五节",title:"重燃的愿望",start:"e_bday2",bg:"bg/birthday.jpg"},
+    {n:"第六节",title:"★抉择·世界第一，还是我",start:"c6b",bg:"bg/moody.jpg"},
   ]},
-  {n:"终章",  title:"烟花与约定", bg:"bg/livingroom.jpg", sections:[
-    {n:"第一节",title:"圣诞·预制照片与猫睡衣",start:"e_xmas1",bg:"bg/Xmas.jpg"},
-    {n:"第二节",title:"圣诞夜·礼物与痛房树",start:"e_xmas2",bg:"bg/livingroom.jpg"},
-    {n:"第三节",title:"情人节·玩偶熊",start:"e_valentine",bg:"bg/valentine.jpg"},
-    {n:"第四节",title:"你的，我的",start:"e_lemontea",bg:"bg/lemontea.jpg"},
-    {n:"第五节",title:"跨年·烟花",start:"c8a",bg:"bg/disney.jpg"},
-    {n:"第六节",title:"烟花下的求婚",start:"c8c",bg:"bg/propose.jpg"},
+  {n:"终章",  title:"你们的结局", bg:"bg/villa.jpg", sections:[
+    {n:"第一节",title:"花园别墅·搬进新家",start:"e_villa",bg:"bg/villa.jpg"},
+    {n:"第二节",title:"结局",routed:true,titleDream:"世界之巅·世界第一",titleStay:"细水长流的相守",start:"c7d_a",startStay:"c7s_a",bg:"bg/goal.jpg"},
   ]},
 ];
 
@@ -1092,6 +1082,7 @@ let bond=+(localStorage.getItem("nagi_bond")||0);
 let und=+(localStorage.getItem("nagi_und")||0);
 let route=localStorage.getItem("nagi_route")||null;
 let coldFlag = localStorage.getItem("nagi_cold")==="1";
+let finalFlag = localStorage.getItem("nagi_flag")||null;   /* 终局关键选择：support/waver/release/accompany/clip */
 let queue=[], qi=0, after=null;
 let typing=false, typer=null, curText="";
 let choicesOpen=false;
@@ -1206,7 +1197,8 @@ function renderMap(){
 function resetProgress(){
   if(!confirm("确定清空所有章节进度？")) return;
   unlocked=0; route=null; bond=0; und=0; coldFlag=false; doneSet=new Set();
-  ["nagi_unlocked","nagi_route","nagi_done","nagi_bond","nagi_und","nagi_cold"].forEach(k=>localStorage.removeItem(k));
+  finalFlag=null;
+  ["nagi_unlocked","nagi_route","nagi_done","nagi_bond","nagi_und","nagi_cold","nagi_flag"].forEach(k=>localStorage.removeItem(k));
   renderMap();
 }
 
@@ -1308,6 +1300,7 @@ function onQueueEnd(){
   else if(after&&after.type==="next"){ play(after.next); }
   else if(after&&after.type==="sec"){ sectionDone(); }
   else if(after&&after.type==="endbad"){ finish("bad"); }
+  else if(after&&after.type==="egg"){ eggFinish(); }
   else if(after&&after.type==="end"){ finish(); }
 }
 function renderChoices(list){
@@ -1325,11 +1318,12 @@ function choose(c){
   bond+=c.b||0; und+=c.u||0;
   if(c.route){ route=c.route; localStorage.setItem("nagi_route",route); }
   if(c.cold){ coldFlag=true; localStorage.setItem("nagi_cold","1"); }
+  if(c.flag){ finalFlag=c.flag; localStorage.setItem("nagi_flag",c.flag); }
   saveScore(); setBond();
   const q=[{who:"ant",t:c.ant}];
   (c.nagi||[]).forEach(line=>{ if(line) q.push({who:"nagi",t:line}); });
   queue=q; qi=0;
-  after = c.endBad ? {type:"endbad"} : c.end ? {type:"end"} : (c.sec ? {type:"sec"} : {type:"next", next:c.next});
+  after = c.egg ? {type:"egg"} : c.endBad ? {type:"endbad"} : c.end ? {type:"end"} : (c.sec ? {type:"sec"} : {type:"next", next:c.next});
   showLine();
 }
 function play(id){
@@ -1350,13 +1344,15 @@ function skipSection(){
 function finish(forceTier){
   if(currentCI!==null && currentSI!==null){ doneSet.add(currentCI+"-"+currentSI); saveDone(); }
   if(route) localStorage.setItem("nagi_route",route);
-  /* 结局由「剧情走向」决定，杜绝数值误判（求婚永远不会是 BAD）：
-     · 梦想线走到求婚 → TRUE   · 相守线温柔以待 → GOOD
-     · 相守线却剪了他翅膀 → NORMAL   · 抉择时冷战到底 → BAD（c6_cold 独立分支强制） */
+  /* 结局完全由「剧情分支」决定，每个结局是不同的故事线：
+     · 梦想线 + 最后挺他到世界第一(support) → TRUE（解锁求婚彩蛋）
+     · 梦想线却退缩(waver) / 相守线放手或陪伴(release·accompany) → GOOD（他为你慢下来）
+     · 相守线剪了他翅膀(clip) → NORMAL（他熄了光）
+     · 抉择时用爱逼他、冷战到底 → BAD（c6_cold 独立分支强制） */
   let tier=forceTier;
   if(!tier){
-    if(route==="dream") tier="true";
-    else tier = coldFlag ? "normal" : "good";
+    if(route==="dream") tier = (finalFlag==="support") ? "true" : "good";
+    else                tier = (finalFlag==="clip")    ? "normal" : "good";
   }
   if(tier!=="bad"){ unlocked=CHAPTERS.length; saveUnlocked(); }
   const e=ENDINGS[tier];
@@ -1368,8 +1364,30 @@ function finish(forceTier){
     $("etitle").textContent=sub(e.title); $("edesc").innerHTML=sub(e.desc);
     const rt=route?("　·　"+(route==="dream"?"梦想线":"相守线")):"";
     $("escore").innerHTML="💛 羁绊 "+bond+"　🧠 理解 "+und+rt+"<br>"+e.sub;
+    /* 仅 TRUE END 显示求婚彩蛋按钮 */
+    $("eggBtn").style.display = (tier==="true") ? "inline-block" : "none";
     $("ending").classList.remove("hidden");
   },700);
+}
+/* ★ TRUE END 彩蛋：他的求婚 */
+function playProposal(){
+  $("ending").classList.add("hidden"); $("gameskip").classList.add("hidden");
+  $("gamebg").classList.remove("hidden"); $("gameveil").classList.remove("hidden");
+  $("gamebg").style.backgroundImage="url('bg/propose.jpg')";
+  $("dialog").classList.remove("hidden");
+  const sc=STORY["c8c"];
+  queue=sc.auto.map(x=>({who:x.who,t:x.t})); qi=0;
+  after={type:"choices", choices:sc.choices};
+  showLine();
+}
+function eggFinish(){
+  unlockEnding("true");
+  $("dialog").classList.add("hidden"); $("hud").classList.add("hidden"); $("gameskip").classList.add("hidden");
+  $("etag").textContent="TRUE END · 彩蛋"; $("emoji").textContent="💍";
+  $("etitle").textContent="他的求婚"; $("eggBtn").style.display="none";
+  $("edesc").innerHTML=sub("那个对全世界都说「好麻烦」的人，<br/>把「一辈子」这三个字，<br/>认认真真，说给了你一个人听。");
+  $("escore").innerHTML="💍 世界第一，和他的余生，都归你了";
+  $("ending").classList.remove("hidden");
 }
 
 /* ====== 结局图鉴 ====== */
