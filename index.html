@@ -573,8 +573,8 @@ const STORY = {
       {who:"nagi",t:"（捧住你的脸，一本正经）别动。我用治愈力，让Ant的痘痘快点好"},
     ],
     choices:[
-      {label:"（被逗笑）你这诈骗手法哪学的啊😳", type:"作", ant:"你这诈骗手法哪学的啊😳", b:2,u:1, nagi:["（嘟嘴）才不是诈骗，我认真的","上次为哄Ant我连一百万都转了……这次只是没钱"], sec:true},
-      {label:"我懂了。你只是不会说，不是不爱", type:"理性", ant:"我懂了。你只是不会说，不是不爱", b:2,u:3, nagi:["（怔住，把你抱进怀里）……Ant总是，比我自己更懂我","以后，我会努力说出来的"], sec:true},
+      {label:"也许……我们只是彼此习惯了，谁也说不清", type:"理性", ant:"也许……我们只是彼此习惯了，谁也说不清", d:1, set:{kc3:"习惯"}, nagi:["（怔了下，没接话）……习惯，不也挺好","（别开脸）……Ant想太多了"], sec:true},
+      {label:"我懂了。你只是不会说，不是不爱——我也一样爱你", type:"心动", ant:"我懂了。你只是不会说，不是不爱——我也一样爱你", i:3, set:{kc3:"爱"}, nagi:["（怔住，把你抱进怀里）……Ant总是，比我自己更懂我","以后，我会努力说出来的"], sec:true},
     ]},
 
   /* ===== 第五章 盛夏限定 ===== */
@@ -668,8 +668,8 @@ const STORY = {
       {who:"nagi",t:"（声音很轻）Reo他不明白……我没有不喜欢足球。不过，已经不重要了。"},
     ],
     choices:[
-      {label:"这次淘汰，是因为你太依赖玲王，赢了洁就松懈了", type:"理性", ant:"这次淘汰，是因为你太依赖玲王，赢了洁就松懈了", b:1,u:3, nagi:["（抬头，跟着你的话思考）……Ant说得对","跟Reo踢球太轻松了……我，大意了"], sec:true},
-      {label:"别看了。有我在，你不是一个人扛", type:"心动", ant:"别看了。有我在，你不是一个人扛", b:2,u:2, nagi:["（身体微微靠向你）……嗯","（低声）有Ant在，好像，没那么冷了"], sec:true},
+      {label:"（轻轻收走手机）别看了。有我在，你不是一个人扛", type:"心动", ant:"（轻轻收走手机）别看了。有我在，你不是一个人扛", i:2, set:{nel:"好"}, nagi:["（身体微微靠向你）……嗯","（低声）有Ant在，好像，没那么冷了"], next:"e_therapy"},
+      {label:"我帮你分析——你太依赖玲王、赢了洁就松懈，得振作", type:"理性", ant:"我帮你分析——你太依赖玲王、赢了洁就松懈，得振作", d:2, set:{nel:"坏"}, nagi:["（眼里的光暗下去）……又是道理。我现在，不想听这些","（别过头）……Ant，让我自己待会儿"], next:"nelbad1"},
     ]},
   e_bday2:{ auto:[
       {who:"sys",t:"你点燃蛋糕上的蜡烛，把那双新球鞋和一封手写信递给他。十八岁，是新的开始。"},
@@ -701,13 +701,13 @@ const STORY = {
       {label:"你要是真爱我，就该立刻回来！", type:"作", ant:"你要是真爱我，就该立刻回来！", b:1,u:0, nagi:["（眼神黯了一下）……Ant，别用这个逼我","（很轻）足球，对我也很重要"], next:"c6_cold"},
     ]},
   c6_cold:{ auto:[
-      {who:"sys",t:"你那句「真爱我就立刻回来」像根刺，扎进两人之间。视频那头的灯，一盏盏暗了下去。"},
-      {who:"sys",t:"之后的日子，他训练越来越拼，回复越来越慢；你赌气不主动，他别扭不开口——两颗心隔着一整个赛季的沉默，越飘越远。"},
-      {who:"nagi",t:"（某个深夜，视频里的他疲惫又克制）Ant……我们，是不是哪里弄错了。"},
+      {who:"sys",t:"你那句话，像根细细的刺。他没有争辩，只是沉默。之后的日子，他依旧会回你消息、抽空回来陪你，可你们都心知肚明——有什么东西，正一点点凉下去。"},
+      {who:"sys",t:"他厌倦了被一根无形的线牵着，觉得快要喘不过气；你也累了，累于追一个永远在远方的人。明明还相爱，却好像，不太合适了。"},
+      {who:"nagi",t:"（某个再普通不过的夜晚，他轻声开口）Ant……我们，是不是都，太累了。"},
     ],
     choices:[
-      {label:"对不起，是我太任性了，你去追你的光", type:"理性", ant:"对不起，是我太任性了，你去追你的光", b:3,u:3, route:"stay", nagi:["（闭了闭眼，声音放软）……Ant肯这么说，我就还在","别怕。这次，换我多挤时间回去陪你"], sec:true},
-      {label:"错的是你！既然这么忙，就别回来了！", type:"作", ant:"错的是你！既然这么忙，就别回来了！", b:0,u:0, nagi:["（很久，很轻）……好。","对不起，Ant。是我，没追上你。"], endBad:true},
+      {label:"……是啊。或许，我们都该歇歇了", type:"理性", ant:"……是啊。或许，我们都该歇歇了", nagi:["（怔了很久，慢慢点头）……嗯","谢谢你，曾经那么用力地，喜欢过我"], endBad:true},
+      {label:"（眼泪掉下来）可是，我还爱你啊", type:"心动", ant:"（眼泪掉下来）可是，我还爱你啊", nagi:["（替你擦掉眼泪，声音很轻）……我知道。我也是","可光有爱，好像……不太够。"], endBad:true},
     ]},
 
   /* ===== 第八章 入秋·并肩相守 ===== */
@@ -727,8 +727,8 @@ const STORY = {
       {who:"nagi",t:"（挤到看台边，发梢滴着汗，却笑了）看到了吗？刚那球……是踢给Ant的。这次我，没有停在原地"},
     ],
     choices:[
-      {label:"看到了！我的天才，闪闪发光", type:"心动", ant:"看到了！我的天才，闪闪发光", b:3,u:2, nagi:["（难得咧嘴笑）有Ant在看，我就停不下来","世界第一……越来越近了"], next:"c7d_b"},
-      {label:"（投资人模式）数据漂亮，身价又涨了哦", type:"理性", ant:"数据漂亮，身价又涨了哦", b:2,u:3, nagi:["（凑近你耳边）对Ant，我可不只想涨身价","我想，配得上你"], next:"c7d_b"},
+      {label:"看到了！我的天才，闪闪发光", type:"心动", ant:"看到了！我的天才，闪闪发光", b:3,u:2, nagi:["（难得咧嘴笑）有Ant在看，我就停不下来","世界第一……越来越近了"], next:"p5_reunion"},
+      {label:"（投资人模式）数据漂亮，身价又涨了哦", type:"理性", ant:"数据漂亮，身价又涨了哦", b:2,u:3, nagi:["（凑近你耳边）对Ant，我可不只想涨身价","我想，配得上你"], next:"p5_reunion"},
     ]},
   c7d_b:{ auto:[
       {who:"sys",t:"那个赛季，他完成了第二次觉醒，一路踢进世界舞台的中央。当「世界第一前锋」的名号落到他头上时，整座球场都在喊他的名字。"},
@@ -893,8 +893,8 @@ const STORY = {
       {who:"nagi",t:"（试探着，声音放软）骗我的吧——Ant要是真睡着了，身体反应怎么会这么大。"},
     ],
     choices:[
-      {label:"哼，知道错就好，下次再说我麻烦试试", type:"作", ant:"哼，知道错就好，下次再说我麻烦试试", b:2,u:2, nagi:["（把你翻过来，额头抵额头）知道了知道了，真啰嗦","以后……只许我嫌，别人嫌我跟他急"], sec:true},
-      {label:"（转过身埋进他怀里）……谁让你嘴那么欠", type:"心动", ant:"（转过身埋进他怀里）……谁让你嘴那么欠", b:3,u:2, nagi:["（收紧手臂，低笑）是我错。Ant别气","（小声）你一不理我，我就慌"], sec:true},
+      {label:"（转过身埋进他怀里）……算了，谁让你嘴那么欠", type:"心动", ant:"（转过身埋进他怀里）……算了，谁让你嘴那么欠", i:1, nagi:["（收紧手臂，低笑）是我错。Ant别气","（小声）你一不理我，我就慌"], sec:true},
+      {label:"不行，你这态度太敷衍，今天必须给我改！", type:"作", ant:"不行，你这态度太敷衍，今天必须给我改！", d:4, nagi:["（搂着你的手臂慢慢松开）……又是这样","（翻身躺回去，背对着你）……好麻烦。睡吧。"], sec:true},
     ]},
   /* 第六章·泡澡浴室（隐）*/
   e_bath:{ auto:[
@@ -971,6 +971,113 @@ const STORY = {
       {label:"（拆开）你居然也准备了礼物？！", type:"心动", ant:"（拆开）你居然也准备了礼物？！", b:3,u:3, nagi:["（别开脸，耳尖红）……圣诞节，不是都要这样吗","Ant喜欢，就好。明年，还一起过"], sec:true},
       {label:"反派猫先生，今年表现不错嘛", type:"作", ant:"反派猫先生，今年表现不错嘛", b:3,u:2, nagi:["（把你连人带被子捞进怀里）少贫嘴","圣诞快乐，Ant。这种麻烦，我愿意年年陪你"], sec:true},
     ]},
+
+  /* ===================== 分支系统·新增关键/陷阱节点 ===================== */
+  /* ★KC2 相处之道：分 M线(懂) / J线(攻) */
+  kc2:{ auto:[
+      {who:"sys",t:"和凪在一起久了，你慢慢看清：这个人无欲无求、懒散到骨子里，对什么都提不起劲。和这样一个「难搞」的他相处，你得先想明白——要用什么方式。"},
+    ],
+    choices:[
+      {label:"读懂他的别扭，顺着他的节奏来", type:"理性", ant:"读懂他的别扭，顺着他的节奏来", i:2, set:{line:"M"}, nagi:["（懒懒看你一眼）……跟Ant在一起，不用费劲","（小声）这点，我喜欢"], next:"e_lolly"},
+      {label:"他这毛病得改，我来「调教」他", type:"作", ant:"他这毛病得改，我来「调教」他", d:2, set:{line:"J"}, nagi:["（皱眉）好麻烦……又要被Ant折腾","（叹气）……随便你吧"], next:"e_softrice"},
+    ]},
+  /* M陷阱① 逼表态 */
+  mt1:{ auto:[
+      {who:"sys",t:"暧昧一天天升温，他刷脸进门、把含过的糖递到你嘴边，黏人得理所当然。可你心里有点没底——你们，到底算什么？"},
+    ],
+    choices:[
+      {label:"（忍住）顺其自然，让他自己往前迈一步", type:"理性", ant:"（忍住）顺其自然，让他自己往前迈一步", i:2, nagi:["（懒懒蹭过来）……Ant今天，怎么这么乖","（满足地眯眼）"], next:"e_invite"},
+      {label:"「那我们算什么？你倒是给个名分」", type:"作", ant:"那我们算什么？你倒是给个名分", d:3, nagi:["（明显缩了一下）……非要现在定义吗，好麻烦","（别开脸）……我先去打游戏了"], next:"e_invite"},
+    ]},
+  /* M陷阱② 查岗患得患失 */
+  mt2:{ auto:[
+      {who:"sys",t:"他最近忙训练，消息常常已读不回。你盯着对话框，那点不安一点点发酵。"},
+    ],
+    choices:[
+      {label:"（放下手机）我也有我的事，忙完他自然来找我", type:"理性", ant:"（放下手机）我也有我的事，忙完他自然来找我", i:2, nagi:["（深夜冒出来）……忙完了。Ant在干嘛","（小声）有点想你"], next:"e_rain"},
+      {label:"「你一天到晚不理我，是不是不在乎我了」", type:"作", ant:"你一天到晚不理我，是不是不在乎我了", d:3, nagi:["（盯着满屏消息，沉默）……Ant，我不太会回这种","（很轻）好累。我去睡了"], next:"e_rain"},
+    ]},
+  /* M陷阱③ 改造躺平（同居后） */
+  mt3:{ auto:[
+      {who:"sys",t:"同居后，他彻底放飞——躺平打游戏，家务不沾，昼夜颠倒。你看着这一幕，太阳穴突突地跳。"},
+    ],
+    choices:[
+      {label:"（深吸气）把「上进」包装成游戏挑战，引他上钩", type:"理性", ant:"（深吸气）把「上进」包装成游戏挑战，引他上钩", i:3, nagi:["（来了兴趣）……这个副本，听起来不无聊","（懒懒起身）赢了，有奖励吗"], next:"m_igate"},
+      {label:"「你不能再这样下去了，必须改！」", type:"作", ant:"你不能再这样下去了，必须改！", d:3, nagi:["（手柄一顿，灰眸里没了光）……Ant，也要改造我吗","（背过身）……好麻烦。别管我"], next:"m_igate"},
+    ]},
+  /* 亲密门（按 I/D 解锁 M深 或 M浅） */
+  m_igate:{ router:"igate" },
+  /* M浅·冷淡变体 */
+  m_shallow:{ auto:[
+      {who:"sys",t:"你和他之间，好像隔了一层看不见的膜。他还是会陪你，却总有点心不在焉——那些本该滚烫的夜晚，也变得安静而客气。"},
+      {who:"nagi",t:"（背对着你玩手机）……睡吧Ant。"},
+    ],
+    choices:[
+      {label:"（伸手又收回）……晚安", type:"理性", ant:"（伸手又收回）……晚安", d:1, nagi:["（半晌）……嗯。"], next:"e_sick"},
+    ]},
+  /* M陷阱④ 把亲密当筹码（M深内） */
+  mt4:{ auto:[
+      {who:"sys",t:"为点小事闹了别扭，夜里他凑过来想亲近你，试探地碰了碰你的手。"},
+    ],
+    choices:[
+      {label:"（就事论事）别用这个糊弄，话先说清楚", type:"理性", ant:"（就事论事）别用这个糊弄，话先说清楚", i:2, nagi:["（顿了顿，认真起来）……也对。是我不好","那……说完，还能抱吗"], next:"e_drunk"},
+      {label:"「你先认错，我才让你碰」", type:"作", ant:"你先认错，我才让你碰", d:2, nagi:["（撑起身，眼神淡下来）……拿这个当条件，好没意思","（翻身背过去）算了，睡吧"], next:"e_drunk"},
+    ]},
+  /* M陷阱⑤ 丢掉自我 */
+  mt5:{ auto:[
+      {who:"sys",t:"他笨手笨脚地照顾你、给你裹上厚围巾。心一软，你差点把整个人都交出去。"},
+    ],
+    choices:[
+      {label:"（领情但有分寸）谢谢～不过我也有我的世界要忙", type:"理性", ant:"（领情但有分寸）谢谢～不过我也有我的世界要忙", i:2, nagi:["（看你一眼，眼神亮了亮）……Ant这样，才有意思","（小声）别太忙，留点给我"], next:"c5a"},
+      {label:"「我为你做什么都愿意，你就是我的全部」", type:"心动", ant:"我为你做什么都愿意，你就是我的全部", d:2, nagi:["（怔了下，反而往后靠了靠）……Ant，别把我当全部","（移开视线）……太沉了，这样"], next:"c5a"},
+    ]},
+  /* Part4 坏反应① 失望吵架 */
+  nelbad1:{ auto:[
+      {who:"sys",t:"你对他的颓废越来越失望，话赶话，第一次真正吵了起来。他没有还嘴，只是沉默地听完，转身出了门。"},
+      {who:"nagi",t:"（很久后回来，声音很轻）……Ant说的，可能都对。"},
+    ],
+    choices:[
+      {label:"（赌气）你倒是说句话啊，别这样闷着！", type:"作", ant:"你倒是说句话啊，别这样闷着！", d:3, nagi:["（垂着眼）……我不知道说什么","（转身）……我想一个人待会儿"], next:"nelbad2"},
+      {label:"（先低头）对不起，我不该把气撒你身上", type:"理性", ant:"对不起，我不该把气撒你身上", i:1, nagi:["（顿了顿）……不怪Ant。是我，太没用了"], next:"nelbad2"},
+    ]},
+  /* Part4 坏反应② 表面和好·约会没心思（并入拥抱） */
+  nelbad2:{ auto:[
+      {who:"sys",t:"那场架，最后谁也没真正说开，只是表面上和好了。你们照常约会，可他从头到尾都心不在焉，灰眸里蒙着化不开的雾。"},
+      {who:"sys",t:"送他回公寓，你邀他进屋。他坐在卧室靠窗的沙发椅里，忽然直起身，把脸埋进你颈窝，很久很久。"},
+      {who:"nagi",t:"（声音闷闷的）Ant，我今天……可以就在这里吗？"},
+    ],
+    choices:[
+      {label:"（轻轻抱住他）当然。今晚哪也别去", type:"心动", ant:"（轻轻抱住他）当然。今晚哪也别去", i:1, nagi:["（手臂收紧了些）……嗯","（很轻）这样，就好了"], next:"p5_intro"},
+      {label:"（叹气）你这样，我也累。我们到底怎么了", type:"作", ant:"你这样，我也累。我们到底怎么了", d:2, nagi:["（沉默良久）……我也，不知道","（松开手）……早点睡吧"], next:"p5_intro"},
+    ]},
+  /* ★Part5 世界舞台·长期分离·KC5 抉择 */
+  p5_intro:{ auto:[
+      {who:"sys",t:"后来的事，说来很长。他在那次淘汰后回到蓝监，一点点把自己重新证明了一遍；又被世界舞台看见，签去了英格兰曼城，成了人人都念得出名字的球星——只差最后一步，世界第一。"},
+      {who:"sys",t:"代价是聚少离多。他在海的那一端拼杀，你在这一端守着空荡的公寓，隔着时差，都累了。一个深夜，视频接通，他难得认真起来。"},
+      {who:"nagi",t:"Ant，我想问……如果足球和陪你只能选一个，你希望我怎么做。"},
+      {who:"sys",t:"【这个选择，将决定你们的结局。】"},
+    ],
+    choices:[
+      {label:"去成为世界第一。你的梦想，我永远做你的看台", type:"理性", ant:"去成为世界第一。你的梦想，我永远做你的看台", i:2, set:{path:"dream"}, nagi:["（眼底骤然亮起，像当年觉醒那一刻）……Ant","果然，只有Ant懂我。那我，绝不会输"], next:"c7d_a"},
+      {label:"别太勉强自己，多回来陪陪我，好不好", type:"心动", ant:"别太勉强自己，多回来陪陪我，好不好", set:{path:"stay"}, nagi:["（沉默片刻，轻轻应下）……好","Ant想要的，我尽量做到"], next:"stay_intro"},
+      {label:"你要是真在乎我，就别在那边拼命了", type:"作", ant:"你要是真在乎我，就别在那边拼命了", d:2, set:{path:"cling"}, nagi:["（眼神黯了一下）……Ant，别用这个逼我","（很轻）足球，对我也很重要"], next:"c6_cold"},
+    ]},
+  /* 梦想线·赛季结束久别重逢 */
+  p5_reunion:{ auto:[
+      {who:"sys",t:"漫长的赛季终于结束。机场到达口，你远远就看见那抹银发——分开太久，久到你冲过去抱住他时，眼泪先掉了下来。"},
+      {who:"sys",t:"回到只属于两人的公寓，吧台旁的照片墙记满了这些年。你给他调了一杯，取名「久别重逢」。那一夜，积攒太久的思念翻涌成潮，他眼神专注得发烫，像要把分开的每一天，都从你身上重新夺回来。"},
+      {who:"nagi",t:"（很久之后，把你圈进怀里，声音低哑）……以后，别让我等这么久了。"},
+    ],
+    choices:[
+      {label:"（埋进他怀里）……嗯。我也好想你", type:"心动", ant:"（埋进他怀里）……嗯。我也好想你", i:1, nagi:["（手臂收紧）……Ant在，我才踢得动","（小声）跨年，陪我去许个愿"], next:"c8a"},
+    ]},
+  /* 相守线·他常回来 */
+  stay_intro:{ auto:[
+      {who:"sys",t:"他真的为你推掉了一些赛程，更频繁地飞回来。圣诞、情人节，他都尽量赶回来陪你。日子很甜——只是某些深夜，你会看见他对着比赛录像出神。"},
+    ],
+    choices:[
+      {label:"（先装作没看见）……早点睡吧", type:"理性", ant:"（先装作没看见）……早点睡吧", nagi:["（迅速关掉屏幕）……没什么。睡吧Ant"], next:"e_xmas1"},
+    ]},
 };
 
 const ENDINGS = {
@@ -980,8 +1087,8 @@ const ENDINGS = {
     desc:"他本可以飞得更高，<br/>却选择慢下来，留在你身边。<br/>没有世界第一，但有他赖着你、嫌你麻烦又抱得更紧的每一天——<br/>这样，就够了。", sub:"🌸 他把你，排在了世界第一前面" },
   normal:{ tag:"NORMAL END", emoji:"🧸", title:"细水长流", status:"慢慢来",
     desc:"你留住了他，<br/>却也悄悄熄灭了他眼里的那束光。<br/>他不再提世界第一，只是偶尔，<br/>会对着旧比赛录像，出神很久。", sub:"🧸 细水长流，也藏着没说出口的遗憾" },
-  bad:{ tag:"BAD END", emoji:"🥀", title:"越来越远", status:"……",
-    desc:"你用「爱」去逼他、去捆他，<br/>他笨拙地，没接住，也没追上。<br/>那句「好麻烦」，这一次没能再把你哄好。<br/>有些话，他终究没来得及说出口……", sub:"🥀 再给他一次机会？" },
+  bad:{ tag:"BAD END", emoji:"🥀", title:"相爱，却平淡告终", status:"……",
+    desc:"你想把他拴在身边，他却觉得失了自由。<br/>明明都还爱着，却谁也喘不过气。<br/>没有狗血的争吵，只是那束光，<br/>在日复一日的疲惫里，悄悄地灭了。", sub:"🥀 换一种方式，再爱他一次？" },
 };
 
 /* ====== 章节目录（章 → 节）====== */
@@ -1127,7 +1234,65 @@ function startTypewriter(){
 startTypewriter();
 
 function setMood(m){ /* 立绘可插拔，暂用虚化背景 */ }
-function setBond(){ $("bond").style.width=Math.min(100,bond/BOND_FULL*100)+"%"; }
+
+/* ====================== 分支系统（线性·五幕） ====================== */
+/* 隐藏数值 I=懂他, D=心墙；旗标 mj(M/J) path(dream/stay/cling) kc3(爱/习惯) nel(好/坏) finalFlag mDeep */
+let I=0, D=0, mj=null, path=null, kc3=null, nel=null, mDeep=false, curNode=null;
+(function loadSt(){ try{ const s=JSON.parse(localStorage.getItem("nagi_state")||"null");
+  if(s){ I=s.I||0; D=s.D||0; mj=s.mj; path=s.path; kc3=s.kc3; nel=s.nel; mDeep=!!s.mDeep; finalFlag=s.finalFlag||null; curNode=s.cur||null; } }catch(e){} })();
+function saveState(){ localStorage.setItem("nagi_state",JSON.stringify({I,D,mj,path,kc3,nel,mDeep,finalFlag,cur:curNode})); }
+function clearState(){ I=0;D=0;mj=path=kc3=nel=finalFlag=null;mDeep=false;curNode=null; localStorage.removeItem("nagi_state"); }
+function setBond(){ $("bond").style.width=Math.min(100, I*5)+"%"; }
+
+const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:"bg/select2.jpg",c1b:"bg/pitch.jpg",
+ c2a:"bg/apartment.jpg",c2b:"bg/apartment.jpg",c2c:"bg/bedroom.jpg",c3a:"bg/openday.jpg",c3b:"bg/openday.jpg",kc2:"bg/livingroom.jpg",
+ e_lolly:"bg/lolly.jpg",mt1:"bg/livingroom.jpg",e_invite:"bg/apartment.jpg",e_lemontea:"bg/lemontea.jpg",e_summer:"bg/summer.jpg",
+ c4a:"bg/qixi.jpg",c4b:"bg/qixi.jpg",c4c:"bg/qixi.jpg",mt2:"bg/moody.jpg",e_rain:"bg/afterwork.jpg",e_festival:"bg/summer.jpg",
+ mt3:"bg/livingroom.jpg",m_shallow:"bg/bedroom.jpg",e_bath:"bg/bedroom.jpg",mt4:"bg/bedroom.jpg",e_drunk:"bg/livingroom.jpg",e_period:"bg/bedroom.jpg",
+ e_sick:"bg/bedroom.jpg",e_scarf:"bg/scarf.jpg",mt5:"bg/bedroom.jpg",c5a:"bg/bedroom.jpg",c5b:"bg/bedroom.jpg",
+ e_softrice:"bg/softrice.jpg",e_dressup:"bg/dressup.jpg",e_drive:"bg/drive.jpg",e_apocalypse:"bg/apocalypse.jpg",e_curry:"bg/curry.jpg",
+ e_autumn:"bg/autumn.jpg",e_jealous:"bg/livingroom.jpg",e_quarrel:"bg/bedroom.jpg",e_halloween:"bg/masquerade.jpg",
+ e_depart:"bg/pitch.jpg",e_bday1:"bg/birthday.jpg",e_therapy:"bg/bedroom.jpg",e_bday2:"bg/birthday.jpg",nelbad1:"bg/moody.jpg",nelbad2:"bg/hug.jpg",
+ p5_intro:"bg/moody.jpg",c7d_a:"bg/goal.jpg",p5_reunion:"bg/lemontea.jpg",c8a:"bg/disney.jpg",c8b:"bg/disney.jpg",c7d_b:"bg/goal.jpg",
+ stay_intro:"bg/villa.jpg",e_xmas1:"bg/Xmas.jpg",e_xmas2:"bg/livingroom.jpg",e_valentine:"bg/valentine.jpg",c7s_a:"bg/villa.jpg",c6_cold:"bg/moody.jpg",c8c:"bg/propose.jpg" };
+
+const PARTMAP={ p1:"序 · 相遇",p2:"序 · 相遇",c1a:"Part1 · 相识",e_select2:"Part1 · 相识",c1b:"Part1 · 相识",
+ c2a:"Part2 · 确立",c2b:"Part2 · 确立",c2c:"Part2 · 确立",c3a:"Part2 · 确立",c3b:"Part2 · 确立",kc2:"相处之道",
+ c5a:"Part3 · 感情认知",c5b:"Part3 · 感情认知",
+ e_depart:"Part4 · 低谷",e_bday1:"Part4 · 低谷",e_therapy:"Part4 · 低谷",e_bday2:"Part4 · 低谷",nelbad1:"Part4 · 低谷",nelbad2:"Part4 · 低谷",
+ p5_intro:"Part5 · 世界舞台",c7d_a:"Part5 · 世界舞台",p5_reunion:"Part5 · 世界舞台",c8a:"Part5 · 世界舞台",c8b:"Part5 · 世界舞台",c7d_b:"Part5 · 世界舞台",
+ stay_intro:"Part5 · 世界舞台",e_xmas1:"Part5 · 世界舞台",e_xmas2:"Part5 · 世界舞台",e_valentine:"Part5 · 世界舞台",c7s_a:"Part5 · 世界舞台",c6_cold:"Part5 · 世界舞台" };
+function partOf(id){ return PARTMAP[id] || (mj==="J"?"相处 · 较劲":"相处 · 默契"); }
+
+const FN={ p1:"p2",p2:"c1a",c1a:"e_select2",e_select2:"c1b",c1b:"c2a",c2a:"c2b",c2b:"c2c",c2c:"c3a",c3a:"c3b",c3b:"kc2",
+ e_lolly:"mt1",e_invite:"e_lemontea",e_lemontea:"e_summer",e_summer:"c4a",c4c:"mt2",e_rain:"e_festival",e_festival:"mt3",
+ e_bath:"mt4",e_drunk:"e_period",e_period:"e_sick",e_sick:"e_scarf",e_scarf:"mt5",c5b:"e_depart",
+ e_softrice:"e_dressup",e_dressup:"e_drive",e_drive:"e_apocalypse",e_apocalypse:"e_curry",e_curry:"e_autumn",e_autumn:"e_jealous",e_jealous:"e_quarrel",e_quarrel:"e_halloween",e_halloween:"c5a",
+ e_depart:"e_bday1",e_therapy:"e_bday2",e_bday2:"p5_intro",
+ c8b:"c7d_b",e_xmas1:"e_xmas2",e_xmas2:"e_valentine",e_valentine:"c7s_a" };
+
+function resolveRouter(id){ if(id==="m_igate"){ mDeep=(D<=3 && I>=4); saveState(); return mDeep?"e_bath":"m_shallow"; } return "p1"; }
+function enterGameLayer(){
+  ["map","smap","clear","ending","gallery","home","prologue","setup","chap"].forEach(i=>$(i).classList.add("hidden"));
+  $("gamebg").classList.remove("hidden"); $("gamebgF").classList.add("hidden"); $("gameveil").classList.remove("hidden");
+  $("hud").classList.remove("hidden"); $("gameskip").classList.add("hidden"); petals(false);
+}
+function go(id){
+  curNode=id; saveState();
+  const node=STORY[id];
+  if(!node){ console.warn("缺失节点",id); finish(); return; }
+  if(node.router){ go(resolveRouter(id)); return; }
+  enterGameLayer();
+  $("gamebg").style.backgroundImage="url('"+(NODEBG[id]||"bg/apartment.jpg")+"')";
+  $("chapName").textContent=partOf(id); setBond();
+  $("dialog").classList.remove("hidden");
+  queue=(node.auto||[]).map(x=>({who:x.who,t:x.t})); qi=0;
+  after={type:"choices", choices:node.choices};
+  showLine();
+}
+function startNew(){ clearState(); go("p1"); }
+function continueGame(){ if(curNode) go(curNode); else startNew(); }
+function newGameConfirm(){ if(localStorage.getItem("nagi_state") && !confirm("重新开始会清空当前进度，确定？")) return; startNew(); }
 
 /* ① 主页 → 开场白 → 名字录入 → 章节目录 */
 function onStart(){ clearInterval(startTimer); $("home").classList.add("hidden"); playPrologue(); }
@@ -1161,6 +1326,19 @@ function endPrologue(){ clearTimeout(pgTimer); clearInterval(pgTyper); $("prolog
 
 /* ③ 章节路线图（一级页）*/
 function showMap(){
+  ["dialog","choices","chap","ending","clear","hud","gameskip","smap","gallery","gamebgF"].forEach(i=>$(i).classList.add("hidden"));
+  $("gamebg").classList.add("hidden"); $("gameveil").classList.add("hidden");
+  petals(true);
+  const hasSave=!!localStorage.getItem("nagi_state");
+  const t=$("trail"); t.style.height="auto";
+  let h='<div style="display:flex;flex-direction:column;gap:15px;align-items:center;padding-top:60px">';
+  if(hasSave) h+='<button class="btn" onclick="continueGame()">继续上次 →</button>';
+  h+='<button class="btn'+(hasSave?' ghost':'')+'" onclick="newGameConfirm()">'+(hasSave?'重新开始':'开始游戏 →')+'</button></div>';
+  t.innerHTML=h;
+  $("map").classList.remove("hidden");
+  return;
+}
+function _oldShowMap_unused(){
   ["dialog","choices","chap","ending","clear","hud","gameskip","smap","gallery","gamebgF"].forEach(i=>$(i).classList.add("hidden"));
   $("gamebg").classList.add("hidden"); $("gameveil").classList.add("hidden");
   currentCI=null; currentSI=null; petals(true); renderMap();
@@ -1273,7 +1451,7 @@ function sectionDone(){
   $("clear").classList.remove("hidden");
 }
 function backToMenu(){ showMap(); }
-function exitToSection(){ if(currentCI!==null) openChapterMap(currentCI); else showMap(); }
+function exitToSection(){ showMap(); }
 
 /* 对话推进 */
 function typeLine(text){
@@ -1297,8 +1475,7 @@ function tap(){
 }
 function onQueueEnd(){
   if(after&&after.type==="choices"){ renderChoices(after.choices); }
-  else if(after&&after.type==="next"){ play(after.next); }
-  else if(after&&after.type==="sec"){ sectionDone(); }
+  else if(after&&after.type==="go"){ go(after.next); }
   else if(after&&after.type==="endbad"){ finish("bad"); }
   else if(after&&after.type==="egg"){ eggFinish(); }
   else if(after&&after.type==="end"){ finish(); }
@@ -1314,16 +1491,17 @@ function renderChoices(list){
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function choose(c){
   choicesOpen=false; $("choices").classList.add("hidden");
-  $("dialog").classList.remove("hidden");        // 选完恢复对话框，播放回应
-  bond+=c.b||0; und+=c.u||0;
-  if(c.route){ route=c.route; localStorage.setItem("nagi_route",route); }
-  if(c.cold){ coldFlag=true; localStorage.setItem("nagi_cold","1"); }
-  if(c.flag){ finalFlag=c.flag; localStorage.setItem("nagi_flag",c.flag); }
-  saveScore(); setBond();
+  $("dialog").classList.remove("hidden");
+  I += (c.i||0) + (c.u||0);          // 懂他：理解值 + 显式 i
+  D += (c.d||0);                      // 心墙：显式陷阱 d
+  if(c.set){ if(c.set.line) mj=c.set.line; if(c.set.path) path=c.set.path; if(c.set.kc3) kc3=c.set.kc3; if(c.set.nel) nel=c.set.nel; }
+  if(c.flag) finalFlag=c.flag;
+  saveState(); setBond();
   const q=[{who:"ant",t:c.ant}];
-  (c.nagi||[]).forEach(line=>{ if(line) q.push({who:"nagi",t:line}); });
+  (c.nagi||[]).forEach(ln=>{ if(ln) q.push({who:"nagi",t:ln}); });
   queue=q; qi=0;
-  after = c.egg ? {type:"egg"} : c.endBad ? {type:"endbad"} : c.end ? {type:"end"} : (c.sec ? {type:"sec"} : {type:"next", next:c.next});
+  const nxt = c.next || FN[curNode];
+  after = c.egg ? {type:"egg"} : c.endBad ? {type:"endbad"} : c.end ? {type:"end"} : (nxt ? {type:"go",next:nxt} : {type:"end"});
   showLine();
 }
 function play(id){
@@ -1342,29 +1520,27 @@ function skipSection(){
 }
 
 function finish(forceTier){
-  if(currentCI!==null && currentSI!==null){ doneSet.add(currentCI+"-"+currentSI); saveDone(); }
-  if(route) localStorage.setItem("nagi_route",route);
-  /* 结局完全由「剧情分支」决定，每个结局是不同的故事线：
-     · 梦想线 + 最后挺他到世界第一(support) → TRUE（解锁求婚彩蛋）
-     · 梦想线却退缩(waver) / 相守线放手或陪伴(release·accompany) → GOOD（他为你慢下来）
-     · 相守线剪了他翅膀(clip) → NORMAL（他熄了光）
-     · 抉择时用爱逼他、冷战到底 → BAD（c6_cold 独立分支强制） */
+  /* 结局由「剧情走向 + 隐藏数值」共同决定：
+     · 心墙D爆表 或 用爱逼他(cling) → BAD（相爱却平淡告终）
+     · 默契线·选「爱」·低谷给空间·全程低心墙·追梦·挺他 → TRUE（六重门）
+     · 选「习惯」 或 剪翅膀(clip) → NORMAL
+     · 其余守住的 → GOOD */
   let tier=forceTier;
   if(!tier){
-    if(route==="dream") tier = (finalFlag==="support") ? "true" : "good";
-    else                tier = (finalFlag==="clip")    ? "normal" : "good";
+    if(path==="cling" || D>=6) tier="bad";
+    else if(mj==="M" && kc3==="爱" && nel==="好" && D<=3 && path==="dream" && finalFlag==="support") tier="true";
+    else if(kc3==="习惯" || finalFlag==="clip") tier="normal";
+    else tier="good";
   }
-  if(tier!=="bad"){ unlocked=CHAPTERS.length; saveUnlocked(); }
-  const e=ENDINGS[tier];
-  unlockEnding(tier);
+  const e=ENDINGS[tier]; unlockEnding(tier);
+  localStorage.removeItem("nagi_state");
   $("chapName").textContent=e.status;
   setTimeout(()=>{
     $("dialog").classList.add("hidden"); $("hud").classList.add("hidden"); $("gameskip").classList.add("hidden");
     $("etag").textContent=e.tag; $("emoji").textContent=e.emoji;
     $("etitle").textContent=sub(e.title); $("edesc").innerHTML=sub(e.desc);
-    const rt=route?("　·　"+(route==="dream"?"梦想线":"相守线")):"";
-    $("escore").innerHTML="💛 羁绊 "+bond+"　🧠 理解 "+und+rt+"<br>"+e.sub;
-    /* 仅 TRUE END 显示求婚彩蛋按钮 */
+    const ln=(mj==="J"?"较劲线":mj==="M"?"默契线":"——")+(path?(" · "+({dream:"梦想线",stay:"相守线",cling:"执念"}[path]||"")):"");
+    $("escore").innerHTML="♡ "+ln+"<br>"+e.sub;
     $("eggBtn").style.display = (tier==="true") ? "inline-block" : "none";
     $("ending").classList.remove("hidden");
   },700);
