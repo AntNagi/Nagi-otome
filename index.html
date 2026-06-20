@@ -75,12 +75,12 @@
 
   /* ===== 章节路线图 ===== */
   #map{justify-content:flex-start;}
-  #map .maphead{position:absolute;top:0;left:0;right:0;z-index:3;padding:18px 0 14px;
+  #map .maphead{position:absolute;top:0;left:0;right:0;z-index:3;padding:18px 0 14px;height:72px;
     display:flex;flex-direction:column;align-items:center;gap:6px;
-    background:linear-gradient(180deg,rgba(250,241,232,.85),transparent)}
+    background:linear-gradient(180deg,var(--cream) 58%,rgba(250,241,232,.92) 84%,transparent)}
   #map .maptitle{font-family:var(--serif);font-size:23px;color:var(--rose);letter-spacing:.08em;
     text-shadow:0 1px 0 #fff}
-  .scroller{position:absolute;inset:0;overflow-y:auto;z-index:2;padding:78px 0 40px;
+  .scroller{position:absolute;top:72px;bottom:62px;left:0;right:0;overflow-y:auto;z-index:2;padding:14px 0 18px;
     scrollbar-width:none;-ms-overflow-style:none}
   .game *::-webkit-scrollbar{width:0;height:0;display:none}
   .game *{scrollbar-width:none;-ms-overflow-style:none}
@@ -104,16 +104,17 @@
     font-size:12px;color:var(--ink);width:120px;margin-top:6px;
     text-shadow:0 1px 0 #fff;line-height:1.3}
   .nlabel b{display:block;font-size:11px;color:var(--goldD);letter-spacing:.1em}
-  #map .mapfoot{position:absolute;bottom:14px;left:0;right:0;z-index:3;display:flex;justify-content:center}
+  #map .mapfoot{position:absolute;bottom:0;left:0;right:0;z-index:3;display:flex;justify-content:center;
+    padding:14px 0 16px;background:linear-gradient(0deg,var(--cream) 50%,rgba(250,241,232,.92) 80%,transparent)}
 
   /* ===== 小节目录（二级页） ===== */
   #smap{justify-content:flex-start;}
-  #smap .maphead{position:absolute;top:0;left:0;right:0;z-index:3;padding:18px 0 14px;
-    display:flex;flex-direction:column;align-items:center;gap:5px;
-    background:linear-gradient(180deg,rgba(250,241,232,.9),transparent)}
+  #smap .maphead{position:absolute;top:0;left:0;right:0;z-index:3;padding:18px 0 14px;height:88px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    background:linear-gradient(180deg,var(--cream) 60%,rgba(250,241,232,.92) 85%,transparent)}
   #smap .smaptitle{font-family:var(--serif);font-size:22px;color:var(--rose);letter-spacing:.08em;text-shadow:0 1px 0 #fff}
   #smap .smapsub{font-size:12.5px;color:var(--ink2);letter-spacing:.18em}
-  #smap .scroller{padding:92px 0 36px}
+  #smap .scroller{top:88px;bottom:20px;padding:12px 0 20px}
   #smap .backbtn{position:absolute;top:14px;left:12px;z-index:6;font-size:13px;color:var(--rose);
     background:rgba(255,250,246,.86);border:1.5px solid var(--line);border-radius:18px;padding:7px 14px;
     cursor:pointer;box-shadow:0 3px 8px rgba(160,100,70,.22)}
