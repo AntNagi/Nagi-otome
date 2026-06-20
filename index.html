@@ -1075,6 +1075,7 @@ const PROLOGUE_LINES=[
   "从作战室的初遇，到世界之巅的并肩——",
   "你会宠他、会治他，读懂他别扭的温柔，",
   "陪他走完这场名为恋爱的比赛。",
+  "（对了，你公寓里那位 AI 管家「一一」，偶尔会探头帮腔——别被它逗笑。）",
   "你的每一个选择，都将决定你们的结局。",
 ];
 
@@ -1164,7 +1165,8 @@ function showPg(){
   pgTimer=setTimeout(()=>{ pgi++; showPg(); }, 3000);
 }
 function pgNext(){ clearTimeout(pgTimer); pgi++; showPg(); }
-function endPrologue(){ clearTimeout(pgTimer); clearInterval(pgTyper); $("prologue").classList.add("hidden"); showSetup(); }
+function endPrologue(){ clearTimeout(pgTimer); clearInterval(pgTyper); $("prologue").classList.add("hidden");
+  if(localStorage.getItem("nagi_pname")){ showMap(); } else { showSetup(); } }
 
 /* ③ 章节路线图（一级页）*/
 function showMap(){
