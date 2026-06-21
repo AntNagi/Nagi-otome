@@ -861,6 +861,18 @@ const STORY = {
       {label:"当然。今晚哪也别去，就赖在这", type:"心动", ant:"当然。今晚哪也别去，就赖在这", b:3,u:3, nagi:["（手臂收紧了些）……嗯","（很轻）这样，就好了"], sec:true},
       {label:"不开心就说出来，我都在", type:"理性", ant:"不开心就说出来，我都在", b:2,u:2, nagi:["（把脸埋得更深）……没什么","只是，想抱一会儿Ant"], sec:true},
     ]},
+  /* ===== 亲密（小剧场改编·占位） ===== */
+  e_intimate:{ auto:[
+      {who:"sys",t:"夜晚的公寓很安静，只有窗外虫鸣和空调低低的嗡声。"},
+      {who:"sys",t:"你窝在沙发上看剧，他像往常一样瘫在旁边打游戏——直到你不经意靠过去，肩膀碰到他的手臂。"},
+      {who:"nagi",t:"（手指顿了一下，侧目看你）……Ant，你靠太近了。"},
+      {who:"sys",t:"他嘴上这么说，手却悄悄放下了手柄。"},
+    ],
+    choices:[
+      {label:"（靠得更近）那你推开我啊", ant:"（靠得更近）那你推开我啊", i:1, nagi:["（喉结滚了一下，声音哑了）……你知道我不会","（伸手揽过你的腰，额头抵着你的）……麻烦死了"], sec:true},
+      {label:"（故意往旁边挪）好好好，不碰你", ant:"（故意往旁边挪）好好好，不碰你", i:1, nagi:["（皱眉，反手把你拽回来）……没让你走","（小声）刚才那个距离，刚好"], sec:true},
+    ]},
+
   e_scarf:{ auto:[
       {who:"sys",t:"一夜入冬。你随口给他发消息：「今天突然好冷，我都要感冒了QAQ」。"},
       {who:"sys",t:"下班时，他真的出现在公司楼下的路灯下，手里拎着一条厚得像小毛毯的奶白围巾，边缘系着根紫缎带。"},
@@ -1080,7 +1092,6 @@ const STORY = {
     ]},
   /* 亲密门（按 I/D 解锁 M深 或 M浅） */
   m_igate:{ router:"igate" },
-  e_sick_gate:{ router:"sick_gate" },
   /* M浅·冷淡变体 */
   m_shallow:{ auto:[
       {who:"sys",t:"你和他之间，好像隔了一层看不见的膜。他还是会陪你，却总有点心不在焉——那些本该滚烫的夜晚，也变得安静而客气。"},
@@ -1184,52 +1195,28 @@ const CHAPTERS=[
     {n:"第三幕",title:"心意相通",start:"c1b"},
   ]},
   {n:"第二章",title:"恋爱", bg:"bg/openday.jpg", sections:[
-    {n:"第一幕",title:"假期的来电",start:"c2a"},
-    {n:"第二幕",title:"开放日·歪头重逢",start:"c3a"},
-    {n:"第三幕",title:"邋遢更衣室",start:"c3b"},
-    {n:"第四幕",title:"我的提议·确立关系",start:"c2b",bg:"bg/apartment.jpg"},
+    {n:"第一幕",title:"开放日·歪头重逢",start:"c3a"},
+    {n:"第二幕",title:"邋遢更衣室",start:"c3b"},
+    {n:"第三幕",title:"你的，我的",start:"e_lemontea",bg:"bg/lemontea.jpg"},
+    {n:"第四幕",title:"假期的来电",start:"c2a"},
+    {n:"第五幕",title:"你的提议·确立关系",start:"c2b",bg:"bg/apartment.jpg"},
+    {n:"第六幕",title:"Fiery Summer·花环",start:"e_summer",bg:"bg/summer.jpg"},
+    {n:"第七幕",title:"高级公寓的邀请",start:"e_invite",bg:"bg/apartment.jpg"},
+    {n:"第八幕",title:"棒棒糖·自动刷脸",start:"e_lolly",bg:"bg/lolly.jpg"},
+    {n:"第九幕",title:"暧昧·该不该催",start:"mt1"},
+    {n:"第十幕",title:"夏日祭·浴衣与烟火",start:"e_festival",bg:"bg/summerfestival.jpg"},
+    {n:"第十一幕",title:"七夕·蓝色玫瑰",start:"c4a",bg:"bg/qixi.jpg"},
+    {n:"第十二幕",title:"七夕之夜",start:"c4d",bg:"bg/bedroom.jpg"},
   ]},
   {n:"第三章",title:"热恋", bg:"bg/livingroom.jpg", sections:[
-    /* ★ 分线 */
     {n:"第一幕",title:"★相处之道",start:"kc2"},
-    /* ── 默契线·初期 ── */
-    {n:"第二幕",title:"棒棒糖·自动刷脸",start:"e_lolly",bg:"bg/lolly.jpg"},
-    {n:"第三幕",title:"暧昧·该不该催",start:"mt1"},
-    {n:"第四幕",title:"高级公寓的邀请",start:"e_invite",bg:"bg/apartment.jpg"},
-    {n:"第五幕",title:"你的，我的",start:"e_lemontea",bg:"bg/lemontea.jpg"},
-    {n:"第六幕",title:"Fiery Summer·花环",start:"e_summer",bg:"bg/summer.jpg"},
-    /* ── 较劲线·初期 ── */
-    {n:"第七幕",title:"软饭王哲学",start:"e_softrice",bg:"bg/softrice.jpg"},
-    {n:"第八幕",title:"任人打扮的小姑娘",start:"e_dressup",bg:"bg/dressup.jpg"},
-    {n:"第九幕",title:"飙车实录",start:"e_drive",bg:"bg/drive.jpg"},
-    {n:"第十幕",title:"末日盛夏畅想",start:"e_apocalypse",bg:"bg/apocalypse.jpg"},
-    {n:"第十一幕",title:"黑暗料理·咖喱饭",start:"e_curry",bg:"bg/curry.jpg"},
-    /* ── 共通·同居日常 ── */
-    {n:"第十二幕",title:"吧台·久别重逢",start:"c3c",bg:"bg/livingroom.jpg"},
-    {n:"第十三幕",title:"久别后·想你",start:"c3d",bg:"bg/bedroom.jpg"},
-    {n:"第十四幕",title:"哦哈哟·赖床的早晨",start:"e_morning",bg:"bg/wakeup.jpg"},
-    /* ── 共通·七夕 ── */
-    {n:"第十五幕",title:"七夕·蓝色玫瑰",start:"c4a",bg:"bg/qixi.jpg"},
-    {n:"第十六幕",title:"七夕之夜",start:"c4d",bg:"bg/bedroom.jpg"},
-    /* ── 默契线·深入 ── */
-    {n:"第十七幕",title:"已读不回的夜",start:"mt2",bg:"bg/moody.jpg"},
-    {n:"第十八幕",title:"雨天·共撑一伞",start:"e_rain",bg:"bg/afterwork.jpg"},
-    {n:"第十九幕",title:"夏日祭·浴衣与烟火",start:"e_festival",bg:"bg/summerfestival.jpg"},
-    {n:"第二十幕",title:"同居·他放飞了",start:"mt3"},
-    {n:"第二十一幕",title:"闹别扭的夜",start:"mt4",bg:"bg/bedroom.jpg"},
-    {n:"第二十二幕",title:"客气的距离",start:"m_shallow",bg:"bg/bedroom.jpg"},
-    /* ── 较劲线·深入 ── */
-    {n:"第二十三幕",title:"只在乎你·吃醋",start:"e_jealous",bg:"bg/livingroom.jpg"},
-    {n:"第二十四幕",title:"拌嘴与和好",start:"e_quarrel",bg:"bg/bedroom.jpg"},
-    {n:"第二十五幕",title:"借着醉意",start:"e_drunk",bg:"bg/livingroom.jpg"},
-    /* ── 共通·秋冬 ── */
-    {n:"第二十六幕",title:"无声的拥抱",start:"e_hug",bg:"bg/hug.jpg"},
-    {n:"第二十七幕",title:"送围巾",start:"e_scarf",bg:"bg/scarf.jpg"},
-    {n:"第二十八幕",title:"换季感冒·笨拙看护",start:"e_sick",bg:"bg/bedroom.jpg"},
-    {n:"第二十九幕",title:"读书之秋",start:"e_autumn",bg:"bg/autumn.jpg"},
-    /* ── 默契线·分寸 ── */
-    {n:"第三十幕",title:"他的温柔·与你的分寸",start:"mt5"},
-    /* ── 共通·埋雷 ── */
+    {n:"第二幕",title:"同居·他放飞了",start:"mt3"},
+    {n:"第三幕",title:"亲密",start:"e_intimate",bg:"bg/bedroom.jpg"},
+    {n:"第四幕",title:"送围巾",start:"e_scarf",bg:"bg/scarf.jpg"},
+    {n:"第五幕",title:"雨天·共撑一伞",start:"e_rain",bg:"bg/afterwork.jpg"},
+    {n:"第六幕",title:"换季感冒·笨拙看护",start:"e_sick",bg:"bg/bedroom.jpg"},
+    {n:"第七幕",title:"他的温柔·与你的分寸",start:"mt5"},
+    {n:"第八幕",title:"已读不回的夜",start:"mt2",bg:"bg/moody.jpg"},
     {n:"最终幕",title:"★笨拙的心·是爱还是习惯",start:"c5a",bg:"bg/bedroom.jpg"},
   ]},
   {n:"第四章",title:"NEL · 低谷", bg:"bg/moody.jpg", sections:[
@@ -1341,18 +1328,18 @@ const STAGES=["序幕 · 那一束光","相识","恋爱","热恋","NEL · 低谷
 function stageIndex(id){
   if(["p1","p2"].includes(id)) return 0;
   if(["c1a","e_select2","c1b"].includes(id)) return 1;
-  if(["c2a","c3a","c3b","c2b"].includes(id)) return 2;
+  if(["c2a","c3a","c3b","c2b","e_lemontea","e_summer","e_invite","e_lolly","mt1","e_festival","c4a","c4b","c4c","c4d"].includes(id)) return 2;
   if(["e_depart","e_bday1","e_therapy","e_bday2","nelbad1","nelbad2","c6a","c6b","e_halloween"].includes(id)) return 4;
   if(["p5_intro","c7d_a","p5_reunion","p5_reunion2","c8a","c8b","c7d_b","c8c","stay_intro","e_xmas1","e_xmas2","e_valentine","c7s_a","c6_cold","e_villa"].includes(id)) return 5;
   return 3;
 }
 /* 节标题（仅「节首」节点有；链内节点 c4b/c4c/c5b/c8b 无 → 不弹卡，连续播放）*/
 const SCENE={ p1:"作战室·初遇",p2:"投资的私心",c1a:"训练室初见",e_select2:"二次选拔·主动选洁",c1b:"心意相通",
- c2a:"假期的来电",c2b:"我的提议",c3a:"开放日·歪头重逢",c3b:"邋遢更衣室",kc2:"★相处之道",
+ c2a:"假期的来电",c2b:"你的提议",c3a:"开放日·歪头重逢",c3b:"邋遢更衣室",kc2:"★相处之道",
  e_lolly:"棒棒糖·自动刷脸",mt1:"暧昧·该不该催",e_invite:"高级公寓的邀请",e_lemontea:"你的，我的",e_summer:"Fiery Summer·花环",
  c4a:"七夕·蓝色玫瑰",c4d:"七夕之夜",mt2:"已读不回的夜",e_rain:"雨天·共撑一伞",e_festival:"夏日祭·浴衣与烟火",mt3:"同居·他放飞了",
  mt4:"闹别扭的夜",e_drunk:"借着醉意",m_shallow:"客气的距离",
- e_sick:"换季感冒·笨拙看护",e_scarf:"送围巾",mt5:"他的温柔·与你的分寸",
+ e_sick:"换季感冒·笨拙看护",e_scarf:"送围巾",e_intimate:"亲密",mt5:"他的温柔·与你的分寸",
  e_softrice:"软饭王哲学",e_dressup:"任人打扮",e_drive:"飙车实录",e_apocalypse:"末日盛夏",e_curry:"黑暗料理·咖喱饭",
  e_autumn:"读书之秋",e_jealous:"只在乎你·吃醋",e_quarrel:"拌嘴·收手还是闹大",e_halloween:"万圣夜·专属恶魔",
  c5a:"★笨拙的心·是爱还是习惯",
@@ -1444,7 +1431,7 @@ const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:
  e_lolly:"bg/lolly.jpg",mt1:"bg/livingroom.jpg",e_invite:"bg/apartment.jpg",e_lemontea:"bg/lemontea.jpg",e_summer:"bg/summer.jpg",
  c4a:"bg/qixi.jpg",c4b:"bg/qixi.jpg",c4c:"bg/qixi.jpg",c4d:"bg/bedroom.jpg",mt2:"bg/moody.jpg",e_rain:"bg/afterwork.jpg",e_festival:"bg/summerfestival.jpg",
  mt3:"bg/livingroom.jpg",m_shallow:"bg/bedroom.jpg",mt4:"bg/bedroom.jpg",e_drunk:"bg/livingroom.jpg",
- e_sick:"bg/bedroom.jpg",e_scarf:"bg/scarf.jpg",mt5:"bg/bedroom.jpg",c5a:"bg/bedroom.jpg",c5b:"bg/bedroom.jpg",
+ e_sick:"bg/bedroom.jpg",e_scarf:"bg/scarf.jpg",e_intimate:"bg/bedroom.jpg",mt5:"bg/bedroom.jpg",c5a:"bg/bedroom.jpg",c5b:"bg/bedroom.jpg",
  e_softrice:"bg/softrice.jpg",e_dressup:"bg/dressup.jpg",e_drive:"bg/drive.jpg",e_apocalypse:"bg/apocalypse.jpg",e_curry:"bg/curry.jpg",
  e_autumn:"bg/autumn.jpg",e_jealous:"bg/livingroom.jpg",e_quarrel:"bg/bedroom.jpg",e_halloween:"bg/Halloween.jpg",
  e_depart:"bg/pitch.jpg",e_bday1:"bg/fallingdown.jpg",e_therapy:"bg/bedroom.jpg",e_bday2:"bg/birthday.jpg",nelbad1:"bg/moody.jpg",nelbad2:"bg/hug.jpg",
@@ -1454,7 +1441,10 @@ const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:
 const PARTMAP={ p1:"序章 · 那一束光",p2:"序章 · 那一束光",
  c1a:"第1章 · 相识",e_select2:"第1章 · 相识",c1b:"第1章 · 相识",
  c2a:"第2章 · 恋爱",c3a:"第2章 · 恋爱",c3b:"第2章 · 恋爱",c2b:"第2章 · 恋爱",
- kc2:"第3章 · 热恋",c5a:"第3章 · 热恋",c5b:"第3章 · 热恋",
+ e_lemontea:"第2章 · 恋爱",e_summer:"第2章 · 恋爱",e_invite:"第2章 · 恋爱",e_lolly:"第2章 · 恋爱",
+ mt1:"第2章 · 恋爱",e_festival:"第2章 · 恋爱",c4a:"第2章 · 恋爱",c4b:"第2章 · 恋爱",c4c:"第2章 · 恋爱",c4d:"第2章 · 恋爱",
+ kc2:"第3章 · 热恋",mt3:"第3章 · 热恋",e_intimate:"第3章 · 热恋",e_scarf:"第3章 · 热恋",e_rain:"第3章 · 热恋",
+ e_sick:"第3章 · 热恋",mt5:"第3章 · 热恋",mt2:"第3章 · 热恋",c5a:"第3章 · 热恋",c5b:"第3章 · 热恋",
  c6a:"第4章 · 低谷",c6b:"第4章 · 低谷",e_halloween:"第4章 · 低谷",
  e_depart:"第4章 · 低谷",e_bday1:"第4章 · 低谷",e_therapy:"第4章 · 低谷",e_bday2:"第4章 · 低谷",nelbad1:"第4章 · 低谷",nelbad2:"第4章 · 低谷",
  e_villa:"终章 · 结局",p5_intro:"终章 · 结局",c7d_a:"终章 · 结局",p5_reunion:"终章 · 结局",p5_reunion2:"终章 · 结局",
@@ -1462,14 +1452,17 @@ const PARTMAP={ p1:"序章 · 那一束光",p2:"序章 · 那一束光",
  stay_intro:"终章 · 结局",e_xmas1:"终章 · 结局",e_xmas2:"终章 · 结局",e_valentine:"终章 · 结局",c7s_a:"终章 · 结局",c6_cold:"终章 · 结局" };
 function partOf(id){ return PARTMAP[id] || "第3章 · 热恋"; }
 
-const FN={ p1:"p2",p2:"c1a",c1a:"e_select2",e_select2:"c1b",c1b:"c2a",c2a:"c3a",c3a:"c3b",c3b:"c2b",c2b:"kc2",
- e_lolly:"mt1",e_invite:"e_lemontea",e_lemontea:"e_summer",e_summer:"c4a",c4c:"c4d",c4d:"mt2",e_rain:"e_festival",e_festival:"mt3",
- e_scarf:"e_sick",e_sick:"e_sick_gate",c5b:"e_depart",
+const FN={ p1:"p2",p2:"c1a",c1a:"e_select2",e_select2:"c1b",
+ c1b:"c3a",c3a:"c3b",c3b:"e_lemontea",e_lemontea:"c2a",c2a:"c2b",c2b:"e_summer",
+ e_summer:"e_invite",e_invite:"e_lolly",e_lolly:"mt1",
+ e_festival:"c4a",c4c:"c4d",c4d:"kc2",
+ mt3:"e_intimate",e_intimate:"e_scarf",e_scarf:"e_rain",e_rain:"e_sick",e_sick:"mt5",mt5:"mt2",mt2:"c5a",
+ c5b:"e_depart",
  e_softrice:"e_dressup",e_dressup:"e_drive",e_drive:"e_apocalypse",e_apocalypse:"e_curry",e_curry:"e_autumn",e_autumn:"e_jealous",e_jealous:"e_quarrel",e_quarrel:"e_drunk",e_drunk:"e_scarf",
  e_depart:"e_bday1",e_therapy:"e_bday2",e_bday2:"p5_intro",
  c8b:"c7d_b",e_xmas1:"e_xmas2",e_xmas2:"e_valentine",e_valentine:"c7s_a" };
 
-function resolveRouter(id){ if(id==="m_igate"){ mDeep=(D<=3 && I>=4); saveState(); return mDeep?"mt4":"m_shallow"; } if(id==="e_sick_gate"){ return mj==="J"?"c5a":"mt5"; } return "p1"; }
+function resolveRouter(id){ if(id==="m_igate"){ mDeep=(D<=3 && I>=4); saveState(); return mDeep?"mt4":"m_shallow"; } return "p1"; }
 function enterGameLayer(){
   ["map","smap","clear","ending","gallery","home","prologue","setup","chap"].forEach(i=>$(i).classList.add("hidden"));
   $("gamebg").classList.remove("hidden"); $("gamebgF").classList.add("hidden"); $("gameveil").classList.remove("hidden");
