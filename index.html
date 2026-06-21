@@ -1413,15 +1413,22 @@ async function teSaveRemote(){
 }
 async function teLoadRemote(){
   try{
-    const r=await fetch(GH_FILE+"?t="+Date.now());
-    if(!r.ok) return;
-    const remote=await r.json();
-    if(remote && typeof remote==="object"){
-      Object.assign(TE,remote);
+    let data;
+    const tk=localStorage.getItem("nagi_gh_token");
+    if(tk){
+      const api="https://api.github.com/repos/"+GH_REPO+"/contents/"+GH_FILE;
+      const meta=await fetch(api,{headers:{Authorization:"token "+tk},cache:"no-store"}).then(r=>r.json());
+      if(meta.content) data=JSON.parse(decodeURIComponent(escape(atob(meta.content.replace(/\n/g,"")))));
+    } else {
+      const r=await fetch(GH_FILE+"?t="+Date.now(),{cache:"no-store"});
+      if(r.ok) data=await r.json();
+    }
+    if(data && typeof data==="object" && Object.keys(data).length){
+      Object.assign(TE,data);
       localStorage.setItem("nagi_te",JSON.stringify(TE));
       teApply();
     }
-  }catch(e){}
+  }catch(e){ console.warn("远程加载失败",e); }
 }
 function setupGHToken(){
   const cur=localStorage.getItem("nagi_gh_token")||"";
