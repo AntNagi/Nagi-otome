@@ -1484,7 +1484,7 @@ function editCurLine(){
 let menuOpen=-1;
 let seen=new Set(JSON.parse(localStorage.getItem("nagi_seen")||"[]"));
 function markSeen(id){ if(SCENE[id]&&!seen.has(id)){ seen.add(id); localStorage.setItem("nagi_seen",JSON.stringify([...seen])); } }
-function setBond(){ $("bond").style.width=Math.min(100, I*5)+"%"; }
+function setBond(){ $("bond").style.width=(queue.length>0?Math.round((qi+1)/queue.length*100):0)+"%"; }
 
 const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:"bg/select2.jpg",c1b:"bg/pitch.jpg",
  c2a:"bg/apartment.jpg",c2b:"bg/apartment.jpg",c3a:"bg/openday.jpg",c3b:"bg/openday.jpg",kc2:"bg/livingroom.jpg",
@@ -1802,7 +1802,7 @@ function applyWho(who){
   else{ sp.classList.remove("hide"); $("text").classList.remove("narration");
     sp.textContent=NAMES[who]; sp.className="speaker"+(who==="ant"?" ant":who==="yiyi"?" yiyi":""); }
 }
-function showLine(){ const ln=queue[qi]; applyWho(ln.who); typeLine(ln.t);
+function showLine(){ const ln=queue[qi]; applyWho(ln.who); typeLine(ln.t); setBond();
   $("editbtn").style.display=(editMode&&queueKeys[qi])?"flex":"none"; }
 function tap(){
   if(choicesOpen) return;
