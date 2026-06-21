@@ -303,10 +303,10 @@
   <div class="screen" id="home">
     <div class="bg"></div>
     <div class="start" onclick="onStart()">
-      <div class="startword" id="startword"></div>
+      <div class="startword" id="startword">START</div>
       <div class="starthint">轻 触 开 始</div>
     </div>
-    <div class="homesaves" onclick="openSaves('home')"><span>☰ 存档记录</span></div>
+    <!-- <div class="homesaves" onclick="openSaves('home')"><span>☰ 存档记录</span></div> -->
     <div id="editToggle" onclick="toggleEdit()">✏️ 编辑模式</div>
     <div id="tokenBtn" onclick="setupGHToken()" style="position:absolute;top:calc(6% + 22px);right:16px;font-size:10px;color:#fff;cursor:pointer;opacity:.7;text-shadow:0 1px 6px rgba(120,40,50,.6);z-index:4;display:none">🔑 同步设置</div>
   </div>
@@ -1333,19 +1333,7 @@ const wait=ms=>new Promise(r=>setTimeout(r,ms));
 })();
 function petals(show){ $("petals").style.display=show?"block":"none"; }
 
-/* 主页 START 打字机循环 */
 let startTimer=null;
-function startTypewriter(){
-  const el=$("startword"); if(!el) return;
-  const word="START", P=word.length+13; let s=0;
-  clearInterval(startTimer);
-  startTimer=setInterval(()=>{
-    const c=s%P; s++;
-    if(c<word.length){ el.innerHTML=word.slice(0,c+1)+'<span class="cur">|</span>'; }
-    else{ const k=c-word.length; el.innerHTML = k>=11 ? '<span class="cur">|</span>' : word+'<span class="cur">|</span>'; }
-  },170);
-}
-startTypewriter();
 
 function setMood(m){ /* 立绘可插拔，暂用虚化背景 */ }
 
