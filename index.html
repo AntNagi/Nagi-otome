@@ -169,7 +169,7 @@
   .hud .chiptitle{font-family:var(--serif);font-size:14px;color:var(--rose);background:rgba(255,250,246,.78);
     border:1.5px solid var(--line);border-radius:18px;padding:5px 14px;box-shadow:0 3px 8px rgba(160,100,70,.2)}
   .hud .sp{flex:1}
-  .bondwrap{display:flex;align-items:center;gap:6px;background:rgba(255,250,246,.78);
+  .bondwrap{display:none;align-items:center;gap:6px;background:rgba(255,250,246,.78);
     border:1.5px solid var(--line);border-radius:18px;padding:5px 12px;box-shadow:0 3px 8px rgba(160,100,70,.2)}
   .bondwrap svg{width:15px;height:15px;fill:var(--rose);stroke:none}
   .bondbar{width:54px;height:6px;border-radius:99px;background:rgba(156,58,72,.18);overflow:hidden}
@@ -1962,7 +1962,7 @@ function renderSaves(){
     const line=(s.st&&s.st.path)?({dream:"梦想线",stay:"相守线",cling:"执念"}[s.st.path]||""):"";
     card.innerHTML='<div class="svtag">'+esc(s.part||"")+(line?(' · '+line):'')+'</div>'
       +'<div class="svtit">'+esc(s.name||"存档")+'</div>'
-      +'<div class="svmeta">'+esc(s.act||"")+' · 懂他 '+(s.st?s.st.I:0)+' / 心墙 '+(s.st?s.st.D:0)+'<br/>'
+      +'<div class="svmeta">'+esc(s.act||"")+'<br/>'
       +esc(s.pname||"你")+' ♡ '+esc(s.nname||"凪")+' · '+fmtTime(s.ts)+'</div>'
       +'<div class="savedel" title="删除">×</div>';
     card.onclick=()=>loadSlot(s.id);
