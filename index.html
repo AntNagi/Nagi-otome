@@ -308,6 +308,7 @@
     </div>
     <div class="homesaves" onclick="openSaves('home')"><span>☰ 存档记录</span></div>
     <div id="editToggle" onclick="toggleEdit()">✏️ 编辑模式</div>
+    <div id="tokenBtn" onclick="setupGHToken()" style="position:absolute;top:calc(6% + 22px);right:16px;font-size:10px;color:#fff;cursor:pointer;opacity:.7;text-shadow:0 1px 6px rgba(120,40,50,.6);z-index:4;display:none">🔑 同步设置</div>
   </div>
 
   <!-- ①b 名字录入 -->
@@ -1395,9 +1396,38 @@ const STAGE2PART=[0,1,2,3,4,5];
 let editMode = localStorage.getItem("nagi_editmode")==="1";
 const TE = JSON.parse(localStorage.getItem("nagi_te")||"{}");
 let curEK=null, editCb=null, queueKeys=[], playingNode=null;
+const GH_REPO="AntNagi/Nagi-otome", GH_FILE="te.json";
 
 function teSave(){ localStorage.setItem("nagi_te",JSON.stringify(TE)); }
-function teSet(key,val){ TE[key]=val; teSave(); }
+function teSet(key,val){ TE[key]=val; teSave(); teSaveRemote(); }
+
+async function teSaveRemote(){
+  const tk=localStorage.getItem("nagi_gh_token"); if(!tk) return;
+  try{
+    const api="https://api.github.com/repos/"+GH_REPO+"/contents/"+GH_FILE;
+    const h={Authorization:"token "+tk,"Content-Type":"application/json"};
+    const meta=await fetch(api,{headers:h}).then(r=>r.json());
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(TE,null,2))));
+    await fetch(api,{method:"PUT",headers:h,body:JSON.stringify({message:"edit: update text",content:content,sha:meta.sha})});
+  }catch(e){ console.warn("远程保存失败",e); }
+}
+async function teLoadRemote(){
+  try{
+    const r=await fetch(GH_FILE+"?t="+Date.now());
+    if(!r.ok) return;
+    const remote=await r.json();
+    if(remote && typeof remote==="object"){
+      Object.assign(TE,remote);
+      localStorage.setItem("nagi_te",JSON.stringify(TE));
+      teApply();
+    }
+  }catch(e){}
+}
+function setupGHToken(){
+  const cur=localStorage.getItem("nagi_gh_token")||"";
+  const tk=prompt("粘贴你的 GitHub Token（只需一次）：\n\n生成方法：GitHub → Settings → Developer settings → Fine-grained tokens → Generate\n权限：只勾选 Contents (Read and write)\n仓库：只选 Nagi-otome",cur);
+  if(tk&&tk.trim()){ localStorage.setItem("nagi_gh_token",tk.trim()); toast("Token 已保存 ✓"); }
+}
 function teApply(){
   for(const [k,v] of Object.entries(TE)){
     const p=k.split(".");
@@ -1422,14 +1452,16 @@ function teApply(){
   }
 }
 teApply();
+teLoadRemote();
 
 function toggleEdit(){
   editMode=!editMode;
   localStorage.setItem("nagi_editmode",editMode?"1":"0");
   toast(editMode?"编辑模式 ON · 点击 ✏️ 编辑文本":"编辑模式 OFF");
   $("editToggle").textContent=editMode?"✏️ 编辑中":"✏️ 编辑模式";
+  $("tokenBtn").style.display=editMode?"block":"none";
 }
-if(editMode) document.addEventListener("DOMContentLoaded",()=>{ $("editToggle").textContent="✏️ 编辑中"; });
+if(editMode) document.addEventListener("DOMContentLoaded",()=>{ $("editToggle").textContent="✏️ 编辑中"; $("tokenBtn").style.display="block"; });
 
 function openEdit(key,text,label,cb){
   curEK=key; editCb=cb||null;
