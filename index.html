@@ -861,16 +861,49 @@ const STORY = {
       {label:"当然。今晚哪也别去，就赖在这", type:"心动", ant:"当然。今晚哪也别去，就赖在这", b:3,u:3, nagi:["（手臂收紧了些）……嗯","（很轻）这样，就好了"], sec:true},
       {label:"不开心就说出来，我都在", type:"理性", ant:"不开心就说出来，我都在", b:2,u:2, nagi:["（把脸埋得更深）……没什么","只是，想抱一会儿Ant"], sec:true},
     ]},
-  /* ===== 亲密（小剧场改编·占位） ===== */
+  /* ===== 亲密（小剧场改编） ===== */
   e_intimate:{ auto:[
-      {who:"sys",t:"夜晚的公寓很安静，只有窗外虫鸣和空调低低的嗡声。"},
-      {who:"sys",t:"你窝在沙发上看剧，他像往常一样瘫在旁边打游戏——直到你不经意靠过去，肩膀碰到他的手臂。"},
+      {who:"sys",t:"窗外霓虹光影透过落地窗洒进来，映在他散乱的银发上，像给他镀了一层微光。"},
+      {who:"sys",t:"电视停在暂停界面，手柄被扔在一旁。客厅安静得只剩两个人的呼吸声。"},
+      {who:"sys",t:"你靠在沙发上看手机，他像只慵懒的大猫瘫在旁边——直到你不经意靠过去，肩膀碰到他的手臂。"},
       {who:"nagi",t:"（手指顿了一下，侧目看你）……Ant，你靠太近了。"},
       {who:"sys",t:"他嘴上这么说，手却悄悄放下了手柄。"},
     ],
     choices:[
-      {label:"（靠得更近）那你推开我啊", ant:"（靠得更近）那你推开我啊", i:1, nagi:["（喉结滚了一下，声音哑了）……你知道我不会","（伸手揽过你的腰，额头抵着你的）……麻烦死了"], sec:true},
-      {label:"（故意往旁边挪）好好好，不碰你", ant:"（故意往旁边挪）好好好，不碰你", i:1, nagi:["（皱眉，反手把你拽回来）……没让你走","（小声）刚才那个距离，刚好"], sec:true},
+      {label:"（靠得更近）那你推开我啊", type:"心动", ant:"（靠得更近）那你推开我啊", i:1, nagi:["（喉结滚了一下，声音哑了）……你知道我不会","（伸手揽过你的腰，额头抵着你的）……麻烦死了"], next:"e_intimate2"},
+      {label:"（故意往旁边挪）好好好，不碰你", type:"调皮", ant:"（故意往旁边挪）好好好，不碰你", i:1, nagi:["（皱眉，反手把你拽回来）……没让你走","（小声）刚才那个距离，刚好"], next:"e_intimate2"},
+    ]},
+  e_intimate2:{ auto:[
+      {who:"sys",t:"他低头吻下来，先是轻轻咬了咬你的耳垂——牙齿不小心磕到耳廓，你缩了缩脖子，他慌了一瞬。"},
+      {who:"nagi",t:"（脸微红，小声）……我、我怕弄疼你。"},
+      {who:"sys",t:"可是他的吻还是顺着脖颈一路向下，留下几个浅浅红痕。动作笨拙，却认真得要命。"},
+    ],
+    choices:[
+      {label:"（揪住他衣领，低声）……你的吻好烫", type:"心动", ant:"（揪住他衣领，低声）……你的吻好烫", i:1, nagi:["（灰瞳闪了闪，声音更哑）……那我继续"], next:"e_intimate3"},
+      {label:"（红着脸笑）你是照着漫画学的吧", type:"调皮", ant:"（红着脸笑）你是照着漫画学的吧", i:1, nagi:["（脸红透了）……才、才没有","（低声嘀咕）漫画里没说会这么难……"], next:"e_intimate3"},
+    ]},
+  e_intimate3:{ auto:[
+      {who:"sys",t:"190cm的身高把你整个人笼罩在沙发里。他试着调整姿势，膝盖不小心压到你腿侧，你低呼了一声。"},
+      {who:"nagi",t:"（慌忙抬起，脸红得像番茄）对、对不起……我没注意……"},
+      {who:"sys",t:"他手忙脚乱地把你抱稳，手滑了一下，你差点从他怀里滑下去。你忍不住笑出声，他耳尖更红了。"},
+      {who:"nagi",t:"（低声嘀咕）……漫画里真的没说会这么难。"},
+      {who:"sys",t:"可是他的眼神，专注得像在球场找准节奏的天才。从慢到快，笨拙的试探一点点变成了确信的节拍。"},
+    ],
+    choices:[
+      {label:"（手指轻轻抓着他肩膀）……Nagi……", type:"心动", ant:"（手指轻轻抓着他肩膀）……Nagi……", i:1, nagi:["（低喘，额头抵着你的）Ant……你还好吗","（很轻很轻）……别放手"], next:"e_intimate4"},
+    ]},
+  e_intimate4:{ auto:[
+      {who:"sys",t:"霓虹光影映在两个人纠缠的影子上，沙发微微晃动。他的心跳和你的心跳交织在一起，像是共鸣的鼓点。"},
+      {who:"sys",t:"然后一切都静下来了。他低喘着停下，额头抵着你的额头，汗水滴在你脸颊上。"},
+      {who:"nagi",t:"（呼吸渐渐平缓，灰瞳里带着满足的光）Ant……我、我是不是还得练？"},
+    ],
+    choices:[
+      {label:"（喘着气甜笑）你已经很棒了……", type:"温柔", ant:"（喘着气甜笑）你已经很棒了……", i:1,
+        nagi:["（懒懒笑了，揉你头发）Ant也很棒……","（低声，带着点青涩的期待）嗯……Ant，你这么甜，我、我还想多试几次……"],
+        sec:true},
+      {label:"（脸埋进他胸口）你少得意……我都没力气了", type:"娇嗔", ant:"（脸埋进他胸口）你少得意……我都没力气了", i:1,
+        nagi:["（把你整个人圈进怀里，下巴搁你头顶）那就不动了……就这样","（很久之后，小声）……下次，我会更小心"],
+        sec:true},
     ]},
 
   e_scarf:{ auto:[
@@ -1431,7 +1464,7 @@ const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:
  e_lolly:"bg/lolly.jpg",mt1:"bg/livingroom.jpg",e_invite:"bg/apartment.jpg",e_lemontea:"bg/lemontea.jpg",e_summer:"bg/summer.jpg",
  c4a:"bg/qixi.jpg",c4b:"bg/qixi.jpg",c4c:"bg/qixi.jpg",c4d:"bg/bedroom.jpg",mt2:"bg/moody.jpg",e_rain:"bg/afterwork.jpg",e_festival:"bg/summerfestival.jpg",
  mt3:"bg/livingroom.jpg",m_shallow:"bg/bedroom.jpg",mt4:"bg/bedroom.jpg",e_drunk:"bg/livingroom.jpg",
- e_sick:"bg/bedroom.jpg",e_scarf:"bg/scarf.jpg",e_intimate:"bg/bedroom.jpg",mt5:"bg/bedroom.jpg",c5a:"bg/bedroom.jpg",c5b:"bg/bedroom.jpg",
+ e_sick:"bg/bedroom.jpg",e_scarf:"bg/scarf.jpg",e_intimate:"bg/bedroom.jpg",e_intimate2:"bg/bedroom.jpg",e_intimate3:"bg/bedroom.jpg",e_intimate4:"bg/bedroom.jpg",mt5:"bg/bedroom.jpg",c5a:"bg/bedroom.jpg",c5b:"bg/bedroom.jpg",
  e_softrice:"bg/softrice.jpg",e_dressup:"bg/dressup.jpg",e_drive:"bg/drive.jpg",e_apocalypse:"bg/apocalypse.jpg",e_curry:"bg/curry.jpg",
  e_autumn:"bg/autumn.jpg",e_jealous:"bg/livingroom.jpg",e_quarrel:"bg/bedroom.jpg",e_halloween:"bg/Halloween.jpg",
  e_depart:"bg/pitch.jpg",e_bday1:"bg/fallingdown.jpg",e_therapy:"bg/bedroom.jpg",e_bday2:"bg/birthday.jpg",nelbad1:"bg/moody.jpg",nelbad2:"bg/hug.jpg",
