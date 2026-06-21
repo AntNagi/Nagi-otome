@@ -1912,8 +1912,7 @@ function finish(forceTier){
 }
 /* ★ TRUE END 彩蛋：他的求婚 */
 function playProposal(){
-  $("ending").classList.add("hidden"); $("gameskip").classList.add("hidden");
-  $("gamebg").classList.remove("hidden"); $("gameveil").classList.remove("hidden");
+  enterGameLayer();
   $("gamebg").style.backgroundImage="url('bg/propose.jpg')";
   $("dialog").classList.remove("hidden"); playingNode="c8c";
   const sc=STORY["c8c"];
