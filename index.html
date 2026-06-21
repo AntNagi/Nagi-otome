@@ -261,6 +261,31 @@
   .setupbox input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(201,160,99,.22)}
   .setupbox .btn{margin-top:16px}
   .setuphint{font-size:11.5px;color:var(--ink2);line-height:1.7;margin-top:8px;text-align:center}
+
+  /* 编辑系统 */
+  #editOverlay{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);animation:fade .2s ease}
+  #editBox{width:90%;max-width:380px;background:var(--cream);border-radius:18px;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+  #editBox h3{font-family:var(--serif);font-size:16px;color:var(--rose);margin-bottom:10px}
+  #editArea{width:100%;min-height:120px;font-size:14px;color:var(--ink);background:#fffaf6;border:1.5px solid var(--line);
+    border-radius:10px;padding:12px;outline:none;font-family:inherit;resize:vertical;
+    -webkit-user-select:text;user-select:text;line-height:1.8}
+  #editArea:focus{border-color:var(--rose)}
+  .editrow{display:flex;gap:8px;margin-top:12px;justify-content:flex-end}
+  .editrow .btn{font-size:13px;padding:9px 20px}
+  #editbtn{position:absolute;right:48px;bottom:10px;width:28px;height:28px;border-radius:50%;
+    display:none;align-items:center;justify-content:center;cursor:pointer;font-size:13px;
+    background:rgba(255,250,246,.92);border:1px solid var(--line);z-index:2}
+  #editbtn:hover{border-color:var(--rose)}
+  .opt{position:relative}
+  .opt .optedit{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;cursor:pointer;opacity:.45;z-index:2}
+  .opt .optedit:hover{opacity:1}
+  .seccard .secedit{position:absolute;right:38px;top:50%;transform:translateY(-50%);font-size:13px;cursor:pointer;opacity:.45;z-index:2}
+  .seccard .secedit:hover{opacity:1}
+  #editToggle{position:absolute;top:6%;right:16px;font-size:11px;letter-spacing:.1em;color:#fff;cursor:pointer;opacity:.85;
+    text-shadow:0 1px 6px rgba(120,40,50,.6);z-index:4;border-bottom:1px solid rgba(255,255,255,.4);padding-bottom:2px}
+  .galcard .galegg{display:inline-block;margin-top:6px;font-size:12px;color:var(--rose);cursor:pointer;
+    border:1px solid var(--rose);border-radius:14px;padding:4px 12px;background:rgba(156,58,72,.08)}
+  .galcard .galegg:hover{background:rgba(156,58,72,.18)}
 </style>
 </head>
 <body>
@@ -282,6 +307,7 @@
       <div class="starthint">轻 触 开 始</div>
     </div>
     <div class="homesaves" onclick="openSaves('home')"><span>☰ 存档记录</span></div>
+    <div id="editToggle" onclick="toggleEdit()">✏️ 编辑模式</div>
   </div>
 
   <!-- ①b 名字录入 -->
@@ -361,6 +387,7 @@
       <div class="speaker" id="speaker">凪诚士郎</div>
       <div class="text" id="text"></div>
       <div class="indicator" id="indicator">▼</div>
+      <div id="editbtn" onclick="event.stopPropagation();editCurLine()">✏️</div>
     </div>
   </div>
 
@@ -418,6 +445,18 @@
     <h1 style="position:relative;font-size:23px" id="savecount">存档卡槽</h1>
     <div class="gallist" id="savelist" style="position:relative"></div>
     <button class="btn ghost" style="position:relative" onclick="closeSaves()">返回</button>
+  </div>
+
+  <!-- 编辑弹窗 -->
+  <div class="hidden" id="editOverlay" onclick="if(event.target===this)cancelEdit()">
+    <div id="editBox">
+      <h3 id="editLabel">编辑文本</h3>
+      <textarea id="editArea"></textarea>
+      <div class="editrow">
+        <button class="btn ghost" onclick="cancelEdit()">取消</button>
+        <button class="btn" onclick="saveEdit()">保存</button>
+      </div>
+    </div>
   </div>
 
   <!-- 轻提示 -->
@@ -1332,6 +1371,69 @@ const PARTS=[
   {t:"世界舞台 · 结局", stages:[5]},
 ];
 const STAGE2PART=[0,1,2,3,4,5];
+/* ====== 文本编辑系统 ====== */
+let editMode = localStorage.getItem("nagi_editmode")==="1";
+const TE = JSON.parse(localStorage.getItem("nagi_te")||"{}");
+let curEK=null, editCb=null, queueKeys=[], playingNode=null;
+
+function teSave(){ localStorage.setItem("nagi_te",JSON.stringify(TE)); }
+function teSet(key,val){ TE[key]=val; teSave(); }
+function teApply(){
+  for(const [k,v] of Object.entries(TE)){
+    const p=k.split(".");
+    try{
+      if(p[0]==="S"){
+        const node=STORY[p[1]]; if(!node) continue;
+        if(p[2]==="a"){ if(node.auto&&node.auto[+p[3]]) node.auto[+p[3]].t=v; }
+        else if(p[2]==="c"){
+          const c=node.choices&&node.choices[+p[3]]; if(!c) continue;
+          if(p[4]==="l") c.label=v;
+          else if(p[4]==="a") c.ant=v;
+          else if(p[4]==="n"&&c.nagi) c.nagi[+p[5]]=v;
+        }
+      } else if(p[0]==="C"){
+        if(p[2]==="t") CHAPTERS[+p[1]].title=v;
+        else if(p[2]==="s"&&p[4]==="t") CHAPTERS[+p[1]].sections[+p[3]].title=v;
+      } else if(p[0]==="SC") SCENE[p[1]]=v;
+      else if(p[0]==="ST") STAGES[+p[1]]=v;
+      else if(p[0]==="E") ENDINGS[p[1]][p[2]]=v;
+      else if(p[0]==="PG") PROLOGUE_LINES[+p[1]]=v;
+    }catch(e){}
+  }
+}
+teApply();
+
+function toggleEdit(){
+  editMode=!editMode;
+  localStorage.setItem("nagi_editmode",editMode?"1":"0");
+  toast(editMode?"编辑模式 ON · 点击 ✏️ 编辑文本":"编辑模式 OFF");
+  $("editToggle").textContent=editMode?"✏️ 编辑中":"✏️ 编辑模式";
+}
+if(editMode) document.addEventListener("DOMContentLoaded",()=>{ $("editToggle").textContent="✏️ 编辑中"; });
+
+function openEdit(key,text,label,cb){
+  curEK=key; editCb=cb||null;
+  $("editLabel").textContent=label||"编辑文本";
+  $("editArea").value=text;
+  $("editOverlay").classList.remove("hidden");
+}
+function saveEdit(){
+  const v=$("editArea").value;
+  teSet(curEK,v); teApply();
+  $("editOverlay").classList.add("hidden");
+  if(editCb) editCb(v);
+  toast("已保存 ✓");
+}
+function cancelEdit(){ $("editOverlay").classList.add("hidden"); }
+
+function editCurLine(){
+  if(!queueKeys[qi]) return;
+  const ln=queue[qi];
+  openEdit(queueKeys[qi], ln.t, ln.who==="sys"?"编辑旁白":"编辑对话", (v)=>{
+    ln.t=v; typeLine(v);
+  });
+}
+
 let menuOpen=-1;
 let seen=new Set(JSON.parse(localStorage.getItem("nagi_seen")||"[]"));
 function markSeen(id){ if(SCENE[id]&&!seen.has(id)){ seen.add(id); localStorage.setItem("nagi_seen",JSON.stringify([...seen])); } }
@@ -1387,17 +1489,24 @@ function showSceneTitle(id){
   const st=stageIndex(id);
   $("chapN").textContent=(st===0?"序章":st===5?"终章":"第 "+st+" 章")+" · "+STAGES[st];
   $("chapT").textContent=sub(SCENE[id]);
+  if(editMode && SCENE[id]){
+    $("chapT").style.cursor="pointer";
+    $("chapT").onclick=(e)=>{ e.stopPropagation();
+      openEdit("SC."+id, SCENE[id], "编辑节标题", (v)=>{ SCENE[id]=v; $("chapT").textContent=sub(v); });
+    };
+  } else { $("chapT").style.cursor=""; $("chapT").onclick=null; }
   pendingNode=id;
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden");
   $("chap").classList.remove("hidden");
 }
 function playNode(id){
-  enterGameLayer(); markSeen(id);
+  enterGameLayer(); markSeen(id); playingNode=id;
   const node=STORY[id]; const st=stageIndex(id);
   $("gamebg").style.backgroundImage="url('"+(NODEBG[id]||"bg/apartment.jpg")+"')";
   $("chapName").textContent=(st===0?"序章":st===5?"终章":"第"+st+"章")+" "+STAGES[st]; setBond();
   $("dialog").classList.remove("hidden");
   queue=(node.auto||[]).map(x=>({who:x.who,t:x.t})); qi=0;
+  queueKeys=(node.auto||[]).map((_,i)=>"S."+id+".a."+i);
   after={type:"choices", choices:node.choices};
   showLine();
 }
@@ -1443,6 +1552,12 @@ function showPg(){
   if(pgi>=PROLOGUE_LINES.length){ endPrologue(); return; }
   el.textContent=sub(PROLOGUE_LINES[pgi]);
   el.classList.add("show");
+  if(editMode){
+    el.style.cursor="pointer";
+    el.ondblclick=(e)=>{ e.stopPropagation(); clearTimeout(pgTimer);
+      openEdit("PG."+pgi, PROLOGUE_LINES[pgi], "编辑开场白", (v)=>{ PROLOGUE_LINES[pgi]=v; el.textContent=sub(v); });
+    };
+  } else { el.style.cursor=""; el.ondblclick=null; }
   clearTimeout(pgTimer);
   pgTimer=setTimeout(()=>{ pgi++; showPg(); }, 3000);
 }
@@ -1548,6 +1663,12 @@ function openChapterMap(ci){
 function renderSectionMap(ci){
   const ch=CHAPTERS[ci];
   $("smapTitle").textContent=sub(ch.n+" · "+ch.title);
+  if(editMode){
+    $("smapTitle").style.cursor="pointer";
+    $("smapTitle").onclick=(e)=>{ e.stopPropagation();
+      openEdit("C."+ci+".t",ch.title,"编辑章标题",(v)=>{ch.title=v;$("smapTitle").textContent=sub(ch.n+" · "+v);});
+    };
+  } else { $("smapTitle").style.cursor=""; $("smapTitle").onclick=null; }
   $("smapSub").textContent=chapterDone(ci)?"本章已通关 ✓":(ch.sections.length+" 幕");
   const box=$("seclist"); box.innerHTML="";
   ch.sections.forEach((s,si)=>{
@@ -1558,6 +1679,12 @@ function renderSectionMap(ci){
     card.innerHTML='<div class="sidx">'+(si+1)+'</div>'
       +'<div class="sbody"><div class="sn">'+s.n+'</div><div class="st">'+esc(sub(secTitle(s)))+'</div></div>'
       +'<div class="sck">'+(done?'✓':'›')+'</div>';
+    if(editMode){
+      const eb=document.createElement("span"); eb.className="secedit"; eb.textContent="✏️";
+      eb.onclick=(e)=>{ e.stopPropagation();
+        openEdit("C."+ci+".s."+si+".t", s.title, "编辑幕标题", (v)=>{ s.title=v; card.querySelector(".st").textContent=sub(v); });
+      }; card.appendChild(eb);
+    }
     card.onclick=()=>playSection(ci,si);
     box.appendChild(card);
   });
@@ -1622,7 +1749,8 @@ function applyWho(who){
   else{ sp.classList.remove("hide"); $("text").classList.remove("narration");
     sp.textContent=NAMES[who]; sp.className="speaker"+(who==="ant"?" ant":who==="yiyi"?" yiyi":""); }
 }
-function showLine(){ const ln=queue[qi]; applyWho(ln.who); typeLine(ln.t); }
+function showLine(){ const ln=queue[qi]; applyWho(ln.who); typeLine(ln.t);
+  $("editbtn").style.display=(editMode&&queueKeys[qi])?"flex":"none"; }
 function tap(){
   if(choicesOpen) return;
   if(typing){ clearInterval(typer); $("text").textContent=curText; typing=false; $("indicator").classList.add("show"); return; }
@@ -1637,10 +1765,17 @@ function onQueueEnd(){
 }
 function renderChoices(list){
   choicesOpen=true; $("indicator").classList.remove("show");
+  $("editbtn").style.display="none";
   $("dialog").classList.add("hidden");           // 选项出现时隐藏对话框，杜绝重叠
   const box=$("choices"); box.innerHTML=""; box.classList.remove("hidden");
-  list.forEach(c=>{ const b=document.createElement("div"); b.className="opt";
+  list.forEach((c,ci)=>{ c._ci=ci; const b=document.createElement("div"); b.className="opt";
     b.innerHTML=esc(sub(c.label));
+    if(editMode){
+      const eb=document.createElement("span"); eb.className="optedit"; eb.textContent="✏️";
+      eb.onclick=(e)=>{ e.stopPropagation();
+        openEdit("S."+playingNode+".c."+ci+".l", c.label, "编辑选项", (v)=>{ c.label=v; b.firstChild.textContent=sub(v); });
+      }; b.appendChild(eb);
+    }
     b.onclick=(e)=>{ e.stopPropagation(); choose(c); }; box.appendChild(b); });
 }
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
@@ -1652,8 +1787,10 @@ function choose(c){
   if(c.set){ if(c.set.line) mj=c.set.line; if(c.set.path) path=c.set.path; if(c.set.kc3) kc3=c.set.kc3; if(c.set.nel) nel=c.set.nel; }
   if(c.flag) finalFlag=c.flag;
   saveState(); setBond();
-  const q=[{who:"ant",t:c.ant}];
-  (c.nagi||[]).forEach(ln=>{ if(ln) q.push({who:"nagi",t:ln}); });
+  const ci=c._ci; const q=[{who:"ant",t:c.ant}];
+  queueKeys=["S."+playingNode+".c."+ci+".a"];
+  let ni=0;
+  (c.nagi||[]).forEach((ln,j)=>{ if(ln){ q.push({who:"nagi",t:ln}); queueKeys.push("S."+playingNode+".c."+ci+".n."+j); } });
   queue=q; qi=0;
   const nxt = c.next || FN[curNode];
   after = c.egg ? {type:"egg"} : c.endBad ? {type:"endbad"} : c.end ? {type:"end"} : (nxt ? {type:"go",next:nxt} : {type:"end"});
@@ -1661,8 +1798,10 @@ function choose(c){
 }
 function play(id){
   const sc=STORY[id]; if(!sc){ console.warn("缺失节点",id); sectionDone(); return; }
+  playingNode=id;
   $("dialog").classList.remove("hidden");
   queue=(sc.auto||[]).map(x=>({who:x.who,t:x.t})); qi=0;
+  queueKeys=(sc.auto||[]).map((_,i)=>"S."+id+".a."+i);
   after={type:"choices", choices:sc.choices};
   showLine();
 }
@@ -1696,6 +1835,12 @@ function finish(forceTier){
     $("etitle").textContent=sub(e.title); $("edesc").innerHTML=sub(e.desc);
     const ln=(mj==="J"?"较劲线":mj==="M"?"默契线":"——")+(path?(" · "+({dream:"梦想线",stay:"相守线",cling:"执念"}[path]||"")):"");
     $("escore").innerHTML="♡ "+ln+"<br>"+e.sub;
+    if(editMode){
+      $("etitle").style.cursor="pointer";
+      $("etitle").onclick=()=>openEdit("E."+tier+".title",e.title,"编辑结局标题",(v)=>{e.title=v;$("etitle").textContent=sub(v);});
+      $("edesc").style.cursor="pointer";
+      $("edesc").onclick=()=>openEdit("E."+tier+".desc",e.desc,"编辑结局描述",(v)=>{e.desc=v;$("edesc").innerHTML=sub(v);});
+    }
     $("eggBtn").style.display = (tier==="true") ? "inline-block" : "none";
     $("ending").classList.remove("hidden");
   },700);
@@ -1705,9 +1850,10 @@ function playProposal(){
   $("ending").classList.add("hidden"); $("gameskip").classList.add("hidden");
   $("gamebg").classList.remove("hidden"); $("gameveil").classList.remove("hidden");
   $("gamebg").style.backgroundImage="url('bg/propose.jpg')";
-  $("dialog").classList.remove("hidden");
+  $("dialog").classList.remove("hidden"); playingNode="c8c";
   const sc=STORY["c8c"];
   queue=sc.auto.map(x=>({who:x.who,t:x.t})); qi=0;
+  queueKeys=sc.auto.map((_,i)=>"S.c8c.a."+i);
   after={type:"choices", choices:sc.choices};
   showLine();
 }
@@ -1806,9 +1952,11 @@ function renderGallery(){
   ENDING_ORDER.forEach(k=>{
     const e=ENDINGS[k], has=got.includes(k);
     const c=document.createElement("div"); c.className="galcard"+(has?"":" lock");
-    c.innerHTML = has
+    let html = has
       ? '<span class="gbig">'+e.emoji+'</span><div class="gtag">'+e.tag+'</div><div class="gtit">'+e.title+'</div><div class="gdesc">'+e.desc+'</div>'
       : '<span class="gbig">🔒</span><div class="gtag">??? END</div><div class="gtit">尚未解锁</div><div class="gdesc">达成对应结局后，将在此收藏。</div>';
+    if(has && k==="true") html+='<span class="galegg" onclick="event.stopPropagation();closeGallery();playProposal()">✧ 彩蛋 · 他的求婚 ✧</span>';
+    c.innerHTML=html;
     box.appendChild(c);
   });
 }
