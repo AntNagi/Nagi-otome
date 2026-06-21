@@ -1346,7 +1346,7 @@ function saveState(){ localStorage.setItem("nagi_state",JSON.stringify({I,D,mj,p
 function clearState(){ I=0;D=0;mj=path=kc3=nel=finalFlag=null;mDeep=false;curNode=null;maxStage=0;curScene=null; localStorage.removeItem("nagi_state"); }
 
 /* 六幕结构（章）+ 节标题，用于过场卡/进度/HUD */
-const STAGES=["序幕 · 那一束光","相识","恋爱","热恋","NEL · 低谷","世界舞台 · 结局"];
+const STAGES=["那一束光","相识","恋爱","热恋","NEL · 低谷","世界舞台 · 结局"];
 function stageIndex(id){
   if(["p1","p2"].includes(id)) return 0;
   if(["c1a","e_select2","c1b"].includes(id)) return 1;
@@ -1902,6 +1902,7 @@ function finish(forceTier){
 function playProposal(){
   enterGameLayer();
   $("gamebg").style.backgroundImage="url('bg/propose.jpg')";
+  $("chapName").textContent="彩蛋 · 他的求婚";
   $("dialog").classList.remove("hidden"); playingNode="c8c";
   const sc=STORY["c8c"];
   queue=sc.auto.map(x=>({who:x.who,t:x.t})); qi=0;
