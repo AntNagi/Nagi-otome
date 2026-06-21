@@ -1041,21 +1041,22 @@ const STORY = {
     ]},
   /* 亲密门（按 I/D 解锁 M深 或 M浅） */
   m_igate:{ router:"igate" },
+  e_sick_gate:{ router:"sick_gate" },
   /* M浅·冷淡变体 */
   m_shallow:{ auto:[
       {who:"sys",t:"你和他之间，好像隔了一层看不见的膜。他还是会陪你，却总有点心不在焉——那些本该滚烫的夜晚，也变得安静而客气。"},
       {who:"nagi",t:"（背对着你玩手机）……睡吧Ant。"},
     ],
     choices:[
-      {label:"（伸手又收回）……晚安", type:"理性", ant:"（伸手又收回）……晚安", d:1, nagi:["（半晌）……嗯。"], next:"e_sick"},
+      {label:"（伸手又收回）……晚安", type:"理性", ant:"（伸手又收回）……晚安", d:1, nagi:["（半晌）……嗯。"], next:"e_scarf"},
     ]},
   /* M陷阱④ 把亲密当筹码（M深内） */
   mt4:{ auto:[
       {who:"sys",t:"为点小事闹了别扭，夜里他凑过来想亲近你，试探地碰了碰你的手。"},
     ],
     choices:[
-      {label:"（就事论事）别用这个糊弄，话先说清楚", type:"理性", ant:"（就事论事）别用这个糊弄，话先说清楚", i:2, nagi:["（顿了顿，认真起来）……也对。是我不好","那……说完，还能抱吗"], next:"e_drunk"},
-      {label:"「你先认错，我才让你碰」", type:"作", ant:"你先认错，我才让你碰", d:2, nagi:["（撑起身，眼神淡下来）……拿这个当条件，好没意思","（翻身背过去）算了，睡吧"], next:"e_drunk"},
+      {label:"（就事论事）别用这个糊弄，话先说清楚", type:"理性", ant:"（就事论事）别用这个糊弄，话先说清楚", i:2, nagi:["（顿了顿，认真起来）……也对。是我不好","那……说完，还能抱吗"], next:"e_scarf"},
+      {label:"「你先认错，我才让你碰」", type:"作", ant:"你先认错，我才让你碰", d:2, nagi:["（撑起身，眼神淡下来）……拿这个当条件，好没意思","（翻身背过去）算了，睡吧"], next:"e_scarf"},
     ]},
   /* M陷阱⑤ 丢掉自我 */
   mt5:{ auto:[
@@ -1132,75 +1133,87 @@ const ENDINGS = {
     desc:"你想把他拴在身边，他却觉得失了自由。<br/>明明都还爱着，却谁也喘不过气。<br/>没有狗血的争吵，只是那束光，<br/>在日复一日的疲惫里，悄悄地灭了。", sub:"🥀 换一种方式，再爱他一次？" },
 };
 
-/* ====== 章节目录（章 → 节）====== */
+/* ====== 章节目录（章 → 幕）====== */
 const CHAPTERS=[
   {n:"序章",  title:"那一束光", bg:"bg/teamV.jpg", sections:[
-    {n:"第一节",title:"作战室·初遇",start:"p1"},
-    {n:"第二节",title:"投资的私心",start:"p2"},
+    {n:"第一幕",title:"作战室·初遇",start:"p1"},
+    {n:"第二幕",title:"投资的私心",start:"p2"},
   ]},
   {n:"第一章",title:"相识", bg:"bg/pitch.jpg", sections:[
-    {n:"第一节",title:"训练室初见",start:"c1a"},
-    {n:"第二节",title:"二次选拔·主动选洁",start:"e_select2",bg:"bg/select2.jpg"},
-    {n:"第三节",title:"心意相通",start:"c1b"},
+    {n:"第一幕",title:"训练室初见",start:"c1a"},
+    {n:"第二幕",title:"二次选拔·主动选洁",start:"e_select2",bg:"bg/select2.jpg"},
+    {n:"第三幕",title:"心意相通",start:"c1b"},
   ]},
-  {n:"第二章",title:"确立", bg:"bg/apartment.jpg", sections:[
-    {n:"第一节",title:"假期的来电",start:"c2a"},
-    {n:"第二节",title:"门口的告白",start:"c2b"},
-    {n:"第三节",title:"只属于两人的夜",start:"c2c",bg:"bg/bedroom.jpg"},
+  {n:"第二章",title:"恋爱", bg:"bg/openday.jpg", sections:[
+    {n:"第一幕",title:"假期的来电",start:"c2a"},
+    {n:"第二幕",title:"开放日·歪头重逢",start:"c3a"},
+    {n:"第三幕",title:"邋遢更衣室",start:"c3b"},
+    {n:"第四幕",title:"我的提议·确立关系",start:"c2b",bg:"bg/apartment.jpg"},
   ]},
-  {n:"第三章",title:"热恋·甜蜜日常", bg:"bg/openday.jpg", sections:[
-    {n:"第一节",title:"开放日·歪头重逢",start:"c3a"},
-    {n:"第二节",title:"邋遢更衣室",start:"c3b"},
-    {n:"第三节",title:"吧台·久别重逢",start:"c3c",bg:"bg/livingroom.jpg"},
-    {n:"第四节",title:"飙车实录",start:"e_drive",bg:"bg/drive.jpg"},
-    {n:"第五节",title:"任人打扮的小姑娘",start:"e_dressup",bg:"bg/dressup.jpg"},
-    {n:"第六节",title:"棒棒糖·自动刷脸",start:"e_lolly",bg:"bg/lolly.jpg"},
+  {n:"第三章",title:"热恋", bg:"bg/livingroom.jpg", sections:[
+    /* ★ 分线 */
+    {n:"第一幕",title:"★相处之道",start:"kc2"},
+    /* ── 默契线·初期 ── */
+    {n:"第二幕",title:"棒棒糖·自动刷脸",start:"e_lolly",bg:"bg/lolly.jpg"},
+    {n:"第三幕",title:"暧昧·该不该催",start:"mt1"},
+    {n:"第四幕",title:"高级公寓的邀请",start:"e_invite",bg:"bg/apartment.jpg"},
+    {n:"第五幕",title:"你的，我的",start:"e_lemontea",bg:"bg/lemontea.jpg"},
+    {n:"第六幕",title:"Fiery Summer·花环",start:"e_summer",bg:"bg/summer.jpg"},
+    /* ── 较劲线·初期 ── */
+    {n:"第七幕",title:"软饭王哲学",start:"e_softrice",bg:"bg/softrice.jpg"},
+    {n:"第八幕",title:"任人打扮的小姑娘",start:"e_dressup",bg:"bg/dressup.jpg"},
+    {n:"第九幕",title:"飙车实录",start:"e_drive",bg:"bg/drive.jpg"},
+    {n:"第十幕",title:"末日盛夏畅想",start:"e_apocalypse",bg:"bg/apocalypse.jpg"},
+    {n:"第十一幕",title:"黑暗料理·咖喱饭",start:"e_curry",bg:"bg/curry.jpg"},
+    /* ── 共通·同居日常 ── */
+    {n:"第十二幕",title:"吧台·久别重逢",start:"c3c",bg:"bg/livingroom.jpg"},
+    {n:"第十三幕",title:"久别后·想你",start:"c3d",bg:"bg/bedroom.jpg"},
+    {n:"第十四幕",title:"哦哈哟·赖床的早晨",start:"e_morning",bg:"bg/wakeup.jpg"},
+    /* ── 共通·七夕 ── */
+    {n:"第十五幕",title:"七夕·蓝色玫瑰",start:"c4a",bg:"bg/qixi.jpg"},
+    {n:"第十六幕",title:"七夕之夜",start:"c4d",bg:"bg/bedroom.jpg"},
+    /* ── 默契线·深入 ── */
+    {n:"第十七幕",title:"已读不回的夜",start:"mt2",bg:"bg/moody.jpg"},
+    {n:"第十八幕",title:"雨天·共撑一伞",start:"e_rain",bg:"bg/afterwork.jpg"},
+    {n:"第十九幕",title:"夏日祭·浴衣与烟火",start:"e_festival",bg:"bg/summerfestival.jpg"},
+    {n:"第二十幕",title:"同居·他放飞了",start:"mt3"},
+    {n:"第二十一幕",title:"闹别扭的夜",start:"mt4",bg:"bg/bedroom.jpg"},
+    {n:"第二十二幕",title:"客气的距离",start:"m_shallow",bg:"bg/bedroom.jpg"},
+    /* ── 较劲线·深入 ── */
+    {n:"第二十三幕",title:"只在乎你·吃醋",start:"e_jealous",bg:"bg/livingroom.jpg"},
+    {n:"第二十四幕",title:"拌嘴与和好",start:"e_quarrel",bg:"bg/bedroom.jpg"},
+    {n:"第二十五幕",title:"借着醉意",start:"e_drunk",bg:"bg/livingroom.jpg"},
+    /* ── 共通·秋冬 ── */
+    {n:"第二十六幕",title:"无声的拥抱",start:"e_hug",bg:"bg/hug.jpg"},
+    {n:"第二十七幕",title:"送围巾",start:"e_scarf",bg:"bg/scarf.jpg"},
+    {n:"第二十八幕",title:"换季感冒·笨拙看护",start:"e_sick",bg:"bg/bedroom.jpg"},
+    {n:"第二十九幕",title:"读书之秋",start:"e_autumn",bg:"bg/autumn.jpg"},
+    /* ── 默契线·分寸 ── */
+    {n:"第三十幕",title:"他的温柔·与你的分寸",start:"mt5"},
+    /* ── 共通·埋雷 ── */
+    {n:"最终幕",title:"★笨拙的心·是爱还是习惯",start:"c5a",bg:"bg/bedroom.jpg"},
   ]},
-  {n:"第四章",title:"同居·渐入佳境", bg:"bg/livingroom.jpg", sections:[
-    {n:"第一节",title:"软饭王哲学",start:"e_softrice",bg:"bg/softrice.jpg"},
-    {n:"第二节",title:"哦哈哟·赖床的早晨",start:"e_morning",bg:"bg/wakeup.jpg"},
-    {n:"第三节",title:"高级公寓的邀请",start:"e_invite",bg:"bg/apartment.jpg"},
-    {n:"第四节",title:"久别后·想你",start:"c3d",bg:"bg/bedroom.jpg"},
-    {n:"第五节",title:"拌嘴与和好",start:"e_quarrel",bg:"bg/bedroom.jpg"},
-    {n:"第六节",title:"笨拙的心",start:"c5a",bg:"bg/bedroom.jpg"},
-  ]},
-  {n:"第五章",title:"盛夏热恋", bg:"bg/summer.jpg", sections:[
-    {n:"第一节",title:"七夕·蓝色玫瑰",start:"c4a",bg:"bg/qixi.jpg"},
-    {n:"第二节",title:"末日盛夏畅想",start:"e_apocalypse",bg:"bg/apocalypse.jpg"},
-    {n:"第三节",title:"Fiery Summer·花环",start:"e_summer",bg:"bg/summer.jpg"},
-    {n:"第四节",title:"夏日祭·浴衣与烟火",start:"e_festival",bg:"bg/summer.jpg"},
-    {n:"第五节",title:"黑暗料理·咖喱饭",start:"e_curry",bg:"bg/curry.jpg"},
-    {n:"第六节",title:"只在乎你·吃醋",start:"e_jealous",bg:"bg/livingroom.jpg"},
-  ]},
-  {n:"第六章",title:"同居·甜与暖", bg:"bg/bedroom.jpg", sections:[
-    {n:"第一节",title:"满室水汽",start:"e_bath",bg:"bg/bedroom.jpg"},
-    {n:"第二节",title:"经期乌龙·别扭的温柔",start:"e_period",bg:"bg/bedroom.jpg"},
-    {n:"第三节",title:"借着醉意",start:"e_drunk",bg:"bg/livingroom.jpg"},
-    {n:"第四节",title:"无声的拥抱",start:"e_hug",bg:"bg/hug.jpg"},
-  ]},
-  {n:"第七章",title:"秋与冬·细水长流", bg:"bg/autumn.jpg", sections:[
-    {n:"第一节",title:"读书之秋",start:"e_autumn",bg:"bg/autumn.jpg"},
-    {n:"第二节",title:"换季感冒·笨拙看护",start:"e_sick",bg:"bg/bedroom.jpg"},
-    {n:"第三节",title:"送围巾",start:"e_scarf",bg:"bg/scarf.jpg"},
-    {n:"第四节",title:"雨天·共撑一伞",start:"e_rain",bg:"bg/afterwork.jpg"},
-    {n:"第五节",title:"万圣夜·专属恶魔",start:"e_halloween",bg:"bg/masquerade.jpg"},
-    {n:"第六节",title:"圣诞·预制照片与猫睡衣",start:"e_xmas1",bg:"bg/Xmas.jpg"},
-    {n:"第七节",title:"圣诞夜·礼物与痛房树",start:"e_xmas2",bg:"bg/livingroom.jpg"},
-    {n:"第八节",title:"跨年·迪士尼烟花",start:"c8a",bg:"bg/disney.jpg"},
-    {n:"第九节",title:"情人节·玩偶熊",start:"e_valentine",bg:"bg/valentine.jpg"},
-    {n:"第十节",title:"你的，我的",start:"e_lemontea",bg:"bg/lemontea.jpg"},
-  ]},
-  {n:"第八章",title:"低谷·NEL与抉择", bg:"bg/moody.jpg", sections:[
-    {n:"第一节",title:"NEL启程·闭关送别",start:"e_depart",bg:"bg/pitch.jpg"},
-    {n:"第二节",title:"聚少离多·想念",start:"c6a",bg:"bg/moody.jpg"},
-    {n:"第三节",title:"被淘汰的生日",start:"e_bday1",bg:"bg/birthday.jpg"},
-    {n:"第四节",title:"那一夜·情绪的出口",start:"e_therapy",bg:"bg/bedroom.jpg"},
-    {n:"第五节",title:"重燃的愿望",start:"e_bday2",bg:"bg/birthday.jpg"},
-    {n:"第六节",title:"★抉择·世界第一，还是我",start:"c6b",bg:"bg/moody.jpg"},
+  {n:"第四章",title:"NEL · 低谷", bg:"bg/moody.jpg", sections:[
+    {n:"第一幕",title:"NEL启程·闭关送别",start:"e_depart",bg:"bg/pitch.jpg"},
+    {n:"第二幕",title:"聚少离多·想念",start:"c6a",bg:"bg/moody.jpg"},
+    {n:"第三幕",title:"★被淘汰的生日",start:"e_bday1",bg:"bg/fallingdown.jpg"},
+    {n:"第四幕",title:"万圣夜·专属恶魔",start:"e_halloween",bg:"bg/Halloween.jpg"},
+    {n:"第五幕",title:"那一夜·情绪的出口",start:"e_therapy",bg:"bg/bedroom.jpg"},
+    {n:"第六幕",title:"重燃的愿望",start:"e_bday2",bg:"bg/birthday.jpg"},
+    {n:"第七幕",title:"★抉择·世界第一，还是我",start:"c6b",bg:"bg/moody.jpg"},
   ]},
   {n:"终章",  title:"你们的结局", bg:"bg/villa.jpg", sections:[
-    {n:"第一节",title:"花园别墅·搬进新家",start:"e_villa",bg:"bg/villa.jpg"},
-    {n:"第二节",title:"结局",routed:true,titleDream:"世界之巅·世界第一",titleStay:"细水长流的相守",start:"c7d_a",startStay:"c7s_a",bg:"bg/goal.jpg"},
+    {n:"第一幕",title:"花园别墅·搬进新家",start:"e_villa",bg:"bg/villa.jpg"},
+    {n:"第二幕",title:"★世界舞台·最后的抉择",start:"p5_intro",bg:"bg/worldstage.jpg"},
+    {n:"第三幕",title:"世界之巅·应援",start:"c7d_a",bg:"bg/goal.jpg"},
+    {n:"第四幕",title:"赛季结束·回国",start:"p5_reunion",bg:"bg/back.jpg"},
+    {n:"第五幕",title:"跨年·烟花",start:"c8a",bg:"bg/firework.jpg"},
+    {n:"第六幕",title:"求婚",start:"c8c",bg:"bg/propose.jpg"},
+    {n:"第七幕",title:"相守·他常回来",start:"stay_intro",bg:"bg/villa.jpg"},
+    {n:"第八幕",title:"圣诞·预制照片与猫睡衣",start:"e_xmas1",bg:"bg/Xmas.jpg"},
+    {n:"第九幕",title:"圣诞夜·礼物与痛房树",start:"e_xmas2",bg:"bg/livingroom.jpg"},
+    {n:"第十幕",title:"情人节·玩偶熊",start:"e_valentine",bg:"bg/valentine.jpg"},
+    {n:"最终幕",title:"结局",routed:true,titleDream:"世界之巅·世界第一",titleStay:"细水长流的相守",start:"c7d_b",startStay:"c7s_a",bg:"bg/goal.jpg"},
   ]},
 ];
 
@@ -1234,7 +1247,7 @@ let finalFlag = localStorage.getItem("nagi_flag")||null;   /* 终局关键选择
 let queue=[], qi=0, after=null;
 let typing=false, typer=null, curText="";
 let choicesOpen=false;
-let currentCI=null, currentSI=null, pendingNext=null;
+let currentCI=null, currentSI=null;
 let unlocked = +(localStorage.getItem("nagi_unlocked")||0);
 let doneSet = new Set(JSON.parse(localStorage.getItem("nagi_done")||"[]"));
 function saveUnlocked(){ localStorage.setItem("nagi_unlocked",unlocked); }
@@ -1285,14 +1298,14 @@ function saveState(){ localStorage.setItem("nagi_state",JSON.stringify({I,D,mj,p
 function clearState(){ I=0;D=0;mj=path=kc3=nel=finalFlag=null;mDeep=false;curNode=null;maxStage=0;curScene=null; localStorage.removeItem("nagi_state"); }
 
 /* 六幕结构（章）+ 节标题，用于过场卡/进度/HUD */
-const STAGES=["相遇 · 相识","确立 · 第一次","相处 · 日常","感情 · 认知","NEL · 低谷","世界舞台 · 结局"];
+const STAGES=["序幕 · 那一束光","相识","恋爱","热恋","NEL · 低谷","世界舞台 · 结局"];
 function stageIndex(id){
-  if(["p1","p2","c1a","e_select2","c1b"].includes(id)) return 0;
-  if(["c2a","c2b","c2c","c3a","c3b"].includes(id)) return 1;
-  if(["c5a","c5b"].includes(id)) return 3;
-  if(["e_depart","e_bday1","e_therapy","e_bday2","nelbad1","nelbad2"].includes(id)) return 4;
-  if(["p5_intro","c7d_a","p5_reunion","p5_reunion2","c8a","c8b","c7d_b","stay_intro","e_xmas1","e_xmas2","e_valentine","c7s_a","c6_cold"].includes(id)) return 5;
-  return 2;
+  if(["p1","p2"].includes(id)) return 0;
+  if(["c1a","e_select2","c1b"].includes(id)) return 1;
+  if(["c2a","c3a","c3b","c2b"].includes(id)) return 2;
+  if(["e_depart","e_bday1","e_therapy","e_bday2","nelbad1","nelbad2","c6a","c6b","e_halloween"].includes(id)) return 4;
+  if(["p5_intro","c7d_a","p5_reunion","p5_reunion2","c8a","c8b","c7d_b","c8c","stay_intro","e_xmas1","e_xmas2","e_valentine","c7s_a","c6_cold","e_villa"].includes(id)) return 5;
+  return 3;
 }
 /* 节标题（仅「节首」节点有；链内节点 c4b/c4c/c5b/c8b 无 → 不弹卡，连续播放）*/
 const SCENE={ p1:"作战室·初遇",p2:"投资的私心",c1a:"训练室初见",e_select2:"二次选拔·主动选洁",c1b:"心意相通",
@@ -1304,26 +1317,28 @@ const SCENE={ p1:"作战室·初遇",p2:"投资的私心",c1a:"训练室初见",
  e_softrice:"软饭王哲学",e_dressup:"任人打扮",e_drive:"飙车实录",e_apocalypse:"末日盛夏",e_curry:"黑暗料理·咖喱饭",
  e_autumn:"读书之秋",e_jealous:"只在乎你·吃醋",e_quarrel:"拌嘴·收手还是闹大",e_halloween:"万圣夜·专属恶魔",
  c5a:"★笨拙的心·是爱还是习惯",
+ c6a:"聚少离多·想念",c6b:"★抉择·世界第一还是我",e_villa:"花园别墅·搬进新家",
  e_depart:"NEL启程·闭关送别",e_bday1:"★被淘汰的生日·你的反应",e_therapy:"那一夜·情绪的出口",e_bday2:"重燃的愿望",nelbad1:"失望·第一次争吵",nelbad2:"表面的和好",
  p5_intro:"★世界舞台·最后的抉择",c7d_a:"世界之巅·应援",p5_reunion:"赛季结束·回国",c8a:"跨年·烟花",c7d_b:"世界第一·终局",
  stay_intro:"相守·他常回来",e_xmas1:"圣诞·预制照片与猫睡衣",e_xmas2:"圣诞夜·礼物与痛房树",e_valentine:"情人节·玩偶熊",c7s_a:"相守·最后的选择",c6_cold:"渐行渐远" };
 
-/* 五大 Part（目录两级结构）：每个 part 含若干 stage */
+/* 六章 Part（目录两级结构）：每个 part 对应一章 */
 const PARTS=[
-  {t:"相遇 · 相识", stages:[0]},
-  {t:"确立 · 热恋 · 相处", stages:[1,2]},
-  {t:"感情 · 认知", stages:[3]},
+  {t:"那一束光", stages:[0]},
+  {t:"相识", stages:[1]},
+  {t:"恋爱", stages:[2]},
+  {t:"热恋", stages:[3]},
   {t:"NEL · 低谷", stages:[4]},
   {t:"世界舞台 · 结局", stages:[5]},
 ];
-const STAGE2PART=[0,1,1,2,3,4];
+const STAGE2PART=[0,1,2,3,4,5];
 let menuOpen=-1;
 let seen=new Set(JSON.parse(localStorage.getItem("nagi_seen")||"[]"));
 function markSeen(id){ if(SCENE[id]&&!seen.has(id)){ seen.add(id); localStorage.setItem("nagi_seen",JSON.stringify([...seen])); } }
 function setBond(){ $("bond").style.width=Math.min(100, I*5)+"%"; }
 
 const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:"bg/select2.jpg",c1b:"bg/pitch.jpg",
- c2a:"bg/apartment.jpg",c2b:"bg/apartment.jpg",c2c:"bg/bedroom.jpg",c3a:"bg/openday.jpg",c3b:"bg/openday.jpg",kc2:"bg/livingroom.jpg",
+ c2a:"bg/apartment.jpg",c2b:"bg/apartment.jpg",c3a:"bg/openday.jpg",c3b:"bg/openday.jpg",kc2:"bg/livingroom.jpg",
  e_lolly:"bg/lolly.jpg",mt1:"bg/livingroom.jpg",e_invite:"bg/apartment.jpg",e_lemontea:"bg/lemontea.jpg",e_summer:"bg/summer.jpg",
  c4a:"bg/qixi.jpg",c4b:"bg/qixi.jpg",c4c:"bg/qixi.jpg",c4d:"bg/bedroom.jpg",mt2:"bg/moody.jpg",e_rain:"bg/afterwork.jpg",e_festival:"bg/summerfestival.jpg",
  mt3:"bg/livingroom.jpg",m_shallow:"bg/bedroom.jpg",mt4:"bg/bedroom.jpg",e_drunk:"bg/livingroom.jpg",
@@ -1334,22 +1349,25 @@ const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:
  p5_intro:"bg/worldstage.jpg",c7d_a:"bg/goal.jpg",p5_reunion:"bg/back.jpg",p5_reunion2:"bg/remeet.jpg",c8a:"bg/firework.jpg",c8b:"bg/firework.jpg",c7d_b:"bg/goal.jpg",
  stay_intro:"bg/villa.jpg",e_xmas1:"bg/Xmas.jpg",e_xmas2:"bg/livingroom.jpg",e_valentine:"bg/valentine.jpg",c7s_a:"bg/villa.jpg",c6_cold:"bg/moody.jpg",c8c:"bg/propose.jpg" };
 
-const PARTMAP={ p1:"序 · 相遇",p2:"序 · 相遇",c1a:"Part1 · 相识",e_select2:"Part1 · 相识",c1b:"Part1 · 相识",
- c2a:"Part2 · 确立",c2b:"Part2 · 确立",c2c:"Part2 · 确立",c3a:"Part2 · 确立",c3b:"Part2 · 确立",kc2:"相处之道",
- c5a:"Part3 · 感情认知",c5b:"Part3 · 感情认知",
- e_depart:"Part4 · 低谷",e_bday1:"Part4 · 低谷",e_therapy:"Part4 · 低谷",e_bday2:"Part4 · 低谷",nelbad1:"Part4 · 低谷",nelbad2:"Part4 · 低谷",
- p5_intro:"Part5 · 世界舞台",c7d_a:"Part5 · 世界舞台",p5_reunion:"Part5 · 世界舞台",c8a:"Part5 · 世界舞台",c8b:"Part5 · 世界舞台",c7d_b:"Part5 · 世界舞台",
- stay_intro:"Part5 · 世界舞台",e_xmas1:"Part5 · 世界舞台",e_xmas2:"Part5 · 世界舞台",e_valentine:"Part5 · 世界舞台",c7s_a:"Part5 · 世界舞台",c6_cold:"Part5 · 世界舞台" };
-function partOf(id){ return PARTMAP[id] || (mj==="J"?"相处 · 较劲":"相处 · 默契"); }
+const PARTMAP={ p1:"序章 · 那一束光",p2:"序章 · 那一束光",
+ c1a:"第1章 · 相识",e_select2:"第1章 · 相识",c1b:"第1章 · 相识",
+ c2a:"第2章 · 恋爱",c3a:"第2章 · 恋爱",c3b:"第2章 · 恋爱",c2b:"第2章 · 恋爱",
+ kc2:"第3章 · 热恋",c5a:"第3章 · 热恋",c5b:"第3章 · 热恋",
+ c6a:"第4章 · 低谷",c6b:"第4章 · 低谷",e_halloween:"第4章 · 低谷",
+ e_depart:"第4章 · 低谷",e_bday1:"第4章 · 低谷",e_therapy:"第4章 · 低谷",e_bday2:"第4章 · 低谷",nelbad1:"第4章 · 低谷",nelbad2:"第4章 · 低谷",
+ e_villa:"终章 · 结局",p5_intro:"终章 · 结局",c7d_a:"终章 · 结局",p5_reunion:"终章 · 结局",p5_reunion2:"终章 · 结局",
+ c8a:"终章 · 结局",c8b:"终章 · 结局",c7d_b:"终章 · 结局",c8c:"终章 · 结局",
+ stay_intro:"终章 · 结局",e_xmas1:"终章 · 结局",e_xmas2:"终章 · 结局",e_valentine:"终章 · 结局",c7s_a:"终章 · 结局",c6_cold:"终章 · 结局" };
+function partOf(id){ return PARTMAP[id] || "第3章 · 热恋"; }
 
-const FN={ p1:"p2",p2:"c1a",c1a:"e_select2",e_select2:"c1b",c1b:"c2a",c2a:"c2b",c2b:"c3a",c3a:"c3b",c3b:"kc2",
+const FN={ p1:"p2",p2:"c1a",c1a:"e_select2",e_select2:"c1b",c1b:"c2a",c2a:"c3a",c3a:"c3b",c3b:"c2b",c2b:"kc2",
  e_lolly:"mt1",e_invite:"e_lemontea",e_lemontea:"e_summer",e_summer:"c4a",c4c:"c4d",c4d:"mt2",e_rain:"e_festival",e_festival:"mt3",
- e_drunk:"e_sick",e_sick:"e_scarf",e_scarf:"mt5",c5b:"e_depart",
- e_softrice:"e_dressup",e_dressup:"e_drive",e_drive:"e_apocalypse",e_apocalypse:"e_curry",e_curry:"e_autumn",e_autumn:"e_jealous",e_jealous:"e_quarrel",e_quarrel:"e_halloween",e_halloween:"c5a",
+ e_scarf:"e_sick",e_sick:"e_sick_gate",c5b:"e_depart",
+ e_softrice:"e_dressup",e_dressup:"e_drive",e_drive:"e_apocalypse",e_apocalypse:"e_curry",e_curry:"e_autumn",e_autumn:"e_jealous",e_jealous:"e_quarrel",e_quarrel:"e_drunk",e_drunk:"e_scarf",
  e_depart:"e_bday1",e_therapy:"e_bday2",e_bday2:"p5_intro",
  c8b:"c7d_b",e_xmas1:"e_xmas2",e_xmas2:"e_valentine",e_valentine:"c7s_a" };
 
-function resolveRouter(id){ if(id==="m_igate"){ mDeep=(D<=3 && I>=4); saveState(); return mDeep?"mt4":"m_shallow"; } return "p1"; }
+function resolveRouter(id){ if(id==="m_igate"){ mDeep=(D<=3 && I>=4); saveState(); return mDeep?"mt4":"m_shallow"; } if(id==="e_sick_gate"){ return mj==="J"?"c5a":"mt5"; } return "p1"; }
 function enterGameLayer(){
   ["map","smap","clear","ending","gallery","home","prologue","setup","chap"].forEach(i=>$(i).classList.add("hidden"));
   $("gamebg").classList.remove("hidden"); $("gamebgF").classList.add("hidden"); $("gameveil").classList.remove("hidden");
@@ -1367,7 +1385,7 @@ function showSceneTitle(id){
   enterGameLayer(); $("hud").classList.add("hidden");
   $("gamebg").style.backgroundImage="url('"+(NODEBG[id]||"bg/apartment.jpg")+"')";
   const st=stageIndex(id);
-  $("chapN").textContent="第 "+(st+1)+" 幕 · "+STAGES[st];
+  $("chapN").textContent=(st===0?"序章":st===5?"终章":"第 "+st+" 章")+" · "+STAGES[st];
   $("chapT").textContent=sub(SCENE[id]);
   pendingNode=id;
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden");
@@ -1377,7 +1395,7 @@ function playNode(id){
   enterGameLayer(); markSeen(id);
   const node=STORY[id]; const st=stageIndex(id);
   $("gamebg").style.backgroundImage="url('"+(NODEBG[id]||"bg/apartment.jpg")+"')";
-  $("chapName").textContent="第"+(st+1)+"幕 "+STAGES[st]; setBond();
+  $("chapName").textContent=(st===0?"序章":st===5?"终章":"第"+st+"章")+" "+STAGES[st]; setBond();
   $("dialog").classList.remove("hidden");
   queue=(node.auto||[]).map(x=>({who:x.who,t:x.t})); qi=0;
   after={type:"choices", choices:node.choices};
@@ -1390,7 +1408,7 @@ function advanceTo(next){
 }
 function showActClear(actIdx,next){
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden"); $("hud").classList.add("hidden");
-  $("clearName").textContent="第 "+(actIdx+1)+" 幕 · "+STAGES[actIdx];
+  $("clearName").textContent=(actIdx===0?"序章":actIdx===5?"终章":"第 "+actIdx+" 章")+" · "+STAGES[actIdx];
   $("clearSub").textContent="本幕完成 ♡";
   $("clearBackBtn").textContent="回主页看进度";
   $("clearBackBtn").onclick=()=>{ $("clear").classList.add("hidden"); showMap(); };
@@ -1454,7 +1472,7 @@ function renderMenu(){
                :'background:rgba(160,140,120,.10);border:1px solid rgba(120,90,70,.12);')
       +(isCur?'box-shadow:0 0 0 2px rgba(156,58,72,.35);':'')+'">'
       +'<span style="font-family:var(--serif);font-size:14px;width:16px;text-align:center;color:'+(reached?'var(--rose)':'#c4b3a4')+'">'+(reached?(isCur?'▶':'✓'):(pi+1))+'</span>'
-      +'<span style="flex:1;font-size:13.5px;color:'+(reached?'var(--ink)':'#b6a496')+'">Part '+(pi+1)+' · '+p.t+'</span>'
+      +'<span style="flex:1;font-size:13.5px;color:'+(reached?'var(--ink)':'#b6a496')+'">'+(pi===0?"序章":pi===PARTS.length-1?"终章":"第"+pi+"章")+' · '+p.t+'</span>'
       +'<span style="font-size:11px;color:'+(reached?'var(--gold)':'#c4b3a4')+'">'+(reached?(open?'▲':'▼'):'🔒')+'</span></div>';
     if(open){
       let locked=0;
@@ -1530,7 +1548,7 @@ function openChapterMap(ci){
 function renderSectionMap(ci){
   const ch=CHAPTERS[ci];
   $("smapTitle").textContent=sub(ch.n+" · "+ch.title);
-  $("smapSub").textContent=chapterDone(ci)?"本章已通关 ✓":(ch.sections.length+" 节");
+  $("smapSub").textContent=chapterDone(ci)?"本章已通关 ✓":(ch.sections.length+" 幕");
   const box=$("seclist"); box.innerHTML="";
   ch.sections.forEach((s,si)=>{
     const done=doneSet.has(ci+"-"+si);
@@ -1558,7 +1576,7 @@ function playSection(ci,si){
   $("chapName").textContent=ch.n;
   $("chapN").textContent=ch.n+" · "+s.n;
   $("chapT").textContent=sub(secTitle(s));
-  pendingNext=(s.routed && route==="stay" && s.startStay)? s.startStay : s.start;
+  pendingNode=(s.routed && route==="stay" && s.startStay)? s.startStay : s.start;
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden");
   $("chap").classList.remove("hidden");
 }
@@ -1573,11 +1591,11 @@ function sectionDone(){
   const ch=CHAPTERS[ci], s=ch.sections[si];
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden"); $("gameskip").classList.add("hidden");
   $("clearName").textContent=sub(ch.n+" · "+secTitle(s));
-  $("clearSub").textContent=chapterDone(ci)?("「"+ch.title+"」已通关 · 🎉"):"本节完成";
+  $("clearSub").textContent=chapterDone(ci)?("「"+ch.title+"」已通关 · 🎉"):"本幕完成";
   $("clearBackBtn").onclick=()=>{ $("clear").classList.add("hidden"); openChapterMap(ci); };
   const btn=$("clearNextBtn");
   if(si+1<ch.sections.length){
-    btn.style.display="inline-block"; btn.textContent="下一节 →";
+    btn.style.display="inline-block"; btn.textContent="下一幕 →";
     btn.onclick=()=>{ $("clear").classList.add("hidden"); playSection(ci,si+1); };
   } else if(ci+1<CHAPTERS.length && chapterDone(ci)){
     btn.style.display="inline-block"; btn.textContent="下一章 →";
