@@ -421,9 +421,11 @@
   <div class="cover hidden" id="clear">
     <div class="bg blur"></div><div class="veil read"></div>
     <div class="etag" style="position:relative">SECTION CLEAR</div>
-    <div class="big" style="position:relative">🎀</div>
+    <div style="position:relative"><svg width="46" height="42" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 28C16 28 4 20 4 12a6 6 0 0 1 12 0 6 6 0 0 1 12 0c0 8-12 16-12 16z" fill="var(--rose)"/>
+    </svg></div>
     <h1 id="clearName" style="position:relative;font-size:21px"></h1>
-    <p id="clearSub" style="position:relative">本节完成</p>
+    <p id="clearSub" style="position:relative">本幕完成</p>
     <div class="row2" style="position:relative">
       <button class="btn ghost" id="clearBackBtn">本章目录</button>
       <button class="btn" id="clearNextBtn">下一节 →</button>
@@ -532,7 +534,7 @@ function advanceTo(next){
 function showActClear(actIdx,next){
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden"); $("hud").classList.add("hidden");
   $("clearName").textContent=(actIdx===0?"序章":actIdx===5?"终章":"第 "+actIdx+" 章")+" · "+STAGES[actIdx];
-  $("clearSub").textContent="本幕完成 ♡";
+  $("clearSub").textContent="本幕完成";
   $("clearBackBtn").textContent="回主页看进度";
   $("clearBackBtn").onclick=()=>{ $("clear").classList.add("hidden"); showMap(); };
   const b=$("clearNextBtn"); b.style.display="inline-block"; b.textContent="进入下一幕 →";
