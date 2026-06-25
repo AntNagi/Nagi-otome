@@ -164,8 +164,13 @@ const STORY = {
       {who:"sys",t:"深蓝运动外套拉链只拉到胸口，露出里面黑色的内搭，袖子松松垮垮垂着，手肘处堆出懒懒的褶皱。嘴里含着棒棒糖，径直走向客厅那把深红沙发椅，抱着椅上的红抱枕把自己团进去。"},
       {who:"sys",t:"几缕碎发垂在额前，他没去理，只是仰着脸，睫毛半垂地冲你眨了下眼。"},
       {who:"nagi",t:"Ant，我要柠檬茶。"},
-      {who:"sys",t:"你站在玄关，看着他理所当然的样子，又气又笑。转身走进吧台时，脸颊却在微微发热。"},
-      {who:"sys",t:"端着玻璃杯走回客厅，暖黄灯光里，他还含着那根棒棒糖，腮帮子随着吮吸轻轻动着。见你过来，懒洋洋掀了下眼皮，把糖从嘴边拿开——糖面干净，在灯光下泛着润润的光。"},
+    ],
+    choices:[
+      {label:"（又气又笑，转身去吧台做柠檬茶）", ant:"（看着他理所当然的样子，又气又笑。转身走进吧台时，脸颊却在微微发热）", next:"e_lolly2"},
+    ]},
+  e_lolly2:{ auto:[
+      {who:"sys",t:"端着玻璃杯走回客厅，暖黄灯光里，他还含着那根棒棒糖，腮帮子随着吮吸轻轻动着。"},
+      {who:"sys",t:"见你过来，懒洋洋掀了下眼皮，把糖从嘴边拿开——糖面干净，在灯光下泛着润润的光。"},
       {who:"nagi",t:"（声音因为含过糖有点黏糊）喏，要吃吗？Ant？"},
       {who:"sys",t:"声音混着甜味飘过来。你盯着他指尖捏着的棒棒糖，又瞥见他没穿袜子的脚踝在沙发边缘轻轻晃着。心脏像被羽毛挠过，又麻又痒，连呼吸都变得小心翼翼。"},
     ],
@@ -292,17 +297,28 @@ const STORY = {
   e_bday1:{ auto:[
       {who:"sys",t:"客厅没有开灯。他躺在沙发上，手机屏幕的冷光打在脸上，反复看着比赛录像——同一个失误，倒回去，再看一遍。"},
       {who:"sys",t:"你从外面回来，带着蛋糕和礼物。明天是他十八岁生日，他显然忘了。听见玄关的声响，他连头都没抬，淡淡说了句欢迎回家，甚至都没有起身。"},
-      {who:"sys",t:"你开了落地灯，走过去坐到他身边。"},
+    ],
+    choices:[
+      {label:"（开了落地灯，走过去坐到他身边）", ant:"（你打开落地灯，暖光铺开来。走过去，坐到他身边）", next:"e_bday1b"},
+    ]},
+  e_bday1b:{ auto:[
       {who:"ant",t:"Nagi~生日快乐！"},
       {who:"sys",t:"他抬起头，灰色眼眸里闪过一丝诧异，像是完全忘了自己的生日。"},
       {who:"nagi",t:"（疑惑）Ant……生日？我？"},
       {who:"ant",t:"你不会连自己生日都不记得吧？"},
       {who:"nagi",t:"嗯，我之前一直是自己住，没有过生日的习惯……"},
-      {who:"ant",t:"但是十八岁是特殊的日子，要好好纪念。现在有我了嘛，我陪你过。"},
-      {who:"nagi",t:"（沉默了一会儿，低声）Ant……谢谢……"},
+    ],
+    choices:[
+      {label:"十八岁是特殊的日子，现在有我了嘛", type:"心动", ant:"但是十八岁是特殊的日子，要好好纪念。现在有我了嘛，我陪你过。", b:1, nagi:["（沉默了一会儿，低声）Ant……谢谢……"], next:"e_bday1c"},
+    ]},
+  e_bday1c:{ auto:[
       {who:"sys",t:"你察觉到他情绪低落，问他刚才在看什么。"},
       {who:"nagi",t:"在看之前的比赛视频。我的表现还真是差啊……（突然感慨）最后连前23都没进……"},
-      {who:"sys",t:"你夺过他的手机放在一旁。正要打开蛋糕盒，手机突然响了——屏幕上显示是Reo。"},
+    ],
+    choices:[
+      {label:"（夺过他的手机放在一旁）别看了", ant:"（你夺过他的手机放在一旁。正要打开蛋糕盒，手机突然响了——屏幕上显示是Reo）", next:"e_bday1d"},
+    ]},
+  e_bday1d:{ auto:[
       {who:"nagi",t:"（语气平淡）喂……Reo？"},
       {who:"sys",t:"电话那头，玲王的声音带着哭腔和自责：「你被淘汰真的完全没有道理……不该逼你踢球，不该给你梦想的压力……对不起，Nagi」。他听着，表情依然平静，灰色眼眸里闪过一丝复杂的情绪。"},
       {who:"nagi",t:"（打断）Reo……谢谢你……但不是你的问题。"},
@@ -319,11 +335,20 @@ const STORY = {
       {who:"sys",t:"你点燃蛋糕上的蜡烛，烛光映在他脸上，显得有些柔和。"},
       {who:"ant",t:"（轻声）Nagi，许个愿吧……十八岁是一个新的开始。"},
       {who:"sys",t:"他低头看着蛋糕，沉默许久。从前，他从不相信生日愿望这种事，但今天似乎有些不同。他闭上眼睛，许下愿望，然后吹灭蜡烛。"},
-      {who:"sys",t:"你们一起切了蛋糕，安静地分享了这份生日时光。你递给他礼物——一双崭新的球鞋和一封手写信。"},
+    ],
+    choices:[
+      {label:"（一起切蛋糕，把礼物递给他）", ant:"（你们一起切了蛋糕，安静地分享了这份生日时光。你递给他礼物——一双崭新的球鞋和一封手写信）", next:"e_bday2b"},
+    ]},
+  e_bday2b:{ auto:[
       {who:"nagi",t:"（接过礼物，声音平静，但眼底多了一丝微光）谢谢……"},
       {who:"sys",t:"因为第二天还有工作，你早早休息了。他还不想睡，独自坐在沙发上，拆开了那封手写信。"},
       {who:"sys",t:"「她第一次看我踢球，就喜欢我了……她说我是个真正的天才，是为足球而生的……」"},
       {who:"sys",t:"「我是喜欢足球的……那种开心，那种热血的感觉……我不想失去……」"},
+    ],
+    choices:[
+      {label:"（他继续读着信……）", ant:"", next:"e_bday2c"},
+    ]},
+  e_bday2c:{ auto:[
       {who:"sys",t:"「Ant说我可以重新开始……她说十八岁有无尽可能……她一直相信我……」"},
       {who:"sys",t:"「我真的还想要踢球……还想和洁一较高下……好像，也想看看世界第一的风景……是不是我当初想象的那样？我还不想放弃。」"},
       {who:"sys",t:"渐渐地，他内心像是被点燃了一盏灯。你的话，让他重新回忆起踢球时的快乐和热情。仿佛第一次对未来有了新的期待，燃起了一丝久违的希望。"},
@@ -1221,7 +1246,7 @@ function setBond(){ $("bond").style.width=Math.min(100,Math.round(secRead/secTot
 
 const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:"bg/select2.jpg",c1b:"bg/pitch.jpg",
  c2a:"bg/apartment.jpg",c2b:"bg/apartment.jpg",c3a:"bg/openday.jpg",c3b:"bg/openday.jpg",kc2:"bg/livingroom.jpg",
- e_lolly:"bg/lolly.jpg",mt1:"bg/livingroom.jpg",e_invite:"bg/apartment.jpg",e_lemontea:"bg/lemontea.jpg",e_summer:"bg/summer.jpg",
+ e_lolly:"bg/lolly.jpg",e_lolly2:"bg/lolly.jpg",mt1:"bg/livingroom.jpg",e_invite:"bg/apartment.jpg",e_lemontea:"bg/lemontea.jpg",e_summer:"bg/summer.jpg",
  c4a:"bg/qixi.jpg",c4b:"bg/qixi.jpg",c4c:"bg/qixi.jpg",c4d:"bg/bedroom.jpg",mt2:"bg/moody.jpg",e_rain:"bg/afterwork.jpg",e_festival:"bg/summerfestival.jpg",
  mt3:"bg/livingroom.jpg",m_shallow:"bg/bedroom.jpg",mt4:"bg/bedroom.jpg",e_drunk:"bg/livingroom.jpg",
  e_sick:"bg/bedroom.jpg",e_scarf:"bg/scarf.jpg",e_intimate:"bg/bedroom.jpg",e_intimate2:"bg/bedroom.jpg",e_intimate3:"bg/bedroom.jpg",e_intimate4:"bg/bedroom.jpg",
@@ -1229,7 +1254,7 @@ const NODEBG={ p1:"bg/teamV.jpg",p2:"bg/teamV.jpg",c1a:"bg/pitch.jpg",e_select2:
  mt5:"bg/bedroom.jpg",c5a:"bg/bedroom.jpg",c5b:"bg/bedroom.jpg",
  e_softrice:"bg/softrice.jpg",e_dressup:"bg/dressup.jpg",e_drive:"bg/drive.jpg",e_apocalypse:"bg/apocalypse.jpg",e_curry:"bg/curry.jpg",
  e_autumn:"bg/autumn.jpg",e_jealous:"bg/livingroom.jpg",e_quarrel:"bg/bedroom.jpg",e_halloween:"bg/Halloween.jpg",
- e_depart:"bg/pitch.jpg",e_bday1:"bg/fallingdown.jpg",e_therapy:"bg/bedroom.jpg",e_bday2:"bg/birthday.jpg",nelbad1:"bg/moody.jpg",nelbad2:"bg/hug.jpg",
+ e_depart:"bg/pitch.jpg",e_bday1:"bg/fallingdown.jpg",e_bday1b:"bg/fallingdown.jpg",e_bday1c:"bg/fallingdown.jpg",e_bday1d:"bg/fallingdown.jpg",e_therapy:"bg/bedroom.jpg",e_bday2:"bg/birthday.jpg",e_bday2b:"bg/birthday.jpg",e_bday2c:"bg/birthday.jpg",nelbad1:"bg/moody.jpg",nelbad2:"bg/hug.jpg",
  w_home:"bg/livingroom.jpg",w_hair:"bg/bedroom.jpg",w_noodle:"bg/bedroom.jpg",w_game:"bg/livingroom.jpg",w_letter:"bg/livingroom.jpg",w_cozy:"bg/livingroom.jpg",w_elegant:"bg/livingroom.jpg",w_exist:"bg/bedroom.jpg",w_restart:"bg/livingroom.jpg",
  p5_intro:"bg/worldstage.jpg",c7d_a:"bg/goal.jpg",p5_reunion:"bg/back.jpg",p5_reunion2:"bg/remeet.jpg",e_bbq:"bg/villa.jpg",c8a:"bg/firework.jpg",c8b:"bg/firework.jpg",c7d_b:"bg/goal.jpg",
  stay_intro:"bg/villa.jpg",e_xmas1:"bg/Xmas.jpg",e_xmas2:"bg/livingroom.jpg",e_valentine:"bg/valentine.jpg",c7s_a:"bg/villa.jpg",c6_cold:"bg/moody.jpg",c8c:"bg/propose.jpg" };
@@ -1242,7 +1267,7 @@ const PARTMAP={ p1:"序章 · 那一束光",p2:"序章 · 那一束光",
  kc2:"第3章 · 热恋",mt3:"第3章 · 热恋",e_intimate:"第3章 · 热恋",e_cozy:"第3章 · 热恋",e_tipsy:"第3章 · 热恋",e_scarf:"第3章 · 热恋",e_rain:"第3章 · 热恋",
  e_sick:"第3章 · 热恋",mt5:"第3章 · 热恋",mt2:"第3章 · 热恋",c5a:"第3章 · 热恋",c5b:"第3章 · 热恋",
  c6a:"第4章 · 低谷",c6b:"第4章 · 低谷",e_halloween:"第4章 · 低谷",
- e_depart:"第4章 · 低谷",e_bday1:"第4章 · 低谷",e_therapy:"第4章 · 低谷",e_bday2:"第4章 · 低谷",nelbad1:"第4章 · 低谷",nelbad2:"第4章 · 低谷",
+ e_depart:"第4章 · 低谷",e_bday1:"第4章 · 低谷",e_bday1b:"第4章 · 低谷",e_bday1c:"第4章 · 低谷",e_bday1d:"第4章 · 低谷",e_therapy:"第4章 · 低谷",e_bday2:"第4章 · 低谷",e_bday2b:"第4章 · 低谷",e_bday2c:"第4章 · 低谷",nelbad1:"第4章 · 低谷",nelbad2:"第4章 · 低谷",
  w_home:"第5章 · 冬·归来",w_hair:"第5章 · 冬·归来",w_noodle:"第5章 · 冬·归来",w_game:"第5章 · 冬·归来",w_letter:"第5章 · 冬·归来",w_cozy:"第5章 · 冬·归来",w_elegant:"第5章 · 冬·归来",w_exist:"第5章 · 冬·归来",w_restart:"第5章 · 冬·归来",
  e_villa:"终章 · 结局",p5_intro:"终章 · 结局",c7d_a:"终章 · 结局",p5_reunion:"终章 · 结局",p5_reunion2:"终章 · 结局",
  e_bbq:"终章 · 结局",c8a:"终章 · 结局",c8b:"终章 · 结局",c7d_b:"终章 · 结局",c8c:"终章 · 结局",
