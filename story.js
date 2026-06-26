@@ -768,11 +768,13 @@ const STORY = {
     ]},
   /* M陷阱③ 改造躺平（同居后） */
   mt3:{ auto:[
-      {who:"sys",t:"同居后，他彻底放飞——躺平打游戏，家务不沾，昼夜颠倒。你看着这一幕，太阳穴突突地跳。"},
+      {who:"sys",t:"搬进来第三天，你下班回家推开门——客厅窗帘拉得死死的，只有电视和手柄的光把他的脸照得忽明忽暗。沙发上堆着他的T恤、枕头、吃了一半的薯片袋，茶几上空罐头排成一排。"},
+      {who:"sys",t:"凪诚士郎以一种令人叹为观止的速度完成了「放飞」。昼夜颠倒，下午三点才起床，起来第一件事是摸手柄。你买回来的菜原封不动躺在冰箱里，他靠外卖和零食续命，袜子直接团成球塞在沙发缝里。"},
+      {who:"nagi",t:"（头也不抬，手指在手柄上翻飞）Ant回来了？……冰箱里有布丁，我给你留了一个。"},
     ],
     choices:[
-      {label:"（话到嘴边又咽了回去，换个法子）把「动一动」说成新副本，陪他一起玩", ant:"（话到嘴边又咽了回去，换个法子）把「动一动」说成新副本，陪他一起玩", i:3, nagi:["（来了兴趣）……这个副本，听起来不无聊","（懒懒起身）赢了，有奖励吗"], next:"m_igate"},
-      {label:"（终究没忍住，语气重了几分）你这样下去……真的好吗", ant:"（终究没忍住，语气重了几分）你这样下去……真的好吗", d:3, nagi:["（手柄一顿，灰眸里的光淡了下去）……Ant，也嫌我这样了","（背过身）……好麻烦。别管我"], next:"m_igate"},
+      {label:"（深呼吸，换个法子）把「动一动」包装成新副本，陪他一起玩", ant:"（你深呼吸，把到嘴边的唠叨咽回去，换了个策略）Nagi～我发现一个超难的现实副本，双人合作的，敢不敢挑战？", i:3, nagi:["（终于抬头，灰眸亮了一下）……这个副本，听起来不无聊","（懒懒起身，伸了个大大的懒腰）赢了，有奖励吗"], next:"m_igate"},
+      {label:"（终究没忍住，语气重了几分）你这样下去……真的好吗", ant:"（你看着满地狼藉，终究没忍住）凪诚士郎，你看看这个家……你这样下去，真的好吗", d:3, nagi:["（手柄一顿，灰眸里的光淡了下去）……Ant，也嫌我这样了","（背过身，声音闷闷的）……好麻烦。别管我"], next:"m_igate"},
     ]},
   /* 亲密门（按 I/D 解锁 M深 或 M浅） */
   m_igate:{ router:"igate" },
@@ -1038,9 +1040,9 @@ const CHAPTERS=[
     {n:"第三幕",title:"亲密",start:"e_intimate",bg:"bg/bedroom.jpg"},
     {n:"第四幕",title:"甜蜜同居·深夜泡面",start:"e_cozy",bg:"bg/livingroom.jpg"},
     {n:"第五幕",title:"微醺之夜",start:"e_tipsy",bg:"bg/livingroom.jpg"},
-    {n:"第六幕",title:"送围巾",start:"e_scarf",bg:"bg/scarf.jpg"},
-    {n:"第七幕",title:"雨天·共撑一伞",start:"e_rain",bg:"bg/afterwork.jpg"},
-    {n:"第八幕",title:"换季感冒·笨拙看护",start:"e_sick",bg:"bg/bedroom.jpg"},
+    {n:"第六幕",title:"雨天·共撑一伞",start:"e_rain",bg:"bg/afterwork.jpg"},
+    {n:"第七幕",title:"换季感冒·笨拙看护",start:"e_sick",bg:"bg/bedroom.jpg"},
+    {n:"第八幕",title:"送围巾",start:"e_scarf",bg:"bg/scarf.jpg"},
     {n:"第九幕",title:"他的温柔·与你的分寸",start:"mt5"},
     {n:"第十幕",title:"已读不回的夜",start:"mt2",bg:"bg/moody.jpg"},
     {n:"最终幕",title:"★笨拙的心·是爱还是习惯",start:"c5a",bg:"bg/bedroom.jpg"},
@@ -1156,7 +1158,7 @@ function stageIndex(id){
   if(["c1a","e_select2","c1b"].includes(id)) return 1;
   if(["c2a","c3a","c3a2","c3b","c3c2","c2b","e_lemontea","e_lemontea2","e_summer","e_invite","e_lolly","e_festival","c4a","c4b","c4c","c4d","c4d2"].includes(id)) return 2;
   if(["e_depart","e_bday1","e_therapy","e_therapy2","e_bday2","nelbad1","nelbad2","c6a","c6b","e_halloween"].includes(id)) return 4;
-  if(["w_home","w_hair","w_noodle","w_game","w_letter","w_cozy","w_elegant","w_exist","w_restart"].includes(id)) return 5;
+  if(["w_home","w_hair","w_noodle","w_game","w_game2","w_letter","w_cozy","w_elegant","w_exist","w_restart"].includes(id)) return 5;
   if(["p5_intro","c7d_a","p5_reunion","p5_reunion2","c8a","c8b","c7d_b","c8c","c8c2","stay_intro","e_xmas1","e_xmas2","e_valentine","e_valentine2","e_valentine3","c7s_a","c6_cold","e_villa","e_bbq"].includes(id)) return 6;
   return 3;
 }
@@ -1344,8 +1346,8 @@ const FN={ p1:"p2",p2:"c1a",c1a:"e_select2",e_select2:"c1b",
  c1b:"c3a",c3a:"c3b",c3b:"e_lemontea",e_lemontea:"c2a",c2a:"c2b",c2b:"e_summer",
  e_summer:"e_invite",e_invite:"e_lolly",e_lolly:"e_festival",
  e_festival:"c4a",c4c:"c4d",c4d:"kc2",
- mt3:"e_intimate",e_intimate:"e_intimate2",e_intimate2:"e_intimate3",e_intimate3:"e_intimate4",e_intimate4:"e_cozy",e_cozy:"e_tipsy",e_tipsy:"e_scarf",e_scarf:"e_rain",e_rain:"e_sick",e_sick:"mt5",mt5:"mt2",mt2:"c5a",
+ mt3:"e_intimate",e_intimate:"e_intimate2",e_intimate2:"e_intimate3",e_intimate3:"e_intimate4",e_intimate4:"e_cozy",e_cozy:"e_tipsy",e_tipsy:"e_rain",e_rain:"e_sick",e_sick:"e_scarf",e_scarf:"mt5",mt5:"mt2",mt2:"c5a",
  c5b:"e_depart",
- e_softrice:"e_dressup",e_dressup:"e_drive",e_drive:"e_apocalypse",e_apocalypse:"e_curry",e_curry:"e_autumn",e_autumn:"e_jealous",e_jealous:"e_quarrel",e_quarrel:"e_drunk",e_drunk:"e_scarf",
+ e_softrice:"e_dressup",e_dressup:"e_drive",e_drive:"e_apocalypse",e_apocalypse:"e_curry",e_curry:"e_autumn",e_autumn:"e_jealous",e_jealous:"e_quarrel",e_quarrel:"e_drunk",e_drunk:"e_rain",
  e_depart:"e_bday1",e_therapy:"e_bday2",e_bday2:"w_home",w_home:"w_hair",w_hair:"w_noodle",w_noodle:"w_game",w_game:"w_letter",w_letter:"w_cozy",w_cozy:"w_elegant",w_elegant:"w_exist",w_exist:"w_restart",w_restart:"p5_intro",
  p5_reunion2:"e_bbq",e_bbq:"c8a",c8b:"c7d_b",e_xmas1:"e_xmas2",e_xmas2:"e_valentine",e_valentine:"c7s_a" };
