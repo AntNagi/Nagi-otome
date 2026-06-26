@@ -1350,4 +1350,5 @@ const FN={ p1:"p2",p2:"c1a",c1a:"e_select2",e_select2:"c1b",
  c5b:"e_depart",
  e_softrice:"e_dressup",e_dressup:"e_drive",e_drive:"e_apocalypse",e_apocalypse:"e_curry",e_curry:"e_autumn",e_autumn:"e_jealous",e_jealous:"e_quarrel",e_quarrel:"e_drunk",e_drunk:"e_rain",
  e_depart:"e_bday1",e_therapy:"e_bday2",e_bday2:"w_home",w_home:"w_hair",w_hair:"w_noodle",w_noodle:"w_game",w_game:"w_letter",w_letter:"w_cozy",w_cozy:"w_elegant",w_elegant:"w_exist",w_exist:"w_restart",w_restart:"p5_intro",
- p5_reunion2:"e_bbq",e_bbq:"c8a",c8b:"c7d_b",e_xmas1:"e_xmas2",e_xmas2:"e_valentine",e_valentine:"c7s_a" };
+ p5_reunion2:"e_bbq",e_bbq:"c8a",c8b:"c7d_b",e_xmas1:"e_xmas2",e_xmas2:"e_valentine",e_valentine:"c7s_a",
+ c3a2:"c3b",c4d2:"kc2",e_lemontea2:"c2a",e_therapy2:"e_bday2",e_softrice2:"e_dressup",e_drive2:"e_apocalypse",e_drunk2:"e_rain",w_game2:"w_letter",e_valentine2:"c7s_a",e_valentine3:"c7s_a" };
