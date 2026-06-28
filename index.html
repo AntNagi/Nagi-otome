@@ -825,9 +825,21 @@ function play(id){
 function skipSection(){
   if(!confirm("确定跳过本节吗？")) return;
   clearInterval(typer); typing=false; choicesOpen=false; clearTimeout(pgTimer);
+  if(currentCI==null && curNode){
+    for(let ci=0;ci<CHAPTERS.length;ci++){
+      const secs=CHAPTERS[ci].sections;
+      for(let si=0;si<secs.length;si++){
+        let id=secs[si].start, vis=new Set();
+        while(id && !vis.has(id)){ vis.add(id); if(id===curNode){currentCI=ci;currentSI=si;break;} id=FN[id]; if(id&&SEC_STARTS.has(id))break; }
+        if(currentCI!=null) break;
+      }
+      if(currentCI!=null) break;
+    }
+  }
+  if(currentCI==null){ showMap(); return; }
   const ch=CHAPTERS[currentCI];
   if(currentCI===CHAPTERS.length-1 && currentSI===ch.sections.length-1){ finish(); }
-  else if(currentCI!==null){ sectionDone(); }
+  else { sectionDone(); }
 }
 
 function finish(forceTier){
