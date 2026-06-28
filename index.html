@@ -516,7 +516,7 @@ function showSceneTitle(id){
   $("chap").classList.remove("hidden");
 }
 function playNode(id){
-  enterGameLayer(); markSeen(id); playingNode=id;
+  enterGameLayer(); $("gameskip").classList.remove("hidden"); markSeen(id); playingNode=id;
   const node=STORY[id]; const st=stageIndex(id);
   $("gamebg").style.backgroundImage="url('"+(NODEBG[id]||"bg/apartment.jpg")+"')";
   $("chapName").textContent=(st===0?"序章":st===5?"终章":"第"+st+"章")+" "+STAGES[st]; setBond();
