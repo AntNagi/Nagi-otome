@@ -314,6 +314,9 @@
   <!-- 花瓣 -->
   <div id="petals"></div>
 
+  <!-- BGM（循环播放） -->
+  <audio id="bgmAudio" loop preload="auto" style="display:none"><source src="bgm.mp3" type="audio/mpeg"></audio>
+
   <!-- ① 主页 -->
   <div class="screen" id="home">
     <div class="bg"></div>
@@ -546,7 +549,12 @@ function continueGame(){ if(curNode) go(curNode); else startNew(); }
 function newGameConfirm(){ if(localStorage.getItem("nagi_state") && !confirm("重新开始会清空当前进度，确定？")) return; startNew(); }
 
 /* ① 主页 → 开场白 → 名字录入 → 章节目录 */
-function onStart(){ clearInterval(startTimer); $("home").classList.add("hidden"); playPrologue(); }
+function onStart(){
+  clearInterval(startTimer); $("home").classList.add("hidden");
+  // 启动BGM（浏览器要求用户交互后才能播放）
+  var bgm=$("bgmAudio"); if(bgm) bgm.play().catch(function(){});
+  playPrologue();
+}
 function showSetup(){
   $("inpPlayer").value = localStorage.getItem("nagi_pname")||"";
   $("inpNagi").value   = localStorage.getItem("nagi_nname")||"";
@@ -803,7 +811,7 @@ function choose(c){
   if(c.set){ if(c.set.line) mj=c.set.line; if(c.set.path) path=c.set.path; if(c.set.kc3) kc3=c.set.kc3; if(c.set.nel) nel=c.set.nel; }
   if(c.flag) finalFlag=c.flag;
   saveState(); setBond();
-  const ci=c._ci; const q=[{who:"ant",t:c.ant}];
+  const ci=c._ci; const q=c.ant?[{who:"ant",t:c.ant}]:[];
   queueKeys=["S."+playingNode+".c."+ci+".a"];
   let ni=0;
   (c.nagi||[]).forEach((ln,j)=>{ if(ln){ q.push({who:"nagi",t:ln}); queueKeys.push("S."+playingNode+".c."+ci+".n."+j); } });
