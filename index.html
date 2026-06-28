@@ -823,6 +823,7 @@ function play(id){
 }
 
 function skipSection(){
+  if(!confirm("确定跳过本节吗？")) return;
   clearInterval(typer); typing=false; choicesOpen=false; clearTimeout(pgTimer);
   const ch=CHAPTERS[currentCI];
   if(currentCI===CHAPTERS.length-1 && currentSI===ch.sections.length-1){ finish(); }
