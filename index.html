@@ -498,6 +498,21 @@ function go(id){
   const node=STORY[id];
   if(!node){ console.warn("缺失节点",id); finish(); return; }
   if(node.router){ go(resolveRouter(id)); return; }
+  if(SEC_STARTS.has(id)){
+    const prev={ci:currentCI,si:currentSI};
+    let found=false;
+    for(let ci=0;ci<CHAPTERS.length&&!found;ci++){
+      const secs=CHAPTERS[ci].sections;
+      for(let si=0;si<secs.length;si++){
+        const sid=(secs[si].routed && route==="stay" && secs[si].startStay)? secs[si].startStay : secs[si].start;
+        if(sid===id){ currentCI=ci; currentSI=si; found=true; break; }
+      }
+    }
+    if(prev.ci!=null && prev.si!=null && (prev.ci!==currentCI || prev.si!==currentSI)){
+      doneSet.add(prev.ci+"-"+prev.si); saveDone();
+      if(chapterDone(prev.ci) && prev.ci+1>unlocked){ unlocked=prev.ci+1; saveUnlocked(); }
+    }
+  }
   curNode=id; if(SCENE[id]){ curScene=id; secReset(id); } const si=stageIndex(id); if(si>maxStage)maxStage=si; saveState();
   if(SCENE[id]) showSceneTitle(id);   // 节首 → 先弹「节标题卡」
   else playNode(id);                   // 链内续节 → 直接连续播放
@@ -750,7 +765,7 @@ function sectionDone(){
     btn.onclick=()=>{ $("clear").classList.add("hidden"); playSection(ci,si+1); };
   } else if(ci+1<CHAPTERS.length && chapterDone(ci)){
     btn.style.display="inline-block"; btn.textContent="下一章 →";
-    btn.onclick=()=>{ $("clear").classList.add("hidden"); openChapterMap(ci+1); };
+    btn.onclick=()=>{ $("clear").classList.add("hidden"); playSection(ci+1,0); };
   } else {
     btn.style.display="none";
   }
