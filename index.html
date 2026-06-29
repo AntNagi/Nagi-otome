@@ -673,7 +673,7 @@ function renderMap(){
     node.className="node"+(locked?" locked":"")+(done?" done":"")+(cur?" current":"");
     node.style.left=p.x+"px"; node.style.top=p.y+"px";
     node.innerHTML=(locked?"🔒":(i===0?"♡":i===N-1?"★":i))+(done?'<span class="badge">✓</span>':"");
-    if(!locked) node.onclick=()=>openChapterMap(i);
+    if(!locked) node.onclick=()=>playSection(i,0);
     trail.appendChild(node);
     const lab=document.createElement("div");
     lab.className="nlabel"; lab.style.left=p.x+"px"; lab.style.top=(p.y+34)+"px";
@@ -758,7 +758,7 @@ function sectionDone(){
   $("dialog").classList.add("hidden"); $("choices").classList.add("hidden"); $("gameskip").classList.add("hidden");
   $("clearName").textContent=sub(ch.n+" · "+secTitle(s));
   $("clearSub").textContent=chapterDone(ci)?("「"+ch.title+"」已通关 · 🎉"):"本幕完成";
-  $("clearBackBtn").onclick=()=>{ $("clear").classList.add("hidden"); openChapterMap(ci); };
+  $("clearBackBtn").onclick=()=>{ $("clear").classList.add("hidden"); showMap(); };
   const btn=$("clearNextBtn");
   if(si+1<ch.sections.length){
     btn.style.display="inline-block"; btn.textContent="下一幕 →";
