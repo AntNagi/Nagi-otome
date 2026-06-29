@@ -835,6 +835,7 @@ function skipSection(){
   if(!confirm("确定跳过本节吗？")) return;
   clearInterval(typer); typing=false; choicesOpen=false; clearTimeout(pgTimer);
   if((currentCI==null || currentSI==null) && curNode){
+    currentCI=null; currentSI=null;
     for(let ci=0;ci<CHAPTERS.length;ci++){
       const secs=CHAPTERS[ci].sections;
       for(let si=0;si<secs.length;si++){
@@ -845,7 +846,7 @@ function skipSection(){
       if(currentCI!=null) break;
     }
   }
-  if(currentCI==null){ showMap(); return; }
+  if(currentCI==null || currentSI==null){ showMap(); return; }
   const ch=CHAPTERS[currentCI];
   if(currentCI===CHAPTERS.length-1 && currentSI===ch.sections.length-1){ finish(); }
   else { sectionDone(); }
