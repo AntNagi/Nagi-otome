@@ -834,7 +834,7 @@ function play(id){
 function skipSection(){
   if(!confirm("确定跳过本节吗？")) return;
   clearInterval(typer); typing=false; choicesOpen=false; clearTimeout(pgTimer);
-  if(currentCI==null && curNode){
+  if((currentCI==null || currentSI==null) && curNode){
     for(let ci=0;ci<CHAPTERS.length;ci++){
       const secs=CHAPTERS[ci].sections;
       for(let si=0;si<secs.length;si++){
