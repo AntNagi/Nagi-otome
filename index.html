@@ -861,13 +861,13 @@ function finish(forceTier){
   }
   const e=ENDINGS[tier]; unlockEnding(tier);
   localStorage.removeItem("nagi_state");
-  $("chapName").textContent=e.status;
+  $("chapName").textContent=sub(e.status);
   setTimeout(()=>{
     $("dialog").classList.add("hidden"); $("hud").classList.add("hidden"); $("gameskip").classList.add("hidden");
     $("etag").textContent=e.tag; $("emoji").textContent=e.emoji;
     $("etitle").textContent=sub(e.title); $("edesc").innerHTML=sub(e.desc);
     const ln=(mj==="J"?"较劲线":mj==="M"?"默契线":"——")+(path?(" · "+({dream:"梦想线",stay:"相守线",cling:"执念"}[path]||"")):"");
-    $("escore").innerHTML="♡ "+ln+"<br>"+e.sub;
+    $("escore").innerHTML="♡ "+ln+"<br>"+sub(e.sub);
     if(editMode){
       $("etitle").style.cursor="pointer";
       $("etitle").onclick=()=>openEdit("E."+tier+".title",e.title,"编辑结局标题",(v)=>{e.title=v;$("etitle").textContent=sub(v);});
