@@ -808,7 +808,8 @@ function choose(c){
   $("dialog").classList.remove("hidden");
   I += (c.i||0) + (c.u||0);          // 懂他：理解值 + 显式 i
   D += (c.d||0);                      // 心墙：显式陷阱 d
-  if(c.set){ if(c.set.line) mj=c.set.line; if(c.set.path) path=c.set.path; if(c.set.kc3) kc3=c.set.kc3; if(c.set.nel) nel=c.set.nel; }
+  if(c.set){ if(c.set.line) mj=c.set.line; if(c.set.path) path=c.set.path; if(c.set.kc3) kc3=c.set.kc3; if(c.set.nel) nel=c.set.nel; if(c.set.nagiResonate) nagiResonate=c.set.nagiResonate; if(c.set.antCompress) antCompress=c.set.antCompress; }
+  if(c.route){ route=c.route; path=c.route; localStorage.setItem("nagi_route",route); }
   if(c.flag) finalFlag=c.flag;
   saveState(); setBond();
   const ci=c._ci; const q=c.ant?[{who:"ant",t:c.ant}]:[];
@@ -816,7 +817,7 @@ function choose(c){
   let ni=0;
   (c.nagi||[]).forEach((ln,j)=>{ if(ln){ q.push({who:"nagi",t:ln}); queueKeys.push("S."+playingNode+".c."+ci+".n."+j); } });
   queue=q; qi=0;
-  const nxt = c.next || FN[curNode];
+  const nxt = c.next || getFN(curNode);
   after = c.egg ? {type:"egg"} : c.endBad ? {type:"endbad"} : c.end ? {type:"end"} : (nxt ? {type:"go",next:nxt} : {type:"end"});
   showLine();
 }
@@ -838,7 +839,7 @@ function skipSection(){
       const secs=CHAPTERS[ci].sections;
       for(let si=0;si<secs.length;si++){
         let id=secs[si].start, vis=new Set();
-        while(id && !vis.has(id)){ vis.add(id); if(id===curNode){currentCI=ci;currentSI=si;break;} id=FN[id]; if(id&&SEC_STARTS.has(id))break; }
+        while(id && !vis.has(id)){ vis.add(id); if(id===curNode){currentCI=ci;currentSI=si;break;} id=getFN(id); if(id&&SEC_STARTS.has(id))break; }
         if(currentCI!=null) break;
       }
       if(currentCI!=null) break;
@@ -851,17 +852,12 @@ function skipSection(){
 }
 
 function finish(forceTier){
-  /* 结局由「剧情走向 + 隐藏数值」共同决定：
-     · 心墙D爆表 或 用爱逼他(cling) → BAD（相爱却平淡告终）
-     · 默契线·选「爱」·低谷给空间·全程低心墙·追梦·挺他 → TRUE（六重门）
-     · 选「习惯」 或 剪翅膀(clip) → NORMAL
-     · 其余守住的 → GOOD */
   let tier=forceTier;
   if(!tier){
     if(path==="cling" || D>=6) tier="bad";
-    else if(mj==="M" && kc3==="爱" && nel==="好" && D<=3 && path==="dream" && finalFlag==="support") tier="true";
-    else if(kc3==="习惯" || finalFlag==="clip") tier="normal";
-    else tier="good";
+    else if(nagiResonate && !antCompress && D<=3 && path==="dream" && finalFlag==="support") tier="true";
+    else if(!antCompress && path==="dream") tier="good";
+    else tier="normal";
   }
   const e=ENDINGS[tier]; unlockEnding(tier);
   localStorage.removeItem("nagi_state");

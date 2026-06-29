@@ -800,7 +800,7 @@ const STORY = {
     ],
     choices:[
       {label:"（领情但有分寸）谢谢～不过我也有我的世界要忙", type:"理性", ant:"（领情但有分寸）谢谢～不过我也有我的世界要忙", i:2, nagi:["（看你一眼，眼神亮了亮）……Ant这样，才有意思","（小声）别太忙，留点给我"], next:"mt2"},
-      {label:"「我为你做什么都愿意，你就是我的全部」", type:"心动", ant:"我为你做什么都愿意，你就是我的全部", d:2, nagi:["（怔了下，反而往后靠了靠）……Ant，别把我当全部","（移开视线）……太沉了，这样"], next:"mt2"},
+      {label:"「我为你做什么都愿意，你就是我的全部」", type:"心动", ant:"我为你做什么都愿意，你就是我的全部", d:2, set:{antCompress:true}, nagi:["（怔了下，反而往后靠了靠）……Ant，别把我当全部","（移开视线）……太沉了，这样"], next:"mt2"},
     ]},
   /* Part4 坏反应① 失望吵架 */
   nelbad1:{ auto:[
@@ -939,7 +939,7 @@ const STORY = {
       {who:"sys",t:"他捧住你的脸，吻落下来——不再是平时那种懒洋洋的蜻蜓点水，而是带着酒气的、热烈的、让人喘不过气的认真。"},
     ],
     choices:[
-      {label:"（喘着气）今天的Nagi和平时可不一样呢……", type:"心动", ant:"今天的Nagi和平时可不一样呢……", i:2, nagi:["哪里不一样？（再次吻上来，这次更缠绵）只是……太喜欢你了而已","（鼻尖蹭你的脸颊）一起醉倒在这，怎么样？"], sec:true},
+      {label:"（喘着气）今天的Nagi和平时可不一样呢……", type:"心动", ant:"今天的Nagi和平时可不一样呢……", i:2, set:{nagiResonate:true}, nagi:["哪里不一样？（再次吻上来，这次更缠绵）只是……太喜欢你了而已","（鼻尖蹭你的脸颊）一起醉倒在这，怎么样？"], sec:true},
       {label:"以后多喝点？这样的你，我好喜欢", type:"调皮", ant:"以后多喝点？这样的你，我好喜欢", i:1, nagi:["（轻笑，在你颈侧蹭了蹭）就算没有酒精，我也希望你能多说这些话","不过，现在更想抱着你"], sec:true},
     ]},
   w_cozy:{ auto:[
@@ -972,7 +972,7 @@ const STORY = {
     ],
     choices:[
       {label:"（笑出来）Nagi不想让我死~那我就不死了", type:"调皮", ant:"Nagi不想让我死~那我就不死了", i:3, nagi:["真是的……（松了口气，手指戳你额头）以后不要再说这种傻话了","（将头埋进你的脖颈）一直陪着我，好吗？"], sec:true},
-      {label:"（抱紧他）嗯……有你在，我不会无聊的", type:"心动", ant:"有你在，我不会无聊的", i:2, nagi:["（手臂收得更紧）好。我会一直在的","真是拿你没办法……（语气懒散，力量却让人安心）快睡吧"], sec:true},
+      {label:"（抱紧他）嗯……有你在，我不会无聊的", type:"心动", ant:"有你在，我不会无聊的", i:2, set:{antCompress:true}, nagi:["（手臂收得更紧）好。我会一直在的","真是拿你没办法……（语气懒散，力量却让人安心）快睡吧"], sec:true},
     ]},
   w_restart:{ auto:[
       {who:"sys",t:"冬天快过完了。窗外的枝头冒出新芽，他的手机不断弹出经纪人和教练的消息——世界赛场的门，再次为他打开。"},
@@ -981,7 +981,7 @@ const STORY = {
       {who:"nagi",t:"不管接下来去哪里……我都想，一直跟你回到这里。"},
     ],
     choices:[
-      {label:"无论你飞多远，这里永远亮着灯等你", type:"理性", ant:"无论你飞多远，这里永远亮着灯等你", i:2,b:2, nagi:["（灰眸里映着远处的灯火）……嗯","（转身把你搂进怀里，下巴抵着你发顶）那我，绝不会让你等太久"], sec:true},
+      {label:"无论你飞多远，这里永远亮着灯等你", type:"理性", ant:"无论你飞多远，这里永远亮着灯等你", i:2,b:2, set:{nagiResonate:true}, nagi:["（灰眸里映着远处的灯火）……嗯","（转身把你搂进怀里，下巴抵着你发顶）那我，绝不会让你等太久"], sec:true},
       {label:"（牵紧他的手）走吧，新的冒险，一起", type:"心动", ant:"（牵紧他的手）走吧，新的冒险，一起", i:2,b:3, nagi:["（低头看着交握的手，唇角慢慢弯起）……一起","（很轻）有Ant在，我什么副本都不怕"], sec:true},
     ]},
 
@@ -1145,11 +1145,11 @@ function setMood(m){ /* 立绘可插拔，暂用虚化背景 */ }
 
 /* ====================== 分支系统（线性·五幕） ====================== */
 /* 隐藏数值 I=懂他, D=心墙；旗标 mj(M/J) path(dream/stay/cling) kc3(爱/习惯) nel(好/坏) finalFlag mDeep */
-let I=0, D=0, mj=null, path=null, kc3=null, nel=null, mDeep=false, curNode=null, maxStage=0, pendingNode=null, curScene=null;
+let I=0, D=0, mj=null, path=null, kc3=null, nel=null, mDeep=false, nagiResonate=false, antCompress=false, curNode=null, maxStage=0, pendingNode=null, curScene=null;
 (function loadSt(){ try{ const s=JSON.parse(localStorage.getItem("nagi_state")||"null");
-  if(s){ I=s.I||0; D=s.D||0; mj=s.mj; path=s.path; kc3=s.kc3; nel=s.nel; mDeep=!!s.mDeep; finalFlag=s.finalFlag||null; curNode=s.cur||null; maxStage=s.maxStage||0; curScene=s.curScene||null; } }catch(e){} })();
-function saveState(){ localStorage.setItem("nagi_state",JSON.stringify({I,D,mj,path,kc3,nel,mDeep,finalFlag,cur:curNode,maxStage,curScene})); }
-function clearState(){ I=0;D=0;mj=path=kc3=nel=finalFlag=null;mDeep=false;curNode=null;maxStage=0;curScene=null; localStorage.removeItem("nagi_state"); }
+  if(s){ I=s.I||0; D=s.D||0; mj=s.mj; path=s.path; kc3=s.kc3; nel=s.nel; mDeep=!!s.mDeep; nagiResonate=!!s.nagiResonate; antCompress=!!s.antCompress; finalFlag=s.finalFlag||null; curNode=s.cur||null; maxStage=s.maxStage||0; curScene=s.curScene||null; } }catch(e){} })();
+function saveState(){ localStorage.setItem("nagi_state",JSON.stringify({I,D,mj,path,kc3,nel,mDeep,nagiResonate,antCompress,finalFlag,cur:curNode,maxStage,curScene})); }
+function clearState(){ I=0;D=0;mj=path=kc3=nel=finalFlag=null;mDeep=false;nagiResonate=false;antCompress=false;curNode=null;maxStage=0;curScene=null; localStorage.removeItem("nagi_state"); }
 
 /* 六幕结构（章）+ 节标题，用于过场卡/进度/HUD */
 const STAGES=["那一束光","相识","恋爱","热恋","NEL · 低谷","冬·归来","世界舞台 · 结局"];
@@ -1304,7 +1304,7 @@ function calcSecTotal(startId){
     vis.add(id);
     t+=(STORY[id].auto||[]).length;
     if(STORY[id].choices) STORY[id].choices.forEach(c=>{ t+=1+(c.nagi?c.nagi.length:0); });
-    id=FN[id];
+    id=getFN(id);
     if(id&&SEC_STARTS.has(id)) break;
   }
   return Math.max(t,1);
@@ -1350,5 +1350,14 @@ const FN={ p1:"p2",p2:"c1a",c1a:"e_select2",e_select2:"c1b",
  c5b:"e_depart",
  e_softrice:"e_dressup",e_dressup:"e_drive",e_drive:"e_apocalypse",e_apocalypse:"e_curry",e_curry:"e_autumn",e_autumn:"e_jealous",e_jealous:"e_quarrel",e_quarrel:"e_drunk",e_drunk:"e_rain",
  e_depart:"e_bday1",e_therapy:"e_bday2",e_bday2:"w_home",w_home:"w_hair",w_hair:"w_noodle",w_noodle:"w_game",w_game:"w_letter",w_letter:"w_cozy",w_cozy:"w_elegant",w_elegant:"w_exist",w_exist:"w_restart",w_restart:"p5_intro",
- p5_reunion2:"e_bbq",e_bbq:"c8a",c8b:"c7d_b",e_xmas1:"e_xmas2",e_xmas2:"e_valentine",e_valentine:"c7s_a",
+ e_villa:"p5_intro",p5_reunion2:"e_bbq",e_bbq:"c8a",c8b:"c7d_b",e_xmas1:"e_xmas2",e_xmas2:"e_valentine",e_valentine:"c7s_a",
  c3a2:"c3b",c4d2:"kc2",e_lemontea2:"c2a",e_therapy2:"e_bday2",e_softrice2:"e_dressup",e_drive2:"e_apocalypse",e_drunk2:"e_rain",w_game2:"w_letter",e_valentine2:"c7s_a",e_valentine3:"c7s_a",e_lolly2:"e_festival" };
+
+const FN_PATH = {
+  dream: { w_home:"w_letter", w_letter:"e_cozy", e_cozy:"w_game", w_game:"w_game2", w_game2:"w_noodle", w_noodle:"w_restart", w_restart:"e_villa" },
+  stay:  { w_home:"w_exist", w_exist:"w_hair", w_hair:"w_cozy", w_cozy:"w_elegant", w_elegant:"w_noodle", w_noodle:"w_restart", w_restart:"stay_intro" }
+};
+function getFN(id){
+  if(path && FN_PATH[path] && FN_PATH[path][id]) return FN_PATH[path][id];
+  return FN[id];
+}
