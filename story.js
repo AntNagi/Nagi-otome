@@ -1035,9 +1035,9 @@ const CHAPTERS=[
     {n:"第一幕",title:"开放日·歪头重逢",start:"c3a"},
     {n:"第二幕",title:"邋遢更衣室",start:"c3b"},
     {n:"第三幕",title:"你的，我的",start:"e_lemontea",bg:"bg/lemontea.jpg"},
-    {n:"第四幕",title:"假期的来电",start:"c2a"},
-    {n:"第五幕",title:"你的提议·确立关系",start:"c2b",bg:"bg/apartment.jpg"},
-    {n:"第六幕",title:"Fiery Summer·花环",start:"e_summer",bg:"bg/summer.jpg"},
+    {n:"第四幕",title:"Fiery Summer·花环",start:"e_summer",bg:"bg/summer.jpg"},
+    {n:"第五幕",title:"假期的来电",start:"c2a"},
+    {n:"第六幕",title:"你的提议·确立关系",start:"c2b",bg:"bg/apartment.jpg"},
     {n:"第七幕",title:"高级公寓的邀请",start:"e_invite",bg:"bg/apartment.jpg"},
     {n:"第八幕",title:"棒棒糖·自动刷脸",start:"e_lolly",bg:"bg/lolly.jpg"},
     {n:"第九幕",title:"夏日祭·浴衣与烟火",start:"e_festival",bg:"bg/summerfestival.jpg"},
@@ -1353,15 +1353,15 @@ const PARTMAP={ p1:"序章 · 那一束光",p2:"序章 · 那一束光",
 function partOf(id){ return PARTMAP[id] || "第3章 · 热恋"; }
 
 const FN={ p1:"p2",p2:"c1a",c1a:"e_select2",e_select2:"c1b",
- c1b:"c3a",c3a:"c3b",c3b:"e_lemontea",e_lemontea:"c2a",c2a:"c2b",c2b:"e_summer",
- e_summer:"e_invite",e_invite:"e_lolly",e_lolly:"e_festival",
+ c1b:"c3a",c3a:"c3b",c3b:"e_lemontea",e_lemontea:"e_summer",e_summer:"c2a",c2a:"c2b",c2b:"e_invite",
+ e_invite:"e_lolly",e_lolly:"e_festival",
  e_festival:"c4a",c4c:"c4d",c4d:"kc2",
  mt3:"e_intimate",e_intimate:"e_intimate2",e_intimate2:"e_intimate3",e_intimate3:"e_intimate4",e_intimate4:"e_cozy",e_cozy:"e_tipsy",e_tipsy:"e_rain",e_rain:"e_sick",e_sick:"e_scarf",e_scarf:"mt5",mt5:"mt2",mt2:"c5a",
  c5b:"e_depart",
  e_softrice:"e_dressup",e_dressup:"e_drive",e_drive:"e_apocalypse",e_apocalypse:"e_curry",e_curry:"e_autumn",e_autumn:"e_jealous",e_jealous:"e_quarrel",e_quarrel:"e_drunk",e_drunk:"e_rain",
  e_depart:"e_bday1",e_therapy:"e_bday2",e_bday2:"w_home",w_home:"w_hair",w_hair:"w_noodle",w_noodle:"w_game",w_game:"w_letter",w_letter:"w_cozy",w_cozy:"w_elegant",w_elegant:"w_exist",w_exist:"w_restart",w_restart:"p5_intro",
  e_villa:"p5_intro",p5_reunion2:"e_bbq",e_bbq:"c8a",c8b:"c7d_b",e_xmas1:"e_xmas2",e_xmas2:"e_valentine",e_valentine:"c7s_a",
- c3a2:"c3b",c4d2:"kc2",e_lemontea2:"c2a",e_therapy2:"e_bday2",e_softrice2:"e_dressup",e_drive2:"e_apocalypse",e_drunk2:"e_rain",w_game2:"w_letter",e_valentine2:"c7s_a",e_valentine3:"c7s_a",e_lolly2:"e_festival" };
+ c3a2:"c3b",c4d2:"kc2",e_lemontea2:"e_summer",e_therapy2:"e_bday2",e_softrice2:"e_dressup",e_drive2:"e_apocalypse",e_drunk2:"e_rain",w_game2:"w_letter",e_valentine2:"c7s_a",e_valentine3:"c7s_a",e_lolly2:"e_festival" };
 
 const FN_PATH = {
   dream: { w_home:"w_letter", w_letter:"e_cozy", e_cozy:"w_game", w_game:"w_game2", w_game2:"w_noodle", w_noodle:"w_restart", w_restart:"e_villa" },
